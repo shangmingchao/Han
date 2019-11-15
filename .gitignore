@@ -1,0 +1,30 @@
+# 生成的 APK 文件
+*.apk
+
+# 自动生成的临时文件
+bin/
+gen/
+out/
+build/
+
+# 本地配置文件
+local.properties
+
+# 缩略图文件
+.DS_Store
+
+# IDE 文件，但保留 copyright 和 codestyle
+*.iml
+.idea/*
+!.idea/copyright
+!.idea/codeStyles/codeStyleConfig.xml
+
+# Gradle 缓存
+.gradle
+
+# 截图目录
+captures/
+
+# NDK 构建文件
+.externalNativeBuild
+.cxx
