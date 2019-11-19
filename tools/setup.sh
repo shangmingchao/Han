@@ -3,23 +3,28 @@
 RED='\033[0;1;31m'
 NC='\033[0m' # No Color
 
-GIT_DIR=$(git rev-parse --git-dir 2> /dev/null)
-GIT_ROOT=$(git rev-parse --show-toplevel 2> /dev/null)
+GIT_DIR=$(git rev-parse --git-dir 2>/dev/null)
+GIT_ROOT=$(git rev-parse --show-toplevel 2>/dev/null)
 
 if [[ ! "$GIT_ROOT" =~ /Han$ ]]; then
   echo -e "${RED}ERROR:${NC} Please run this script from the cloned Han directory."
   exit 1
 fi
 
+echo "Installing git pre-commit hook"
+echo
+cp "${GIT_ROOT}/tools/pre-commit" "${GIT_DIR}/hooks/pre-commit" &&
+  chmod +x "${GIT_DIR}/hooks/pre-commit"
+
 echo "Installing git commit-msg hook"
 echo
-cp "${GIT_ROOT}/tools/commit-msg" "${GIT_DIR}/hooks/commit-msg" \
-  && chmod +x "${GIT_DIR}/hooks/commit-msg"
+cp "${GIT_ROOT}/tools/commit-msg" "${GIT_DIR}/hooks/commit-msg" &&
+  chmod +x "${GIT_DIR}/hooks/commit-msg"
 
 echo "Installing git pre-push hook"
 echo
-cp "${GIT_ROOT}/tools/pre-push" "${GIT_DIR}/hooks/pre-push" \
-  && chmod +x "${GIT_DIR}/hooks/pre-push"
+cp "${GIT_ROOT}/tools/pre-push" "${GIT_DIR}/hooks/pre-push" &&
+  chmod +x "${GIT_DIR}/hooks/pre-push"
 
 cat <<-EOF
 Please import the code style settings in Android Studio:

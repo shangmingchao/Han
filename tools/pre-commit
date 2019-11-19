@@ -1,0 +1,18 @@
+#!/bin/bash
+
+echo "Executing spotlessCheck"
+./gradlew spotlessCheck >/dev/null
+check=$?
+if [ $check -eq 0 ]; then
+  echo "Your code style is perfect!"
+  exit 0
+fi
+echo "Executing spotlessApply"
+./gradlew spotlessApply >/dev/null
+check=$?
+if [ $check -eq 0 ]; then
+  echo "Your code style is not good, but has been corrected."
+  git add .
+  exit 0
+fi
+exit 1
