@@ -1,3 +1,4 @@
+os: linux
 language: android
 android:
   components:
@@ -28,10 +29,10 @@ env:
     - secure: b+B7iFm72i+UL7H59iBEW2GoXNXSPi34uk+MYxQ6NHwUP9QwgfY8m+k0tOQCy3CD9W5M4j9Y4tAYsMBjT28QJ1p4AJTN9JJGivSZ9Ie+O/Ak/6hEXp9XxCHU1EtzrvFBhwVOgE/020lkBGiXpZolJDtvHfazCpsEQlCBdx1UHIgAH4Fo5FieJuYEHqpl7o0MG8N+ra4U+h3mq3OFV5CQtXuEv7P26li3uzGeSTqQZVgTDpb7P8pH8bISnUH5AST6QiJ47OujYVsoYs6GXzfH2XvULvihOw4dTIVmYo43wnWeRHJwsDspTjReQQjFRXyaV+3Dj6Z8gY125E8D0N7ynOgwdnXmZEXxuwetz8HR7Kc5iJRyYpqIvT6kIyGAutEWvssTPyAa0ZU9RwAeZb278ROrXs7iJFuANwrclsiLQnxCRYlUsyXVBhc3gjBMaiUOy3nHGBxmZBL+UFDWZ0zWLLnaAgyrRzaKXXPHmew15Uxg0PfsOpKVfRMZPOT8hkmDa7cNVY+p1IELRCp+/DZK/I0YtXY0667UpJXKeZfgzndtUqX17JvQ3xdJIP7VP1JyzYeVknjTMGVyXY+2dhWARMpAl/XRZXNdI1Xwnwt9i0k7UDjqCEsRKBCB2v5U5qgvVLVWyDKgtlQmQZ4CbFEhdHifM6jzao3ByhjEKhN+i8I=
 deploy:
   provider: releases
-  api_key:
+  token:
     secure: MnpGvoT4uVxzxSNE6g2mRIt5CNWzCApWApvgQW810+Ik8FKrpQv8TMB+PvWc8yTVK9WKRdmSr8DhdmXIP5VIsuO+c228mtDRH+j1BWR5zImplFJxMB7fHIzZPfGt/UBQx4d1R7SLTz5SuA/mIkj5die3V3mIIcLWMCUXGvM8k+gPZQjYyIPX6b6zX07+Zyc9OMRISTqD7bAAXL5v5C+tO/3JeVpijytXM6jiqPatCvlPfxPIxBwK6SnRt4BhPyJVQJ8h9x2doul1bIja4BPqsCDLErrwdcBkyBvd4LDQYLj8mEN/BOCef6E0wSKnoLROMilZeMhesfeiosUJ1+7ILHGbGnCzkqC4dB9dha9UTRrM3HPQ3nv4AmXLFiR9GiISrfkLgKKIEmhwxaMJhS5fAEW5z89eZl0mMkLLaFFJrAq75M5WVhhtAYNFG597nT22UFdi7FJGr7E+7WU2JEOTZq2YQBG8yNTJCGGXT4b4AQOFjtK4FCXF4IeRvWoG4YQt1fZQCkw05u/WzG+XbsV+PQg+o15G4o8iKIgame7cvNk4yDKPBHEw0vlD50at0uQfcksDk6DW+KPcMJjNqYzvD+00ydAGm0ONTEXGG6jtfm+8WvEP3NpSr4Y/+e/FZiJYC9oVcau4IkcqDn6xRlwltNzPlfP2k77ojP8yZdvrwIg=
   file: app/build/outputs/apk/arelease/app-release.apk
-  skip_cleanup: true
+  cleanup: false
   on:
     repo: shangmingchao/Han
     tags: true
