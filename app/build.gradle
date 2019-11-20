@@ -2,6 +2,12 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
     compileSdkVersion build_versions.target_sdk
 
@@ -16,11 +22,11 @@ android {
     }
 
     signingConfigs {
-        debug {
-            keyAlias "debug"
-            keyPassword "android"
-            storeFile file("../debug.keystore")
-            storePassword "android"
+        release {
+            keyAlias "han"
+            keyPassword keystoreProperties.containsKey("keyPassword") ? keystoreProperties['keyPassword'] : System.getenv("keyPassword")
+            storeFile file("../han.keystore")
+            storePassword keystoreProperties.containsKey("storePassword") ? keystoreProperties['storePassword'] : System.getenv("storePassword")
         }
     }
 
@@ -28,12 +34,7 @@ android {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
-        }
-        debug {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release
         }
     }
 

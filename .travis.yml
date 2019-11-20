@@ -9,6 +9,8 @@ android:
     - extra-google-m2repository
     - extra-android-m2repository
 before_install:
+  - openssl aes-256-cbc -K $encrypted_5ad7d9eff25f_key -iv $encrypted_5ad7d9eff25f_iv
+    -in han.keystore.enc -out han.keystore -d
   - chmod +x gradlew
 script:
   - ./gradlew assembleRelease
@@ -20,3 +22,16 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
     - $HOME/.android/build-cache
+env:
+  global:
+    - secure: RiXfJo2ttpZom6z59qJc6WF31s93MddGuv02m5gpAwF19845gsGR1zHvnRV2ySvqN8ibhLkQBnlXntNCO0cGWs2BmdZYZ3t/pvPLU8vqwmNqjgabYr/PueMP3arrkdKnmSNL+hqtC4Ob2fGyzJUzdSEQZB0sOxlRn0dGiZXkacOLGyoyqqRqnrU2on1d0I68AgjTw8zmVUou8qE0v43KbQjRg8QNR+kGeSy3qOZPDX88LsA3/e/7XnyFNg9uTilJmTxwBsYQAMa2ZY9HZYgnMMGYaxa+Snghh1XMLpfHpjOUrsnexNeXBXYpL4P4wtBCn/9hHYHEG6zgV1sPpHpVrJBEXlyo+r2jfsb1tFhbYROLoEV5zNJnLnaqkZOVWZIhyBPHvodlCTbZznIzi0gj+LajijAtTU4AeG9XEXFTLiJAe3gYcSxIfvF8QFMXNb9Ol0EALlCd/0f18ozky2zjuyZRosPRRgGoJGTe5Phybb2sfoOZy80+PJg3M2YX3se4+cc7K/s8J+lnXQquf0XjkGQbl3UgCTG5lJxX4BwxCqNRvX5LtFpazIxH8JhnqGL9R9dTlmXeznLnVPIRwBaQAb9aJX21vAL3xtkIMmz+aiALOfDAKILANkkttCILzJuM+1Q7fAXW2IAROkVk0LxHuhRqqWM634+Y/0FwOZHgRwY=
+    - secure: b+B7iFm72i+UL7H59iBEW2GoXNXSPi34uk+MYxQ6NHwUP9QwgfY8m+k0tOQCy3CD9W5M4j9Y4tAYsMBjT28QJ1p4AJTN9JJGivSZ9Ie+O/Ak/6hEXp9XxCHU1EtzrvFBhwVOgE/020lkBGiXpZolJDtvHfazCpsEQlCBdx1UHIgAH4Fo5FieJuYEHqpl7o0MG8N+ra4U+h3mq3OFV5CQtXuEv7P26li3uzGeSTqQZVgTDpb7P8pH8bISnUH5AST6QiJ47OujYVsoYs6GXzfH2XvULvihOw4dTIVmYo43wnWeRHJwsDspTjReQQjFRXyaV+3Dj6Z8gY125E8D0N7ynOgwdnXmZEXxuwetz8HR7Kc5iJRyYpqIvT6kIyGAutEWvssTPyAa0ZU9RwAeZb278ROrXs7iJFuANwrclsiLQnxCRYlUsyXVBhc3gjBMaiUOy3nHGBxmZBL+UFDWZ0zWLLnaAgyrRzaKXXPHmew15Uxg0PfsOpKVfRMZPOT8hkmDa7cNVY+p1IELRCp+/DZK/I0YtXY0667UpJXKeZfgzndtUqX17JvQ3xdJIP7VP1JyzYeVknjTMGVyXY+2dhWARMpAl/XRZXNdI1Xwnwt9i0k7UDjqCEsRKBCB2v5U5qgvVLVWyDKgtlQmQZ4CbFEhdHifM6jzao3ByhjEKhN+i8I=
+deploy:
+  provider: releases
+  api_key:
+    secure: MnpGvoT4uVxzxSNE6g2mRIt5CNWzCApWApvgQW810+Ik8FKrpQv8TMB+PvWc8yTVK9WKRdmSr8DhdmXIP5VIsuO+c228mtDRH+j1BWR5zImplFJxMB7fHIzZPfGt/UBQx4d1R7SLTz5SuA/mIkj5die3V3mIIcLWMCUXGvM8k+gPZQjYyIPX6b6zX07+Zyc9OMRISTqD7bAAXL5v5C+tO/3JeVpijytXM6jiqPatCvlPfxPIxBwK6SnRt4BhPyJVQJ8h9x2doul1bIja4BPqsCDLErrwdcBkyBvd4LDQYLj8mEN/BOCef6E0wSKnoLROMilZeMhesfeiosUJ1+7ILHGbGnCzkqC4dB9dha9UTRrM3HPQ3nv4AmXLFiR9GiISrfkLgKKIEmhwxaMJhS5fAEW5z89eZl0mMkLLaFFJrAq75M5WVhhtAYNFG597nT22UFdi7FJGr7E+7WU2JEOTZq2YQBG8yNTJCGGXT4b4AQOFjtK4FCXF4IeRvWoG4YQt1fZQCkw05u/WzG+XbsV+PQg+o15G4o8iKIgame7cvNk4yDKPBHEw0vlD50at0uQfcksDk6DW+KPcMJjNqYzvD+00ydAGm0ONTEXGG6jtfm+8WvEP3NpSr4Y/+e/FZiJYC9oVcau4IkcqDn6xRlwltNzPlfP2k77ojP8yZdvrwIg=
+  file: app/build/outputs/apk/arelease/app-release.apk
+  skip_cleanup: true
+  on:
+    repo: shangmingchao/Han
+    tags: true
