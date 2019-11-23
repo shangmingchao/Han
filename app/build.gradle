@@ -8,6 +8,14 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+def versionPropertiesFile = rootProject.file("version.properties")
+def versionProperties = new Properties()
+versionProperties.load(new FileInputStream(versionPropertiesFile))
+def versionMajor = versionProperties['versionMajor'].toInteger()
+def versionMinor = versionProperties['versionMinor'].toInteger()
+def versionPatch = versionProperties['versionPatch'].toInteger()
+def versionBuild = versionProperties['versionBuild'].toInteger()
+
 android {
     compileSdkVersion build_versions.target_sdk
 
@@ -15,8 +23,8 @@ android {
         applicationId "com.frank.han"
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
-        versionCode 1
-        versionName "1.0"
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
+        versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
