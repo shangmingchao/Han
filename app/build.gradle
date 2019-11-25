@@ -44,8 +44,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
+        debug {
+            testCoverageEnabled true
+        }
     }
 
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "${variant.name}_${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}.apk"
+        }
+    }
 }
 
 dependencies {
