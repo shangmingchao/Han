@@ -7,12 +7,12 @@ ext.build_versions = build_versions
 
 def versions = [:]
 versions.android_gradle_plugin = '4.0.0-alpha04'
-versions.kotlin = "1.3.60-eap-25"
+versions.kotlin = "1.3.60"
 versions.androidx = "1.1.0"
 versions.constraint_layout = "1.1.3"
 versions.junit = "4.12"
-versions.espresso = "3.2.0"
-versions.android_junit = "1.1.1"
+versions.androidx_test = "1.3.0-alpha02"
+versions.espresso = "3.3.0-alpha02"
 
 def deps = [:]
 
@@ -21,14 +21,22 @@ deps.kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions
 
 deps.kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
 
-def support = [:]
-support.app_compat = "androidx.appcompat:appcompat:$versions.androidx"
-support.ktx = "androidx.core:core-ktx:$versions.androidx"
-support.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
-deps.support = support
+def androidx = [:]
+androidx.app_compat = "androidx.appcompat:appcompat:$versions.androidx"
+androidx.ktx = "androidx.core:core-ktx:$versions.androidx"
+androidx.constraint_layout = "androidx.constraintlayout:constraintlayout:$versions.constraint_layout"
+deps.androidx = androidx
 
 deps.junit = "junit:junit:$versions.junit"
-deps.android_junit = "androidx.test.ext:junit:$versions.android_junit"
-deps.espresso = "androidx.test.espresso:espresso-core:$versions.espresso"
+
+def androidx_test = [:]
+androidx_test.core = "androidx.test:core:1.2.1-alpha02"
+androidx_test.runner = "androidx.test:runner:$versions.androidx_test"
+androidx_test.rules = "androidx.test:rules:$versions.androidx_test"
+androidx_test.junit = "androidx.test.ext:junit:1.1.2-alpha02"
+androidx_test.truth = "androidx.test.ext:truth:$versions.androidx_test"
+androidx_test.espresso_core = "androidx.test.espresso:espresso-core:$versions.espresso"
+androidx_test.espresso_contrib = "androidx.test.espresso:espresso-contrib:$versions.espresso"
+deps.androidx_test = androidx_test
 
 ext.deps = deps

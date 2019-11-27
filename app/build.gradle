@@ -49,6 +49,11 @@ android {
         }
     }
 
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
+    }
+
     applicationVariants.all { variant ->
         variant.outputs.all {
             outputFileName = "${variant.name}_${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}.apk"
@@ -59,10 +64,18 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation deps.kotlin
-    implementation deps.support.app_compat
-    implementation deps.support.ktx
-    implementation deps.support.constraint_layout
+    implementation deps.androidx.app_compat
+    implementation deps.androidx.ktx
+    implementation deps.androidx.constraint_layout
+
     testImplementation deps.junit
-    androidTestImplementation deps.android_junit
-    androidTestImplementation deps.espresso
+    testImplementation deps.androidx_test.core
+
+    androidTestImplementation deps.androidx_test.core
+    androidTestImplementation deps.androidx_test.runner
+    androidTestImplementation deps.androidx_test.rules
+    androidTestImplementation deps.androidx_test.junit
+    androidTestImplementation deps.androidx_test.truth
+    androidTestImplementation deps.androidx_test.espresso_core
+    androidTestImplementation deps.androidx_test.espresso_contrib
 }
