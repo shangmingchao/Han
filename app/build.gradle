@@ -78,4 +78,6 @@ dependencies {
     androidTestImplementation deps.androidx_test.truth
     androidTestImplementation deps.androidx_test.espresso_core
     androidTestImplementation deps.androidx_test.espresso_contrib
+    androidTestImplementation deps.androidx_test.espresso_intents
+    androidTestImplementation deps.androidx_test.uiautomator
 }

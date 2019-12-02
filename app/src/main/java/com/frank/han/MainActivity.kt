@@ -6,6 +6,12 @@ import com.frank.han.util.DateExtensions
 import java.util.Calendar
 import kotlinx.android.synthetic.main.activity_main.name
 
+/**
+ * Main Activity
+ *
+ * @author frank
+ * @date 2019/12/2 10:41 AM
+ */
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

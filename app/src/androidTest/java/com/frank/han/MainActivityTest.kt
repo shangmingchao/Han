@@ -11,6 +11,12 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
+/**
+ * MainActivityTest java -jar crawl_launcher.jar --apk-file /Users/hhh/AndroidStudioProjects/Han/app/release/release_1.0.0.0.apk --android-sdk /Users/hhh/Library/Android/sdk
+ *
+ * @author frank
+ * @date 2019/12/2 10:41 AM
+ */
 @RunWith(AndroidJUnit4::class)
 @LargeTest
 class MainActivityTest {
@@ -18,7 +24,8 @@ class MainActivityTest {
     @get:Rule
     val activityRule = ActivityTestRule(MainActivity::class.java)
 
-    @Test fun testNameChange() {
+    @Test
+    fun testNameChange() {
         onView(withId(R.id.name)).check(matches(withText("test = true")))
     }
 }
