@@ -1,6 +1,5 @@
 package com.frank.han.ui.repo
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
@@ -25,8 +24,6 @@ class RepoViewModel : ViewModel() {
             emit(remoteRepo)
         } catch (e: Exception) {
             e.printStackTrace()
-        } finally {
-            Log.d("TAG", "getRepo: completed")
         }
     }
 }

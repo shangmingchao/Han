@@ -10,10 +10,8 @@ import androidx.test.uiautomator.By
 import androidx.test.uiautomator.UiDevice
 import androidx.test.uiautomator.Until
 import org.hamcrest.core.IsNull.notNullValue
-import org.junit.Assert.assertEquals
 import org.junit.Assert.assertThat
 import org.junit.Before
-import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
@@ -45,11 +43,5 @@ class MainActivityBehaviorUiTest {
         }
         context.startActivity(intent)
         device.wait(Until.hasObject(By.pkg(PACKAGE).depth(0)), LAUNCH_TIMEOUT)
-    }
-
-    @Test
-    fun changeText() {
-        val nameTextView = device.findObject(By.res(PACKAGE, "name"))
-        assertEquals(nameTextView.text, "test = true")
     }
 }
