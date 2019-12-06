@@ -49,6 +49,10 @@ android {
         }
     }
 
+    viewBinding {
+        enabled = true
+    }
+
     testOptions {
         unitTests.returnDefaultValues = true
         unitTests.includeAndroidResources = true
@@ -65,11 +69,23 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation deps.kotlin
     implementation deps.androidx.app_compat
-    implementation deps.androidx.ktx
+    implementation deps.androidx.ktx_core
+    implementation deps.androidx.ktx_collection
+    implementation deps.androidx.ktx_fragment
+    implementation deps.androidx.ktx_lifecycle_runtime
+    implementation deps.androidx.ktx_lifecycle_viewmodel
+    implementation deps.androidx.ktx_lifecycle_livedata
     implementation deps.androidx.constraint_layout
+
+    implementation deps.retrofit.core
+    implementation deps.retrofit.converter_gson
+
+    implementation deps.stetho.core
+    implementation deps.stetho.okhttp3_helper
 
     testImplementation deps.junit
     testImplementation deps.androidx_test.core
+    testImplementation deps.okhttp_mock
 
     androidTestImplementation deps.androidx_test.core
     androidTestImplementation deps.androidx_test.runner
