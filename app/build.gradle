@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
@@ -80,12 +81,17 @@ dependencies {
     implementation deps.retrofit.core
     implementation deps.retrofit.converter_gson
 
+    implementation deps.room.core
+    kapt deps.room.compiler
+    implementation deps.room.ktx
+
     implementation deps.stetho.core
     implementation deps.stetho.okhttp3_helper
 
     testImplementation deps.junit
     testImplementation deps.androidx_test.core
     testImplementation deps.okhttp_mock
+    testImplementation deps.room.testing
 
     androidTestImplementation deps.androidx_test.core
     androidTestImplementation deps.androidx_test.runner

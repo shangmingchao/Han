@@ -17,6 +17,7 @@ versions.uiautomator = "2.2.0"
 versions.retrofit = "2.6.1"
 versions.okhttp = "4.2.2"
 versions.stetho = "1.5.1"
+versions.room = "2.2.2"
 
 def deps = [:]
 
@@ -55,6 +56,13 @@ def retrofit = [:]
 retrofit.core = "com.squareup.retrofit2:retrofit:$versions.retrofit"
 retrofit.converter_gson = "com.squareup.retrofit2:converter-gson:$versions.retrofit"
 deps.retrofit = retrofit
+
+def room = [:]
+room.core = "androidx.room:room-runtime:$versions.room"
+room.compiler = "androidx.room:room-compiler:$versions.room"
+room.ktx = "androidx.room:room-ktx:$versions.room"
+room.testing = "androidx.room:room-testing:$versions.room"
+deps.room = room
 
 def stetho = [:]
 stetho.core = "com.facebook.stetho:stetho:$versions.stetho"

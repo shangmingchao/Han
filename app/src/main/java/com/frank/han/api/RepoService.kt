@@ -1,6 +1,6 @@
 package com.frank.han.api
 
-import com.frank.han.data.repo.Repo
+import com.frank.han.data.repo.entity.Repo
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -11,10 +11,10 @@ import retrofit2.http.Path
  * @author frank
  * @date 2019/12/2 6:20 PM
  */
-interface GitHubService {
+interface RepoService {
 
-    @GET("users/{user}/repos")
-    suspend fun listRepos(@Path("user") user: String): List<Repo>
+    @GET("users/{username}/repos")
+    suspend fun listUserRepositories(@Path("username") username: String): List<Repo>
 
     companion object {
         const val END_POINT = "https://api.github.com/"
