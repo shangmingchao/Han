@@ -27,8 +27,8 @@ before_script:
   - adb shell settings put global animator_duration_scale 0 &
   - adb shell input keyevent 82 &
 script:
-  - ./gradlew assembleRelease
   - ./gradlew createDebugCoverageReport
+  - ./gradlew assembleRelease
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/

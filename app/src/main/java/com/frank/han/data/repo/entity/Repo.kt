@@ -12,7 +12,7 @@ import androidx.room.PrimaryKey
  */
 @Entity(indices = [Index(value = ["id"], unique = true)])
 data class Repo(
-    @PrimaryKey val id: String,
+    @PrimaryKey val id: Long,
     val full_name: String,
     val description: String,
     val owner_login: String
