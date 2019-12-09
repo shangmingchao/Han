@@ -9,7 +9,7 @@ import androidx.test.espresso.intent.matcher.IntentMatchers.toPackage
 import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import androidx.test.filters.SdkSuppress
+import androidx.test.filters.LargeTest
 import org.hamcrest.Matchers.allOf
 import org.junit.Rule
 import org.junit.Test
@@ -23,14 +23,13 @@ import org.junit.runner.RunWith
  */
 
 private const val PACKAGE = "com.frank.han"
-private const val LAUNCH_TIMEOUT = 5000L
 
 @RunWith(AndroidJUnit4::class)
-@SdkSuppress(minSdkVersion = 18)
+@LargeTest
 class MainActivityBehaviorUiTest {
 
     @get:Rule
-    val intentsTestRule = IntentsTestRule<MainActivity>(MainActivity::class.java)
+    val intentsTestRule = IntentsTestRule(MainActivity::class.java)
 
     @Test
     fun testRepoRouter() {
