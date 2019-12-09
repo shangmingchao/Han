@@ -6,6 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.frank.han.data.repo.RepoDao
 import com.frank.han.data.repo.entity.Repo
+import com.frank.han.data.user.UserDao
 import com.frank.han.data.user.entity.User
 
 /**
@@ -18,6 +19,8 @@ import com.frank.han.data.user.entity.User
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun repoDao(): RepoDao
+
+    abstract fun userDao(): UserDao
 
     companion object {
 

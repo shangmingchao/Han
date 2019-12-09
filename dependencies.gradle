@@ -38,7 +38,6 @@ androidx.constraint_layout = "androidx.constraintlayout:constraintlayout:$versio
 deps.androidx = androidx
 
 deps.junit = "junit:junit:$versions.junit"
-deps.okhttp_mock = "com.squareup.okhttp3:mockwebserver:$versions.okhttp"
 
 def androidx_test = [:]
 androidx_test.core = "androidx.test:core:1.2.1-alpha02"
@@ -56,6 +55,11 @@ def retrofit = [:]
 retrofit.core = "com.squareup.retrofit2:retrofit:$versions.retrofit"
 retrofit.converter_gson = "com.squareup.retrofit2:converter-gson:$versions.retrofit"
 deps.retrofit = retrofit
+
+def okhttp = [:]
+okhttp.mock = "com.squareup.okhttp3:mockwebserver:$versions.okhttp"
+okhttp.logging_interceptor = "com.squareup.okhttp3:logging-interceptor:$versions.okhttp"
+deps.okhttp = okhttp
 
 def room = [:]
 room.core = "androidx.room:room-runtime:$versions.room"

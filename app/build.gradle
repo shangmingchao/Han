@@ -59,6 +59,15 @@ android {
         unitTests.includeAndroidResources = true
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     applicationVariants.all { variant ->
         variant.outputs.all {
             outputFileName = "${variant.name}_${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}.apk"
@@ -81,6 +90,8 @@ dependencies {
     implementation deps.retrofit.core
     implementation deps.retrofit.converter_gson
 
+    implementation deps.okhttp.logging_interceptor
+
     implementation deps.room.core
     kapt deps.room.compiler
     implementation deps.room.ktx
@@ -90,7 +101,7 @@ dependencies {
 
     testImplementation deps.junit
     testImplementation deps.androidx_test.core
-    testImplementation deps.okhttp_mock
+    testImplementation deps.okhttp.mock
     testImplementation deps.room.testing
 
     androidTestImplementation deps.androidx_test.core

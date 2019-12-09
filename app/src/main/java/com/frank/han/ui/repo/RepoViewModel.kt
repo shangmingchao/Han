@@ -2,10 +2,10 @@ package com.frank.han.ui.repo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import com.frank.han.data.Resource
+import com.frank.han.data.getResource
 import com.frank.han.data.repo.RepoRepository
 import com.frank.han.data.repo.entity.Repo
-import kotlinx.coroutines.Dispatchers
 
 /**
  *
@@ -18,8 +18,9 @@ class RepoViewModel : ViewModel() {
     private val repository = RepoRepository()
     val repo = getRepo("google")
 
-    private fun getRepo(userId: String): LiveData<List<Repo>> = liveData(Dispatchers.IO) {
-        val remoteRepo = repository.getRemoteRepo(userId)
-        emit(remoteRepo)
-    }
+    private fun getRepo(username: String): LiveData<Resource<List<Repo>>> = getResource(
+        databaseQuery = { repository.getLocalRepo(username) },
+        networkCall = { repository.getRemoteRepo(username) },
+        saveCallResult = { repository.saveLocalRepo(it) }
+    )
 }

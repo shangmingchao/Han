@@ -14,6 +14,5 @@ import androidx.room.PrimaryKey
 data class Repo(
     @PrimaryKey val id: Long,
     val full_name: String,
-    val description: String,
-    val owner_login: String
+    val description: String?
 )
