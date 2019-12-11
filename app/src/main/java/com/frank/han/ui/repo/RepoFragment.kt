@@ -5,12 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.frank.han.data.Resource.Errors
 import com.frank.han.data.Resource.Loading
 import com.frank.han.data.Resource.Success
 import com.frank.han.databinding.FragmentRepoBinding
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 
 /**
  *
@@ -21,7 +22,7 @@ import com.frank.han.databinding.FragmentRepoBinding
 class RepoFragment : Fragment() {
 
     private lateinit var binding: FragmentRepoBinding
-    private val viewModel: RepoViewModel by viewModels()
+    private val repoViewModel: RepoViewModel by viewModel { parametersOf(Bundle(), "vm1") }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,7 +35,7 @@ class RepoFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.repo.observe(viewLifecycleOwner, Observer { resource ->
+        repoViewModel.repo.observe(viewLifecycleOwner, Observer { resource ->
             binding.repo.text = when (resource) {
                 is Loading -> "Loading"
                 is Success -> resource.data.toString()

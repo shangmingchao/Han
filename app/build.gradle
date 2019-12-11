@@ -96,6 +96,14 @@ dependencies {
     kapt deps.room.compiler
     implementation deps.room.ktx
 
+    implementation deps.koin.core
+    implementation deps.koin.ext
+    implementation deps.koin.android
+    implementation deps.koin.androidx_scope
+    implementation deps.koin.androidx_viewmodel
+    implementation deps.koin.androidx_fragment
+    implementation deps.koin.androidx_ext
+
     implementation deps.stetho.core
     implementation deps.stetho.okhttp3_helper
 
@@ -103,6 +111,7 @@ dependencies {
     testImplementation deps.androidx_test.core
     testImplementation deps.okhttp.mock
     testImplementation deps.room.testing
+    testImplementation deps.koin.test
 
     androidTestImplementation deps.androidx_test.core
     androidTestImplementation deps.androidx_test.runner

@@ -2,7 +2,15 @@ package com.frank.han
 
 import android.app.Application
 import com.facebook.stetho.Stetho
-import kotlin.properties.Delegates
+import com.frank.han.di.databaseModule
+import com.frank.han.di.httpClientModule
+import com.frank.han.di.repositoryModule
+import com.frank.han.di.serializationModule
+import com.frank.han.di.viewModelModule
+import com.frank.han.di.webServiceModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
 /**
  *
@@ -14,14 +22,16 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        app = this
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
         }
-    }
-
-    companion object {
-        private var app: App by Delegates.notNull()
-        fun getInstance() = app
+        startKoin {
+            androidLogger()
+            androidContext(this@App)
+            modules(
+                serializationModule, httpClientModule, webServiceModule, databaseModule,
+                repositoryModule, viewModelModule
+            )
+        }
     }
 }

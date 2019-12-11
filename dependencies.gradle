@@ -18,6 +18,7 @@ versions.retrofit = "2.6.1"
 versions.okhttp = "4.2.2"
 versions.stetho = "1.5.1"
 versions.room = "2.2.2"
+versions.koin = "2.1.0-alpha-7"
 
 def deps = [:]
 
@@ -67,6 +68,17 @@ room.compiler = "androidx.room:room-compiler:$versions.room"
 room.ktx = "androidx.room:room-ktx:$versions.room"
 room.testing = "androidx.room:room-testing:$versions.room"
 deps.room = room
+
+def koin = [:]
+koin.core = "org.koin:koin-core:$versions.koin"
+koin.ext = "org.koin:koin-core-ext:$versions.koin"
+koin.test = "org.koin:koin-test:$versions.koin"
+koin.android = "org.koin:koin-android:$versions.koin"
+koin.androidx_scope = "org.koin:koin-androidx-scope:$versions.koin"
+koin.androidx_viewmodel = "org.koin:koin-androidx-viewmodel:$versions.koin"
+koin.androidx_fragment = "org.koin:koin-androidx-fragment:$versions.koin"
+koin.androidx_ext = "org.koin:koin-androidx-ext:$versions.koin"
+deps.koin = koin
 
 def stetho = [:]
 stetho.core = "com.facebook.stetho:stetho:$versions.stetho"
