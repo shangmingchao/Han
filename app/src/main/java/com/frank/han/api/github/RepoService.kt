@@ -1,4 +1,4 @@
-package com.frank.han.api
+package com.frank.han.api.github
 
 import com.frank.han.data.repo.entity.Repo
 import retrofit2.http.GET
@@ -15,8 +15,4 @@ interface RepoService {
 
     @GET("users/{username}/repos")
     suspend fun listUserRepositories(@Path("username") username: String): List<Repo>
-
-    companion object {
-        const val END_POINT = "https://api.github.com/"
-    }
 }

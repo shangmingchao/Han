@@ -2,7 +2,7 @@ package com.frank.han.di
 
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.frank.han.BuildConfig
-import com.frank.han.api.RepoService
+import com.frank.han.api.GITHUB_END_POINT
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -15,6 +15,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 const val INTERCEPTOR_LOGCAT = "logcat"
 const val INTERCEPTOR_CONSOLE = "console"
+
+const val RETROFIT_GITHUB = "github"
 
 val httpClientModule = module {
 
@@ -39,9 +41,9 @@ val httpClientModule = module {
             .build()
     }
 
-    single {
+    single<Retrofit>(named(RETROFIT_GITHUB)) {
         get<Retrofit.Builder>()
-            .baseUrl(RepoService.END_POINT)
+            .baseUrl(GITHUB_END_POINT)
             .client(get())
             .addConverterFactory(GsonConverterFactory.create(get()))
             .build()

@@ -22,7 +22,7 @@ import org.koin.core.parameter.parametersOf
 class RepoFragment : Fragment() {
 
     private lateinit var binding: FragmentRepoBinding
-    private val repoViewModel: RepoViewModel by viewModel { parametersOf(Bundle(), "vm1") }
+    private val repoViewModel: RepoViewModel by viewModel { parametersOf(Bundle(), "google") }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,4 +43,13 @@ class RepoFragment : Fragment() {
             }
         })
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        outState.putString("foo", "bar")
+        super.onSaveInstanceState(outState)
+    }
+
+    fun getVMFoo() = repoViewModel.getFoo()
+
+    fun getVMUsername() = repoViewModel.getUsername()
 }

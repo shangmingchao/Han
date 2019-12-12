@@ -1,7 +1,7 @@
 package com.frank.han.data.repo
 
 import androidx.lifecycle.LiveData
-import com.frank.han.api.RepoService
+import com.frank.han.api.github.RepoService
 import com.frank.han.data.repo.entity.Repo
 
 /**

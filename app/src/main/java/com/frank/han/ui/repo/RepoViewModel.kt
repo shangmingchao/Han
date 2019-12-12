@@ -16,14 +16,19 @@ import com.frank.han.data.repo.entity.Repo
  */
 class RepoViewModel(
     private val handle: SavedStateHandle,
+    private val username: String,
     private val repoRepository: RepoRepository
 ) : ViewModel() {
 
-    val repo = getRepo("google")
+    val repo by lazy { getRepo(username) }
 
     private fun getRepo(username: String): LiveData<Resource<List<Repo>>> = getResource(
         databaseQuery = { repoRepository.getLocalRepo(username) },
         networkCall = { repoRepository.getRemoteRepo(username) },
         saveCallResult = { repoRepository.saveLocalRepo(it) }
     )
+
+    fun getFoo() = handle.get<String>("foo")
+
+    fun getUsername() = username
 }

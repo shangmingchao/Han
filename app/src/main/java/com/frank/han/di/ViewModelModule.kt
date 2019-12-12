@@ -6,5 +6,9 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val viewModelModule = module {
-    viewModel { (handle: SavedStateHandle) -> RepoViewModel(handle, get()) }
+    viewModel { (handle: SavedStateHandle, username: String) ->
+        RepoViewModel(
+            handle, username, get()
+        )
+    }
 }
