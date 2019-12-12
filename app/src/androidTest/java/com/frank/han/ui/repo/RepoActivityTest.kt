@@ -27,8 +27,7 @@ class RepoActivityTest {
             val repoFragment =
                 it.supportFragmentManager.findFragmentById(R.id.container) as RepoFragment
             assertNotNull(repoFragment)
-            assertEquals("google", repoFragment.getVMUsername())
-            assertEquals("bar", repoFragment.getVMFoo())
+            assertEquals("brief", repoFragment.getStyle())
         }
     }
 }

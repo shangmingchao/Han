@@ -28,7 +28,11 @@ class RepoViewModel(
         saveCallResult = { repoRepository.saveLocalRepo(it) }
     )
 
-    fun getFoo() = handle.get<String>("foo")
+    fun getStyle(): String? = handle.get<String>(STYLE_KEY)
 
-    fun getUsername() = username
+    fun setStyle(style: String) = handle.set(STYLE_KEY, style)
+
+    companion object {
+        const val STYLE_KEY = "style"
+    }
 }

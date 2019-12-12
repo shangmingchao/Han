@@ -35,6 +35,7 @@ class RepoFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        repoViewModel.setStyle("brief")
         repoViewModel.repo.observe(viewLifecycleOwner, Observer { resource ->
             binding.repo.text = when (resource) {
                 is Loading -> "Loading"
@@ -44,12 +45,5 @@ class RepoFragment : Fragment() {
         })
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        outState.putString("foo", "bar")
-        super.onSaveInstanceState(outState)
-    }
-
-    fun getVMFoo() = repoViewModel.getFoo()
-
-    fun getVMUsername() = repoViewModel.getUsername()
+    fun getStyle() = repoViewModel.getStyle()
 }
