@@ -14,7 +14,7 @@ fun <T, R> getResource(
     databaseQuery: () -> LiveData<T>,
     networkCall: suspend () -> R,
     saveCallResult: suspend (R) -> Unit
-): LiveData<Resource<T>> = liveData(Dispatchers.IO) {
+): LiveData<Resource<T>> = liveData(Dispatchers.IO, 0) {
     emit(Resource.Loading())
     val localLiveData = getLocalResource(databaseQuery)
     localLiveData?.let { emitSource(it) }

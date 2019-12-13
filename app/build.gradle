@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
@@ -85,6 +86,8 @@ dependencies {
     implementation deps.androidx.ktx_lifecycle_runtime
     implementation deps.androidx.ktx_lifecycle_viewmodel
     implementation deps.androidx.ktx_lifecycle_livedata
+    implementation deps.androidx.ktx_navigation_fragment
+    implementation deps.androidx.ktx_navigation_ui
     implementation deps.androidx.constraint_layout
 
     implementation deps.retrofit.core
@@ -93,6 +96,7 @@ dependencies {
     implementation deps.okhttp.logging_interceptor
 
     implementation deps.room.core
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt deps.room.compiler
     implementation deps.room.ktx
 
