@@ -1,12 +1,10 @@
 package com.frank.han.ui.main
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.frank.han.databinding.FragmentMainBinding
+import com.frank.han.R
 import com.frank.han.ui.BaseFragment
+import kotlinx.android.synthetic.main.fragment_main.repoBtn
 
 /**
  *
@@ -16,20 +14,11 @@ import com.frank.han.ui.BaseFragment
  */
 class MainFragment : BaseFragment() {
 
-    private lateinit var binding: FragmentMainBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        binding = FragmentMainBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+    override val layoutId = R.layout.fragment_main
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        binding.repo.setOnClickListener {
+        repoBtn.setOnClickListener {
             findNavController().navigate(
                 MainFragmentDirections.actionMainFragmentToRepoFragment("google")
             )

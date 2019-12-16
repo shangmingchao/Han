@@ -27,12 +27,4 @@ class RepoViewModel(
         networkCall = { repoRepository.getRemoteRepo(username) },
         saveCallResult = { repoRepository.saveLocalRepo(it) }
     )
-
-    fun getStyle(): String? = handle.get<String>(STYLE_KEY)
-
-    fun setStyle(style: String) = handle.set(STYLE_KEY, style)
-
-    companion object {
-        const val STYLE_KEY = "style"
-    }
 }

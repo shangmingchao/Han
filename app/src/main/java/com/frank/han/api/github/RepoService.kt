@@ -5,9 +5,9 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 /**
- * Github API
+ * Github Repositories API
  *
- * @see <a href="https://developer.github.com/v3/">GitHub REST API v3</a>
+ * @see <a href="https://developer.github.com/v3/repos/">GitHub Repositories API v3</a>
  * @author frank
  * @date 2019/12/2 6:20 PM
  */

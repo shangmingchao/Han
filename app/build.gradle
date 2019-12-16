@@ -51,10 +51,6 @@ android {
         }
     }
 
-    viewBinding {
-        enabled = true
-    }
-
     testOptions {
         unitTests.returnDefaultValues = true
         unitTests.includeAndroidResources = true

@@ -13,6 +13,6 @@ class DateExtensionsTest {
 
     @Test
     fun isSameYear() {
-        assert(DateExtensions.isSameYear(Calendar.getInstance(), Calendar.getInstance()))
+        assert(Calendar.getInstance().isSameYear(Calendar.getInstance()))
     }
 }
