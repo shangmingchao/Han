@@ -30,7 +30,7 @@ cat <<-EOF
 Please import the code style settings in Android Studio:
   * open Settings -> Editor -> Code Style
   * click the gear icon and select "Import Scheme..."
-  * find the file ${GIT_ROOT}/tools/iosched-codestyle.xml
+  * find the file ${GIT_ROOT}/tools/codestyle.xml
 Additionally, checking the following settings helps avoid miscellaneous issues:
   * Settings -> Editor -> General -> Strip trailing spaces on Save
   * Settings -> Editor -> General -> Ensure line feed at end of file on Save
