@@ -1,6 +1,6 @@
 package com.frank.han.api.github
 
-import com.frank.han.data.repo.entity.Repo
+import com.frank.han.data.repo.entity.RepoDTO
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -14,5 +14,5 @@ import retrofit2.http.Path
 interface RepoService {
 
     @GET("users/{username}/repos")
-    suspend fun listUserRepositories(@Path("username") username: String): List<Repo>
+    suspend fun listUserRepositories(@Path("username") username: String): List<RepoDTO>
 }

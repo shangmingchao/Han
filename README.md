@@ -16,12 +16,25 @@ git clone https://github.com/shangmingchao/Han.git && cd Han && chmod +x tools/s
 ```
 Config your Android Studio:
 
-Open Preferences.../Settings -> Editor -> Code Style
+Open `Preferences...`/`Settings` -> `Editor` -> `Code Style`
 
-click the gear icon and select "Import Scheme...", choose Han/tools/codestyle.xml
+Click the gear icon and select `Import Scheme...`, choose Han/tools/codestyle.xml file
+
+Open `Editor` -> `File and Code Templates` -> `Includes` -> `File Header`
+
+Edit the template like this:
+
+```kotlin
+/**
+ *
+ *
+ * @author frank
+ * @date ${DATE} ${TIME}
+ */
+```
 
 Checking the following settings:
 
-- Editor -> General -> Strip trailing spaces on Save
-- Editor -> General -> Ensure line feed at end of file on Save
-- Editor -> General -> Auto Import -> Optimize imports on the fly
+- `Editor` -> `General` -> `Strip trailing spaces on Save`
+- `Editor` -> `General` -> `Ensure line feed at end of file on Save`
+- `Editor` -> `General` -> `Auto Import -> Optimize imports on the fly`

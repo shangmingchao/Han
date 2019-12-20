@@ -3,9 +3,9 @@ package com.frank.han.data
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.frank.han.data.repo.RepoDao
-import com.frank.han.data.repo.entity.Repo
+import com.frank.han.data.repo.entity.RepoPO
 import com.frank.han.data.user.UserDao
-import com.frank.han.data.user.entity.User
+import com.frank.han.data.user.entity.UserPO
 
 /**
  *
@@ -13,7 +13,7 @@ import com.frank.han.data.user.entity.User
  * @author frank
  * @date 2019/12/7 8:16 PM
  */
-@Database(entities = [Repo::class, User::class], version = 1, exportSchema = false)
+@Database(entities = [RepoPO::class, UserPO::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
     abstract fun repoDao(): RepoDao

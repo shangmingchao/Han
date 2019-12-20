@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.frank.han.data.Resource
 import com.frank.han.data.getResource
 import com.frank.han.data.repo.RepoRepository
-import com.frank.han.data.repo.entity.Repo
+import com.frank.han.data.repo.entity.RepoVO
 
 /**
  *
@@ -22,9 +22,11 @@ class RepoViewModel(
 
     val repo by lazy { getRepo(username) }
 
-    private fun getRepo(username: String): LiveData<Resource<List<Repo>>> = getResource(
+    private fun getRepo(username: String): LiveData<Resource<List<RepoVO>>> = getResource(
         databaseQuery = { repoRepository.getLocalRepo(username) },
         networkCall = { repoRepository.getRemoteRepo(username) },
+        dpMapping = { it.map { dto -> dto.mapPO() } },
+        pvMapping = { it.map { po -> po.mapVO() } },
         saveCallResult = { repoRepository.saveLocalRepo(it) }
     )
 }

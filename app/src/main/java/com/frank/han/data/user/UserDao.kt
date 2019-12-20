@@ -1,10 +1,11 @@
 package com.frank.han.data.user
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.frank.han.data.user.entity.User
+import com.frank.han.data.user.entity.UserPO
 
 /**
  *
@@ -16,8 +17,8 @@ import com.frank.han.data.user.entity.User
 interface UserDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun saveUser(user: User)
+    suspend fun saveUser(user: UserPO)
 
-    @Query("SELECT * FROM user WHERE id = :userId")
-    suspend fun getUserById(userId: String): User
+    @Query("SELECT * FROM UserPO WHERE id = :userId")
+    fun getUserById(userId: String): LiveData<UserPO>
 }

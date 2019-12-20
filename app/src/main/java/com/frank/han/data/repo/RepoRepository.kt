@@ -2,7 +2,8 @@ package com.frank.han.data.repo
 
 import androidx.lifecycle.LiveData
 import com.frank.han.api.github.RepoService
-import com.frank.han.data.repo.entity.Repo
+import com.frank.han.data.repo.entity.RepoDTO
+import com.frank.han.data.repo.entity.RepoPO
 
 /**
  *
@@ -15,12 +16,13 @@ class RepoRepository(
     private val repoDao: RepoDao
 ) {
 
-    suspend fun getRemoteRepo(username: String): List<Repo> =
+    suspend fun getRemoteRepo(username: String): List<RepoDTO> =
         repoService.listUserRepositories(username)
 
-    fun getLocalRepo(username: String): LiveData<List<Repo>> =
+    fun getLocalRepo(username: String): LiveData<List<RepoPO>> =
         repoDao.getUserRepos()
 
-    suspend fun saveLocalRepo(repos: List<Repo>) =
+    suspend fun saveLocalRepo(repos: List<RepoPO>) {
         repoDao.saveRepo(repos)
+    }
 }
