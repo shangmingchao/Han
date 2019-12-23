@@ -7,6 +7,6 @@ package com.frank.han.data.repo.entity
  * @date 2019/12/17 3:52 PM
  */
 data class RepoVO(
-    var desc: String = "",
-    var isPrivate: Boolean = false
+    var desc: String,
+    var isPrivate: Boolean
 )

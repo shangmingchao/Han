@@ -1,4 +1,4 @@
-package com.frank.han.ui.repo
+package com.frank.han.ui.user
 
 import android.os.Bundle
 import android.widget.Toast
@@ -10,7 +10,7 @@ import com.frank.han.data.Resource.Errors
 import com.frank.han.data.Resource.Loading
 import com.frank.han.data.Resource.Success
 import com.frank.han.ui.BaseFragment
-import kotlinx.android.synthetic.main.fragment_repo.repoText
+import kotlinx.android.synthetic.main.fragment_user.userTextView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -18,18 +18,18 @@ import org.koin.core.parameter.parametersOf
  *
  *
  * @author frank
- * @date 2019/12/5 3:38 PM
+ * @date 2019/12/23 2:08 PM
  */
-class RepoFragment : BaseFragment() {
+class UserFragment : BaseFragment() {
 
-    override val layoutId = R.layout.fragment_repo
-    private val args by navArgs<RepoFragmentArgs>()
-    private val repoViewModel: RepoViewModel by viewModel { parametersOf(Bundle(), args.username) }
+    override val layoutId = R.layout.fragment_user
+    private val args by navArgs<UserFragmentArgs>()
+    private val userViewModel: UserViewModel by viewModel { parametersOf(Bundle(), args.username) }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        repoViewModel.repo.observe(viewLifecycleOwner, Observer { resource ->
-            repoText.text = when (resource) {
+        userViewModel.user.observe(viewLifecycleOwner, Observer { resource ->
+            userTextView.text = when (resource) {
                 is Loading -> "Loading"
                 is Success -> resource.data.toString()
                 is Errors -> {

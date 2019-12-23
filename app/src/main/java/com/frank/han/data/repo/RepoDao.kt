@@ -5,7 +5,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
+import androidx.room.Transaction
 import com.frank.han.data.repo.entity.RepoPO
+import com.frank.han.data.user.entity.UserWithRepos
 
 /**
  *
@@ -19,6 +21,7 @@ interface RepoDao {
     @Insert(onConflict = REPLACE)
     suspend fun saveRepo(repo: List<RepoPO>)
 
-    @Query("SELECT * FROM RepoPO")
-    fun getUserRepos(): LiveData<List<RepoPO>>
+    @Transaction
+    @Query("SELECT * FROM UserPO WHERE login = :username")
+    fun getUserRepos(username: String): LiveData<UserWithRepos>
 }

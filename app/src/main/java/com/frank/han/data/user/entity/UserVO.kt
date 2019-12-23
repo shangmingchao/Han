@@ -7,5 +7,5 @@ package com.frank.han.data.user.entity
  * @date 2019/12/18 2:37 PM
  */
 data class UserVO(
-    var username: String = ""
+    val username: String
 )

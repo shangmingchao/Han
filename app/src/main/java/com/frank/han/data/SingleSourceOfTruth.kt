@@ -1,8 +1,8 @@
 package com.frank.han.data
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.liveData
+import androidx.lifecycle.map
 import kotlinx.coroutines.Dispatchers
 
 /**
@@ -20,19 +20,13 @@ fun <V, D, P> getResource(
     saveCallResult: suspend (P) -> Unit
 ): LiveData<Resource<V>> = liveData(Dispatchers.IO, 0) {
     emit(Resource.Loading())
-    val localLiveData = getLocalResource(databaseQuery)
-    localLiveData?.let {
-        emitSource(
-            Transformations.map(it) { resP -> resMapping(resP, pvMapping) })
-    }
+    val localResource = getLocalResource(databaseQuery)
+    emitSource(localResource.map { resMapping(it, pvMapping) })
     val remoteResource = getRemoteResource(networkCall)
     if (remoteResource is Resource.Success) {
         saveCallResult.invoke(dpMapping(remoteResource.data!!))
     } else if (remoteResource is Resource.Errors) {
-        emit(Resource.Errors(remoteResource.message!!))
-        localLiveData?.let {
-            emitSource(
-                Transformations.map(it) { resP -> resMapping(resP, pvMapping) })
-        }
+        emit(Resource.Errors(remoteResource.errorInfo!!))
+        emitSource(localResource.map { resMapping(it, pvMapping) })
     }
 }

@@ -1,6 +1,7 @@
 package com.frank.han.data.repo
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import com.frank.han.api.github.RepoService
 import com.frank.han.data.repo.entity.RepoDTO
 import com.frank.han.data.repo.entity.RepoPO
@@ -20,7 +21,7 @@ class RepoRepository(
         repoService.listUserRepositories(username)
 
     fun getLocalRepo(username: String): LiveData<List<RepoPO>> =
-        repoDao.getUserRepos()
+        Transformations.map(repoDao.getUserRepos(username)) { it?.repos }
 
     suspend fun saveLocalRepo(repos: List<RepoPO>) {
         repoDao.saveRepo(repos)

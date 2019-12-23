@@ -20,4 +20,6 @@ val databaseModule = module {
     single { get<RoomDatabase.Builder<AppDatabase>>(named(DATABASE_APP)).build() }
 
     single { get<AppDatabase>().repoDao() }
+
+    single { get<AppDatabase>().userDao() }
 }

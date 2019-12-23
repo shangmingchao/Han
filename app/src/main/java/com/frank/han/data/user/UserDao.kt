@@ -21,4 +21,7 @@ interface UserDao {
 
     @Query("SELECT * FROM UserPO WHERE id = :userId")
     fun getUserById(userId: String): LiveData<UserPO>
+
+    @Query("SELECT * FROM UserPO WHERE login = :username")
+    fun getUserByName(username: String): LiveData<UserPO>
 }

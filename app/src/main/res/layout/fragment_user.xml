@@ -4,19 +4,10 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-    <Button
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userBtn"
-        android:id="@+id/repoBtn"
-        android:text="@string/repo" />
-
-    <Button
+    <TextView
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:id="@+id/userBtn"
-        android:text="@string/user" />
+        android:id="@+id/userTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

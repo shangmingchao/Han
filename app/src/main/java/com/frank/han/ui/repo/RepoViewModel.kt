@@ -7,6 +7,7 @@ import com.frank.han.data.Resource
 import com.frank.han.data.getResource
 import com.frank.han.data.repo.RepoRepository
 import com.frank.han.data.repo.entity.RepoVO
+import com.frank.han.util.ModelMapper.map
 
 /**
  *
@@ -25,8 +26,8 @@ class RepoViewModel(
     private fun getRepo(username: String): LiveData<Resource<List<RepoVO>>> = getResource(
         databaseQuery = { repoRepository.getLocalRepo(username) },
         networkCall = { repoRepository.getRemoteRepo(username) },
-        dpMapping = { it.map { dto -> dto.mapPO() } },
-        pvMapping = { it.map { po -> po.mapVO() } },
+        dpMapping = { it.map { dto -> map(dto) } },
+        pvMapping = { it.map { po -> map(po) } },
         saveCallResult = { repoRepository.saveLocalRepo(it) }
     )
 }

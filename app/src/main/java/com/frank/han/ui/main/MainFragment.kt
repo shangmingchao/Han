@@ -5,6 +5,7 @@ import androidx.navigation.fragment.findNavController
 import com.frank.han.R
 import com.frank.han.ui.BaseFragment
 import kotlinx.android.synthetic.main.fragment_main.repoBtn
+import kotlinx.android.synthetic.main.fragment_main.userBtn
 
 /**
  *
@@ -18,6 +19,11 @@ class MainFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        userBtn.setOnClickListener {
+            findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToUserFragment("google")
+            )
+        }
         repoBtn.setOnClickListener {
             findNavController().navigate(
                 MainFragmentDirections.actionMainFragmentToRepoFragment("google")

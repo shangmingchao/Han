@@ -10,6 +10,7 @@ import com.frank.han.data.user.entity.UserPO
 /**
  *
  *
+ * @see <a href="https://developer.android.com/training/data-storage/room">Room</a>
  * @author frank
  * @date 2019/12/7 8:16 PM
  */

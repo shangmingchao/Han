@@ -11,11 +11,8 @@ import androidx.room.PrimaryKey
  */
 @Entity
 data class RepoPO(
-    @PrimaryKey var id: Long = 0,
-    var node_id: String = "",
-    var name: String = "",
-    var full_name: String = "",
-    var is_private: Boolean = false
-) {
-    fun mapVO(): RepoVO = RepoVO(name, is_private)
-}
+    @PrimaryKey val id: Long,
+    val name: String,
+    val is_private: Boolean,
+    val owner_id: Long
+)

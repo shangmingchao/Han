@@ -18,6 +18,13 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_mainFragment_to_userFragment"
+            app:destination="@id/userFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -25,6 +32,15 @@
         android:label="fragment_repo"
         android:name="com.frank.han.ui.repo.RepoFragment"
         tools:layout="@layout/fragment_repo">
+        <argument
+            android:name="username"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/userFragment"
+        android:label="UserFragment"
+        tools:layout="@layout/fragment_user"
+        android:name="com.frank.han.ui.user.UserFragment">
         <argument
             android:name="username"
             app:argType="string" />

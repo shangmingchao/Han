@@ -1,10 +1,16 @@
 package com.frank.han.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
+import com.frank.han.data.ErrorInfo.DBError
+import com.frank.han.data.ErrorInfo.NetError
+import com.frank.han.data.ErrorInfo.OtherError
 import com.frank.han.data.Resource.Errors
 import com.frank.han.data.Resource.Loading
 import com.frank.han.data.Resource.Success
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 /**
  * A generic class that contains data and status about loading this data.
@@ -14,27 +20,31 @@ import com.frank.han.data.Resource.Success
  */
 sealed class Resource<out T>(
     val data: T? = null,
-    val message: String? = null
+    val errorInfo: ErrorInfo? = null
 ) {
     class Loading<T>(data: T? = null) : Resource<T>(data)
     class Success<T>(data: T) : Resource<T>(data)
-    class Errors<T>(message: String, data: T? = null) : Resource<T>(data, message)
+    class Errors<T>(errorInfo: ErrorInfo, data: T? = null) : Resource<T>(data, errorInfo)
 }
 
 fun <S, D> resMapping(src: Resource<S>, mapping: (S) -> D): Resource<D> = when (src) {
     is Loading -> Loading(src.data?.let(mapping))
     is Success -> Success(mapping(src.data!!))
-    is Errors -> Errors(src.message!!, src.data?.let(mapping))
+    is Errors -> Errors(src.errorInfo!!, src.data?.let(mapping))
 }
 
 suspend fun <T> getRemoteResource(call: suspend () -> T): Resource<T> = try {
-    Resource.Success(call.invoke())
+    Success(call.invoke())
 } catch (e: Exception) {
-    Resource.Errors(e.message!!)
+    when (e) {
+        is SocketTimeoutException -> Errors(NetError(CODE_SOCKET_TIMEOUT, e.message!!))
+        is UnknownHostException -> Errors(NetError(CODE_UNKNOWN_HOST, e.message!!))
+        else -> Errors(OtherError(CODE_UNKNOWN, e.message!!))
+    }
 }
 
-suspend fun <T> getLocalResource(query: () -> LiveData<T>): LiveData<Resource<T>>? = try {
-    query.invoke().map { Resource.Success(it) }
+fun <T> getLocalResource(query: () -> LiveData<T>): LiveData<Resource<T>> = try {
+    query.invoke().map { if (it != null) Success(it) else Errors<T>(DBError("empty")) }
 } catch (e: Exception) {
-    null
+    MutableLiveData(Errors(DBError(e.message!!)))
 }

@@ -11,7 +11,7 @@ import androidx.room.PrimaryKey
  */
 @Entity
 data class UserPO(
-    @PrimaryKey var id: Long = 0,
-    var login: String = "",
-    var node_id: String = ""
+    @PrimaryKey val id: Long,
+    val login: String,
+    val name: String
 )
