@@ -30,7 +30,7 @@ class UserFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         userViewModel.user.observe(viewLifecycleOwner, Observer { resource ->
             userTextView.text = when (resource) {
-                is Loading -> "Loading"
+                is Loading -> getString(R.string.loading)
                 is Success -> resource.data.toString()
                 is Errors -> {
                     if (resource.errorInfo is NetError) {

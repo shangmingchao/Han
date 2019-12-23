@@ -23,7 +23,6 @@ class RepoRepository(
     fun getLocalRepo(username: String): LiveData<List<RepoPO>> =
         Transformations.map(repoDao.getUserRepos(username)) { it?.repos }
 
-    suspend fun saveLocalRepo(repos: List<RepoPO>) {
+    suspend fun saveLocalRepo(repos: List<RepoPO>) =
         repoDao.saveRepo(repos)
-    }
 }

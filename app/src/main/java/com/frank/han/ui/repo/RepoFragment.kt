@@ -30,7 +30,7 @@ class RepoFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         repoViewModel.repo.observe(viewLifecycleOwner, Observer { resource ->
             repoText.text = when (resource) {
-                is Loading -> "Loading"
+                is Loading -> getString(R.string.loading)
                 is Success -> resource.data.toString()
                 is Errors -> {
                     if (resource.errorInfo is NetError) {

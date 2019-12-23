@@ -2,5 +2,6 @@
     <string name="app_name">Han</string>
     <string name="repo">Repo</string>
     <string name="user">User</string>
+    <string name="loading">Loading</string>
     <string name="net_error">Network error</string>
 </resources>
