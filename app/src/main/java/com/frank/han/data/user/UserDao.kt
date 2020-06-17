@@ -1,11 +1,11 @@
 package com.frank.han.data.user
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.frank.han.data.user.entity.UserPO
+import kotlinx.coroutines.flow.Flow
 
 /**
  *
@@ -20,8 +20,8 @@ interface UserDao {
     suspend fun saveUser(user: UserPO)
 
     @Query("SELECT * FROM UserPO WHERE id = :userId")
-    fun getUserById(userId: String): LiveData<UserPO>
+    fun getUserById(userId: String): Flow<UserPO>
 
     @Query("SELECT * FROM UserPO WHERE login = :username")
-    fun getUserByName(username: String): LiveData<UserPO>
+    fun getUserByName(username: String): Flow<UserPO>
 }

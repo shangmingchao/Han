@@ -1,6 +1,7 @@
 package com.frank.han.ui.user
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
@@ -29,6 +30,7 @@ class UserFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         userViewModel.user.observe(viewLifecycleOwner, Observer { resource ->
+            Log.e("aaaa", "observe:")
             userTextView.text = when (resource) {
                 is Loading -> getString(R.string.loading)
                 is Success -> resource.data.toString()

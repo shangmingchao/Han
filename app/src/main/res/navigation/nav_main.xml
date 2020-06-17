@@ -3,12 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
-    app:startDestination="@id/mainFragment"
-    tools:ignore="UnusedNavigation">
+    app:startDestination="@id/mainFragment">
 
     <fragment
         android:id="@+id/mainFragment"
-        android:label="fragment_main"
+        android:label="@string/app_name"
         android:name="com.frank.han.ui.main.MainFragment"
         tools:layout="@layout/fragment_main">
         <action
@@ -29,7 +28,7 @@
 
     <fragment
         android:id="@+id/repoFragment"
-        android:label="fragment_repo"
+        android:label="@string/repo"
         android:name="com.frank.han.ui.repo.RepoFragment"
         tools:layout="@layout/fragment_repo">
         <argument
@@ -38,7 +37,7 @@
     </fragment>
     <fragment
         android:id="@+id/userFragment"
-        android:label="UserFragment"
+        android:label="@string/user"
         tools:layout="@layout/fragment_user"
         android:name="com.frank.han.ui.user.UserFragment">
         <argument

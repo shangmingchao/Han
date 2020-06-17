@@ -2,15 +2,13 @@ package com.frank.han.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.map
-import com.frank.han.data.ErrorInfo.DBError
-import com.frank.han.data.ErrorInfo.NetError
-import com.frank.han.data.ErrorInfo.OtherError
-import com.frank.han.data.Resource.Errors
-import com.frank.han.data.Resource.Loading
-import com.frank.han.data.Resource.Success
+import com.frank.han.data.ErrorInfo.*
+import com.frank.han.data.Resource.*
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import kotlinx.coroutines.flow.Flow
 
 /**
  * A generic class that contains data and status about loading this data.
@@ -43,8 +41,8 @@ suspend fun <T> getRemoteResource(call: suspend () -> T): Resource<T> = try {
     }
 }
 
-fun <T> getLocalResource(query: () -> LiveData<T>): LiveData<Resource<T>> = try {
-    query.invoke().map { if (it != null) Success(it) else Errors<T>(DBError("empty")) }
+fun <T> getLocalResource(query: () -> Flow<T>): LiveData<Resource<T>> = try {
+    query.invoke().asLiveData().map { if (it != null) Success(it) else Errors<T>(DBError("empty")) }
 } catch (e: Exception) {
     MutableLiveData(Errors(DBError(e.message!!)))
 }

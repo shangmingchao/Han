@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 
 /**
  *
@@ -13,7 +14,7 @@ import kotlinx.coroutines.Dispatchers
  * @date 2019/12/9 11:06 AM
  */
 fun <V, D, P> getResource(
-    databaseQuery: () -> LiveData<P>,
+    databaseQuery: () -> Flow<P>,
     networkCall: suspend () -> D,
     dpMapping: (D) -> P,
     pvMapping: (P) -> V,

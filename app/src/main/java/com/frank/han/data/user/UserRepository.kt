@@ -1,9 +1,11 @@
 package com.frank.han.data.user
 
-import androidx.lifecycle.LiveData
 import com.frank.han.api.github.UserService
 import com.frank.han.data.user.entity.UserDTO
 import com.frank.han.data.user.entity.UserPO
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 
 /**
  *
@@ -17,11 +19,12 @@ class UserRepository(
 ) {
 
     suspend fun getRemoteUser(username: String): UserDTO =
-        userService.getASingleUser(username)
+            userService.getASingleUser(username)
 
-    fun getLocalUser(username: String): LiveData<UserPO> =
-        userDao.getUserByName(username)
+    @ExperimentalCoroutinesApi
+    fun getLocalUser(username: String): Flow<UserPO> =
+            userDao.getUserByName(username).distinctUntilChanged()
 
     suspend fun saveLocalUser(user: UserPO) =
-        userDao.saveUser(user)
+            userDao.saveUser(user)
 }
