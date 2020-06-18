@@ -2,8 +2,8 @@ language: android
 dist: trusty
 android:
   components:
-    - build-tools-21.0.0
-    - android-21
+    - build-tools-29.0.2
+    - android-29
     - add-on
     - extra
     - sys-img-armeabi-v7a-android-21
