@@ -1,4 +1,4 @@
-package com.frank.han.data
+package com.frank.han.data.app
 
 import androidx.room.Database
 import androidx.room.RoomDatabase

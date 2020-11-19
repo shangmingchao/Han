@@ -1,11 +1,9 @@
 package com.frank.han.ui.user
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.frank.han.R
-import com.frank.han.data.ErrorInfo.NetError
 import com.frank.han.data.Resource.*
 import com.frank.han.ui.BaseFragment
 import kotlinx.android.synthetic.main.fragment_user.*
@@ -22,7 +20,7 @@ class UserFragment : BaseFragment() {
 
     override val layoutId = R.layout.fragment_user
     private val args by navArgs<UserFragmentArgs>()
-    private val userViewModel: UserViewModel by viewModel { parametersOf(Bundle(), args.username) }
+    private val userViewModel: UserViewModel by viewModel { parametersOf(args.username) }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -30,12 +28,7 @@ class UserFragment : BaseFragment() {
             userTextView.text = when (resource) {
                 is Loading -> getString(R.string.loading)
                 is Success -> resource.data.toString()
-                is Errors -> {
-                    if (resource.errorInfo is NetError) {
-                        Toast.makeText(context, R.string.net_error, Toast.LENGTH_SHORT).show()
-                    }
-                    null
-                }
+                is Errors -> null
             }
         })
     }

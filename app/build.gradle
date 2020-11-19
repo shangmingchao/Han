@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: "androidx.navigation.safeargs.kotlin"
+apply plugin: 'androidx.navigation.safeargs.kotlin'
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
@@ -72,34 +72,23 @@ android {
     }
 }
 
-configurations.all {
-    resolutionStrategy {
-        eachDependency { details ->
-            if (details.requested.group == 'androidx.appcompat'
-                    && details.requested.name != 'multidex'
-                    && details.requested.name != 'multidex-instrumentation') {
-                details.useVersion versions.androidx
-            }
-            if (details.requested.group == 'com.google.code.findbugs') {
-                details.useVersion versions.findbugs
-            }
-        }
-    }
-}
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation deps.kotlin
-    implementation deps.androidx.app_compat
+    implementation deps.androidx.appcompat
+    implementation deps.androidx.recyclerview
+    implementation deps.androidx.constraintlayout
+    implementation deps.androidx.startup
+    implementation deps.androidx.datastore_prefs
+    implementation deps.androidx.datastore_proto
     implementation deps.androidx.ktx_core
     implementation deps.androidx.ktx_collection
     implementation deps.androidx.ktx_fragment
-    implementation deps.androidx.ktx_lifecycle_runtime
     implementation deps.androidx.ktx_lifecycle_viewmodel
+    implementation deps.androidx.lifecycle_viewmodel_savedstate
     implementation deps.androidx.ktx_lifecycle_livedata
     implementation deps.androidx.ktx_navigation_fragment
     implementation deps.androidx.ktx_navigation_ui
-    implementation deps.androidx.constraint_layout
 
     implementation deps.retrofit.core
     implementation deps.retrofit.converter_gson
@@ -121,8 +110,11 @@ dependencies {
     implementation deps.stetho.core
     implementation deps.stetho.okhttp3_helper
 
+    implementation deps.glide.core
+    kapt deps.glide.compiler
+
     testImplementation deps.junit
-    testImplementation deps.androidx_test.core
+    testImplementation deps.mockito
     testImplementation deps.room.testing
     testImplementation deps.koin.test
 
@@ -130,9 +122,5 @@ dependencies {
     androidTestImplementation deps.androidx_test.runner
     androidTestImplementation deps.androidx_test.rules
     androidTestImplementation deps.androidx_test.junit
-    androidTestImplementation deps.androidx_test.truth
     androidTestImplementation deps.androidx_test.espresso_core
-    androidTestImplementation deps.androidx_test.espresso_contrib
-    androidTestImplementation deps.androidx_test.espresso_intents
-    androidTestImplementation deps.androidx_test.uiautomator
 }

@@ -24,7 +24,7 @@ class RepoFragment : BaseFragment() {
 
     override val layoutId = R.layout.fragment_repo
     private val args by navArgs<RepoFragmentArgs>()
-    private val repoViewModel: RepoViewModel by viewModel { parametersOf(Bundle(), args.username) }
+    private val repoViewModel: RepoViewModel by viewModel { parametersOf(args.username) }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
