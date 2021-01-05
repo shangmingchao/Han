@@ -28,16 +28,11 @@ class RepoFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        repoViewModel.repo.observe(viewLifecycleOwner, Observer { resource ->
+        repoViewModel.repo.observe(viewLifecycleOwner, { resource ->
             repoText.text = when (resource) {
                 is Loading -> getString(R.string.loading)
                 is Success -> resource.data.toString()
-                is Errors -> {
-                    if (resource.errorInfo is NetError) {
-                        Toast.makeText(context, R.string.net_error, Toast.LENGTH_SHORT).show()
-                    }
-                    null
-                }
+                is Errors -> null
             }
         })
     }

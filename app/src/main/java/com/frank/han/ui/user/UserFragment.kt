@@ -24,7 +24,7 @@ class UserFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        userViewModel.user.observe(viewLifecycleOwner, Observer { resource ->
+        userViewModel.user.observe(viewLifecycleOwner, { resource ->
             userTextView.text = when (resource) {
                 is Loading -> getString(R.string.loading)
                 is Success -> resource.data.toString()
