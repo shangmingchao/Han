@@ -38,3 +38,67 @@ Checking the following settings:
 - `Editor` -> `General` -> `Strip trailing spaces on Save`
 - `Editor` -> `General` -> `Ensure line feed at end of file on Save`
 - `Editor` -> `General` -> `Auto Import -> Optimize imports on the fly`
+
+Sample
+======
+
+```kotlin
+class UserFragment : BaseFragment() {
+
+    override val layoutId = R.layout.fragment_user
+    private val args by navArgs<UserFragmentArgs>()
+    private val userViewModel: UserViewModel by viewModel { parametersOf(args.username) }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        userViewModel.user.observe(viewLifecycleOwner) {
+            userTextView.text = when (it) {
+                is Loading -> getString(R.string.loading)
+                is Success -> it.data.toString()
+                is Errors -> null
+            }
+        }
+    }
+}
+```
+
+```kotlin
+class UserViewModel(
+    private val handle: SavedStateHandle,
+    private val username: String,
+    private val userRepository: UserRepository
+) : ViewModel() {
+
+    val user by lazy { getUser(username) }
+
+    private fun getUser(username: String): LiveData<Resource<UserVO>> = getResource(
+        databaseQuery = { userRepository.getLocalUser(username) },
+        networkCall = { userRepository.getRemoteUser(username) },
+        dpMapping = { map(it) },
+        pvMapping = { map(it) },
+        saveCallResult = { userRepository.saveLocalUser(it) }
+    )
+}
+```
+
+```kotlin
+class UserRepository(
+    private val userService: UserService,
+    private val userDao: UserDao
+) {
+
+    suspend fun getRemoteUser(username: String): UserDTO =
+            userService.getASingleUser(username)
+    
+    fun getLocalUser(username: String): Flow<UserPO> =
+            userDao.getUserByName(username).distinctUntilChanged()
+
+    suspend fun saveLocalUser(user: UserPO) =
+            userDao.saveUser(user)
+}
+```
+
+More
+====
+
+See [Android project exercises](https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/android_project_exercises.md)

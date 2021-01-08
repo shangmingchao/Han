@@ -22,7 +22,6 @@ class RepoRepository(
     suspend fun getRemoteRepo(username: String): List<RepoDTO> =
             repoService.listUserRepositories(username)
 
-    @ExperimentalCoroutinesApi
     fun getLocalRepo(username: String): Flow<List<RepoPO>> =
             repoDao.getUserRepos(username).distinctUntilChanged().map { it?.repos }
 

@@ -21,7 +21,6 @@ class UserRepository(
     suspend fun getRemoteUser(username: String): UserDTO =
             userService.getASingleUser(username)
 
-    @ExperimentalCoroutinesApi
     fun getLocalUser(username: String): Flow<UserPO> =
             userDao.getUserByName(username).distinctUntilChanged()
 

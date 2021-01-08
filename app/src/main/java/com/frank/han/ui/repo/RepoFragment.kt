@@ -28,12 +28,12 @@ class RepoFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        repoViewModel.repo.observe(viewLifecycleOwner, { resource ->
-            repoText.text = when (resource) {
+        repoViewModel.repo.observe(viewLifecycleOwner) {
+            repoText.text = when (it) {
                 is Loading -> getString(R.string.loading)
-                is Success -> resource.data.toString()
+                is Success -> it.data.toString()
                 is Errors -> null
             }
-        })
+        }
     }
 }
