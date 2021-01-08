@@ -14,6 +14,7 @@ Download Android Studio 3.6 Beta 5 or the latest version
 ```shell
 git clone https://github.com/shangmingchao/Han.git && cd Han && chmod +x tools/setup.sh && tools/setup.sh
 ```
+
 Config your Android Studio:
 
 Open `Preferences...`/`Settings` -> `Editor` -> `Code Style`

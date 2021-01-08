@@ -1,5 +1,9 @@
 package com.frank.han.data.repo
 
+import com.frank.han.data.repo.entity.RepoPO
+import com.frank.han.data.repo.entity.RepoVO
+import com.frank.han.util.ModelMapper
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 /**
@@ -12,5 +16,8 @@ class MapperTest {
 
     @Test
     fun mapValidate() {
+        val po: RepoPO = RepoPO(1L, "name1", false, 1L)
+        val vo: RepoVO = ModelMapper.map(po)
+        assertEquals(vo.desc, "name1")
     }
 }
