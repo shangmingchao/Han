@@ -29,6 +29,7 @@ versions.google_truth = "0.42"
 versions.junit = "4.12"
 versions.mockito = "1.10.19"
 versions.espresso = "3.1.0"
+versions.jacoco_gradle_plugin = "0.1.5-SNAPSHOT"
 versions.retrofit = "2.9.0"
 versions.okhttp = "4.8.0"
 versions.stetho = "1.5.1"
@@ -42,6 +43,7 @@ def deps = [:]
 deps.android_gradle_plugin = "com.android.tools.build:gradle:$versions.android_gradle_plugin"
 deps.kotlin_gradle_plugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin"
 deps.navigation_gradle_plugin = "androidx.navigation:navigation-safe-args-gradle-plugin:$versions.androidx_navigation"
+deps.jacoco_gradle_plugin = "com.dicedmelon.gradle:jacoco-android:$versions.jacoco_gradle_plugin"
 
 deps.kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"
 
@@ -69,6 +71,7 @@ deps.mockito = "org.mockito:mockito-core:$versions.mockito"
 def androidx_test = [:]
 androidx_test.core = "androidx.test:core:$versions.androidx_test_core"
 androidx_test.core_ktx = "androidx.test:core-ktx:$versions.androidx_test_core"
+androidx_test.fragment = "androidx.fragment:fragment-testing:$versions.androidx_fragment"
 androidx_test.runner = "androidx.test:runner:$versions.androidx_test_runner_rules"
 androidx_test.rules = "androidx.test:rules:$versions.androidx_test_runner_rules"
 androidx_test.junit = "androidx.test.ext:junit:$versions.androidx_test_junit"

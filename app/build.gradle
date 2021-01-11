@@ -3,6 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'androidx.navigation.safeargs.kotlin'
+apply plugin: 'jacoco-android'
+
+def sdkPropertiesFile = rootProject.file("sdk.properties")
+def sdkProperties = new Properties()
+sdkProperties.load(new FileInputStream(sdkPropertiesFile))
+def minSdk = sdkProperties['minSdk'].toInteger()
+def targetSdk = sdkProperties['targetSdk'].toInteger()
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
@@ -18,13 +25,21 @@ def versionMinor = versionProperties['versionMinor'].toInteger()
 def versionPatch = versionProperties['versionPatch'].toInteger()
 def versionBuild = versionProperties['versionBuild'].toInteger()
 
+jacoco {
+    toolVersion = "0.8.4"
+}
+
+tasks.withType(Test) {
+    jacoco.includeNoLocationClasses = true
+}
+
 android {
     compileSdkVersion build_versions.target_sdk
 
     defaultConfig {
         applicationId "com.frank.han"
-        minSdkVersion build_versions.min_sdk
-        targetSdkVersion build_versions.target_sdk
+        minSdkVersion minSdk
+        targetSdkVersion targetSdk
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
@@ -122,5 +137,11 @@ dependencies {
     androidTestImplementation deps.androidx_test.runner
     androidTestImplementation deps.androidx_test.rules
     androidTestImplementation deps.androidx_test.junit
+    androidTestImplementation deps.androidx_test.junit_ktx
     androidTestImplementation deps.androidx_test.espresso_core
+    androidTestImplementation deps.androidx_test.espresso_contrib
+    androidTestImplementation deps.androidx_test.espresso_intents
+
+    debugImplementation deps.androidx_test.core
+    debugImplementation deps.androidx_test.fragment
 }

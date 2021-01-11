@@ -1,8 +1,9 @@
 package com.frank.han
 
+import androidx.lifecycle.Lifecycle
+import androidx.test.ext.junit.rules.activityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
-import androidx.test.rule.ActivityTestRule
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -18,9 +19,11 @@ import org.junit.runner.RunWith
 class MainActivityTest {
 
     @get:Rule
-    val activityTestRule = ActivityTestRule(MainActivity::class.java)
+    var mainActivityRule = activityScenarioRule<MainActivity>()
 
     @Test
-    fun testRepoRouter() {
+    fun testEvent() {
+        val scenario = mainActivityRule.scenario
+        scenario.moveToState(Lifecycle.State.RESUMED)
     }
 }

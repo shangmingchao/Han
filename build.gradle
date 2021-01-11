@@ -6,11 +6,13 @@ buildscript {
         google()
         jcenter()
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+        maven { url 'https://oss.jfrog.org/artifactory/oss-snapshot-local' }
     }
     dependencies {
         classpath deps.android_gradle_plugin
         classpath deps.kotlin_gradle_plugin
         classpath deps.navigation_gradle_plugin
+        classpath deps.jacoco_gradle_plugin
     }
 }
 
