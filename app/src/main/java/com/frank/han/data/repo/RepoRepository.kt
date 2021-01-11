@@ -3,9 +3,9 @@ package com.frank.han.data.repo
 import com.frank.han.api.github.RepoService
 import com.frank.han.data.repo.entity.RepoDTO
 import com.frank.han.data.repo.entity.RepoPO
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 
 /**
@@ -20,11 +20,11 @@ class RepoRepository(
 ) {
 
     suspend fun getRemoteRepo(username: String): List<RepoDTO> =
-            repoService.listUserRepositories(username)
+        repoService.listUserRepositories(username)
 
     fun getLocalRepo(username: String): Flow<List<RepoPO>> =
-            repoDao.getUserRepos(username).distinctUntilChanged().map { it?.repos }
+        repoDao.getUserRepos(username).distinctUntilChanged().filterNotNull().map { it.repos }
 
     suspend fun saveLocalRepo(repos: List<RepoPO>) =
-            repoDao.saveRepo(repos)
+        repoDao.saveRepo(repos)
 }

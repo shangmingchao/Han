@@ -1,11 +1,8 @@
 package com.frank.han.ui.repo
 
 import android.os.Bundle
-import android.widget.Toast
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.frank.han.R
-import com.frank.han.data.ErrorInfo.NetError
 import com.frank.han.data.Resource.Errors
 import com.frank.han.data.Resource.Loading
 import com.frank.han.data.Resource.Success

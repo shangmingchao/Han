@@ -3,7 +3,6 @@ package com.frank.han.data.user
 import com.frank.han.api.github.UserService
 import com.frank.han.data.user.entity.UserDTO
 import com.frank.han.data.user.entity.UserPO
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 

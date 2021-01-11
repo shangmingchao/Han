@@ -1,7 +1,6 @@
 package com.frank.han.ui.user
 
 import android.os.Bundle
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.frank.han.R
 import com.frank.han.data.Resource.*
