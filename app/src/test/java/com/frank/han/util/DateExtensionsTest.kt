@@ -1,5 +1,6 @@
 package com.frank.han.util
 
+import com.google.common.truth.Truth.assertThat
 import java.util.Calendar
 import org.junit.Test
 
@@ -12,7 +13,7 @@ import org.junit.Test
 class DateExtensionsTest {
 
     @Test
-    fun isSameYear() {
-        assert(Calendar.getInstance().isSameYear(Calendar.getInstance()))
+    fun testSameYear() {
+        assertThat(Calendar.getInstance().isSameYear(Calendar.getInstance())).isTrue()
     }
 }

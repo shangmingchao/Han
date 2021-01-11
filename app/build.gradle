@@ -130,6 +130,7 @@ dependencies {
 
     testImplementation deps.junit
     testImplementation deps.mockito
+    testImplementation deps.google_truth
     testImplementation deps.room.testing
     testImplementation deps.koin.test
 
@@ -141,6 +142,7 @@ dependencies {
     androidTestImplementation deps.androidx_test.espresso_core
     androidTestImplementation deps.androidx_test.espresso_contrib
     androidTestImplementation deps.androidx_test.espresso_intents
+    androidTestImplementation deps.google_truth
 
     debugImplementation deps.androidx_test.core
     debugImplementation deps.androidx_test.fragment
