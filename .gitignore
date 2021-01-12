@@ -3,6 +3,7 @@ keystore.properties
 
 app/release
 *.apk
+output-metadata.json
 
 bin/
 gen/

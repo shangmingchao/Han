@@ -40,6 +40,9 @@ Checking the following settings:
 - `Editor` -> `General` -> `Ensure line feed at end of file on Save`
 - `Editor` -> `General` -> `Auto Import -> Optimize imports on the fly`
 
+Open `Build` -> `Generate Signed Bundle/APK...` -> `APK` -> `Create new...` to create a keystore file, put the file `han.keystore` at the project's root directory  
+Create `keystore.properties` file at the project's root directory, Add `keyPassword` and `storePassword` property of the `han.keystore`  
+
 Sample
 ======
 
