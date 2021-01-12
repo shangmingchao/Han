@@ -1,10 +1,19 @@
 package com.frank.han.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+
+const val CODE_UNKNOWN = 0
+const val CODE_SOCKET_TIMEOUT = 1
+const val CODE_UNKNOWN_HOST = 2
+const val CODE_DB_ERROR = 3
 
 /**
  *
@@ -30,4 +39,39 @@ fun <V, D, P> getResource(
         emit(Resource.Errors(remoteResource.errorInfo!!))
         emitSource(localResource.map { resMapping(it, pvMapping) })
     }
+}
+
+fun <S, D> resMapping(src: Resource<S>, mapping: (S) -> D): Resource<D> = when (src) {
+    is Resource.Loading -> Resource.Loading(src.data?.let(mapping))
+    is Resource.Success -> Resource.Success(mapping(src.data!!))
+    is Resource.Errors -> Resource.Errors(src.errorInfo!!, src.data?.let(mapping))
+}
+
+suspend fun <T> getRemoteResource(call: suspend () -> T): Resource<T> = try {
+    Resource.Success(call.invoke())
+} catch (e: Exception) {
+    when (e) {
+        is SocketTimeoutException -> Resource.Errors(
+            ErrorInfo.NetError(
+                CODE_SOCKET_TIMEOUT,
+                e.message!!
+            )
+        )
+        is UnknownHostException -> Resource.Errors(
+            ErrorInfo.NetError(
+                CODE_UNKNOWN_HOST,
+                e.message!!
+            )
+        )
+        else -> Resource.Errors(ErrorInfo.OtherError(CODE_UNKNOWN, e.message!!))
+    }
+}
+
+fun <T> getLocalResource(query: () -> Flow<T>): LiveData<Resource<T>> = try {
+    query.invoke().asLiveData().map { if (it != null) Resource.Success(it) else Resource.Errors<T>(
+        ErrorInfo.DBError("empty")
+    )
+    }
+} catch (e: Exception) {
+    MutableLiveData(Resource.Errors(ErrorInfo.DBError(e.message!!)))
 }

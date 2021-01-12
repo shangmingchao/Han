@@ -33,6 +33,14 @@ tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
 }
 
+jacocoAndroidUnitTestReport {
+    excludes += ['**/api/*',
+                 '**/components/*',
+                 '**/entity/.*',
+                 'BaseFragment.kt',
+                 'BaseNavHostFragment.kt']
+}
+
 android {
     compileSdkVersion build_versions.target_sdk
 
