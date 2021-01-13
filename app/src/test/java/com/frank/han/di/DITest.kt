@@ -1,7 +1,7 @@
 package com.frank.han.di
 
+import com.google.common.truth.Truth.assertThat
 import org.junit.After
-import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.koin.core.context.startKoin
@@ -33,7 +33,7 @@ class DITest : KoinTest {
     fun testHttpClientModule() {
         val retrofit1 = get<Retrofit>(named(RETROFIT_GITHUB))
         val retrofit2 = get<Retrofit>(named(RETROFIT_GITHUB))
-        assertEquals(retrofit1, retrofit2)
+        assertThat(retrofit1).isEqualTo(retrofit2)
     }
 
     @After

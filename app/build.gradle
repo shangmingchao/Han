@@ -36,9 +36,12 @@ tasks.withType(Test) {
 jacocoAndroidUnitTestReport {
     excludes += ['**/api/*',
                  '**/components/*',
-                 '**/entity/.*',
-                 'BaseFragment.kt',
-                 'BaseNavHostFragment.kt']
+                 '**/*DTO.*',
+                 '**/*PO.*',
+                 '**/*VO.*',
+                 '**/*ErrorInfo.*',
+                 '**/*Resource.*',
+                 '**/*Base*Fragment.*']
 }
 
 android {
