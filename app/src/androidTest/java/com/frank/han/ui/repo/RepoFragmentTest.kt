@@ -5,7 +5,10 @@ import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.lifecycle.Lifecycle
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions
+import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers
+import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
+import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.frank.han.R
 import org.junit.Test
@@ -24,7 +27,6 @@ class RepoFragmentTest {
     fun testEvent() {
         val scenario = launchFragmentInContainer<RepoFragment>(bundleOf("username" to "google"))
         scenario.moveToState(Lifecycle.State.RESUMED)
-        onView(ViewMatchers.withId(R.id.repoText))
-            .check(ViewAssertions.matches(ViewMatchers.isDisplayed()))
+        onView(withId(R.id.repoText)).check(matches(withContentDescription(R.string.repo)))
     }
 }
