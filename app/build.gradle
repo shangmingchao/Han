@@ -139,6 +139,8 @@ dependencies {
     testImplementation deps.koin.test
 
     androidTestImplementation deps.androidx_test.core
+    androidTestImplementation deps.androidx_test.core_ktx
+    androidTestImplementation deps.androidx_test.navigation
     androidTestImplementation deps.androidx_test.runner
     androidTestImplementation deps.androidx_test.rules
     androidTestImplementation deps.androidx_test.junit

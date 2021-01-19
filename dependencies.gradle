@@ -73,6 +73,7 @@ def androidx_test = [:]
 androidx_test.core = "androidx.test:core:$versions.androidx_test_core"
 androidx_test.core_ktx = "androidx.test:core-ktx:$versions.androidx_test_core"
 androidx_test.fragment = "androidx.fragment:fragment-testing:$versions.androidx_fragment"
+androidx_test.navigation = "androidx.navigation:navigation-testing:$versions.androidx_navigation"
 androidx_test.runner = "androidx.test:runner:$versions.androidx_test_runner_rules"
 androidx_test.rules = "androidx.test:rules:$versions.androidx_test_runner_rules"
 androidx_test.junit = "androidx.test.ext:junit:$versions.androidx_test_junit"

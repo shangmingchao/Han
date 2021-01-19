@@ -1,12 +1,15 @@
 package com.frank.han.ui.main
 
 import android.os.Bundle
-import androidx.lifecycle.*
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.frank.han.R
 import com.frank.han.data.app.AppPrefs
 import com.frank.han.ui.BaseFragment
-import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_main.counterText
+import kotlinx.android.synthetic.main.fragment_main.repoBtn
+import kotlinx.android.synthetic.main.fragment_main.userBtn
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
@@ -37,9 +40,16 @@ class MainFragment : BaseFragment() {
                 MainFragmentDirections.actionMainFragmentToRepoFragment("google")
             )
         }
-        val counter: LiveData<Int> = liveData {
-            emitSource(appPrefs.getCounter().asLiveData())
+        appPrefs.getCounter().asLiveData().observe(viewLifecycleOwner) {
+            counterText.text = "$it"
         }
-        counter.observe(viewLifecycleOwner, Observer { counterText.text = "$it" })
+    }
+
+    fun getCounter(): Int {
+        return try {
+            counterText.text.toString().toInt()
+        } catch (e: Exception) {
+            0
+        }
     }
 }

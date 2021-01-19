@@ -3,11 +3,14 @@ package com.frank.han.di
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
 import org.koin.core.context.startKoin
 import org.koin.core.context.stopKoin
+import org.koin.core.logger.Level
 import org.koin.core.qualifier.named
 import org.koin.test.KoinTest
+import org.koin.test.KoinTestRule
 import org.koin.test.get
 import retrofit2.Retrofit
 
@@ -19,14 +22,13 @@ import retrofit2.Retrofit
  */
 class DITest : KoinTest {
 
-    @Before
-    fun startTheKoin() {
-        startKoin {
-            modules(
-                serializationModule, httpClientModule, webServiceModule, databaseModule,
-                repositoryModule, viewModelModule
-            )
-        }
+    @get:Rule
+    val koinTestRule = KoinTestRule.create {
+        printLogger(Level.DEBUG)
+        modules(
+            serializationModule, httpClientModule, webServiceModule, databaseModule,
+            repositoryModule, viewModelModule
+        )
     }
 
     @Test
@@ -36,8 +38,4 @@ class DITest : KoinTest {
         assertThat(retrofit1).isEqualTo(retrofit2)
     }
 
-    @After
-    fun stopTheKoin() {
-        stopKoin()
-    }
 }
