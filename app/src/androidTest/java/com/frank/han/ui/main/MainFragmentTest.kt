@@ -1,7 +1,6 @@
 package com.frank.han.ui.main
 
 import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.lifecycle.Lifecycle
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
@@ -28,8 +27,7 @@ class MainFragmentTest {
 
     @Test
     fun testUIState() {
-        val scenario = launchFragmentInContainer<MainFragment>()
-        scenario.moveToState(Lifecycle.State.RESUMED)
+        launchFragmentInContainer<MainFragment>()
         onView(withId(R.id.userBtn)).check(matches(isDisplayed()))
         onView(withId(R.id.repoBtn)).check(matches(isDisplayed()))
     }

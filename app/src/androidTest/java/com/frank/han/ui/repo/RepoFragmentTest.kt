@@ -2,7 +2,6 @@ package com.frank.han.ui.repo
 
 import androidx.core.os.bundleOf
 import androidx.fragment.app.testing.launchFragmentInContainer
-import androidx.lifecycle.Lifecycle
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
@@ -23,8 +22,7 @@ class RepoFragmentTest {
 
     @Test
     fun testEvent() {
-        val scenario = launchFragmentInContainer<RepoFragment>(bundleOf("username" to "google"))
-        scenario.moveToState(Lifecycle.State.RESUMED)
+        launchFragmentInContainer<RepoFragment>(bundleOf("username" to "google"))
         onView(withId(R.id.repoText)).check(matches(withContentDescription(R.string.repo)))
         Thread.sleep(2000)
     }
