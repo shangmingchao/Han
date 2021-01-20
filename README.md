@@ -19,7 +19,7 @@ Config your Android Studio:
 
 Open `Preferences...`/`Settings` -> `Editor` -> `Code Style`
 
-Click the gear icon and select `Import Scheme...`, choose Han/tools/codestyle.xml file
+Click the gear icon and select `Import Scheme...`, choose `Han/tools/codestyle.xml` file
 
 Open `Editor` -> `File and Code Templates` -> `Includes` -> `File Header`
 
