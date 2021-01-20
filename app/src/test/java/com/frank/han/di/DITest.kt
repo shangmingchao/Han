@@ -1,12 +1,8 @@
 package com.frank.han.di
 
 import com.google.common.truth.Truth.assertThat
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import org.koin.core.context.startKoin
-import org.koin.core.context.stopKoin
 import org.koin.core.logger.Level
 import org.koin.core.qualifier.named
 import org.koin.test.KoinTest
@@ -37,5 +33,4 @@ class DITest : KoinTest {
         val retrofit2 = get<Retrofit>(named(RETROFIT_GITHUB))
         assertThat(retrofit1).isEqualTo(retrofit2)
     }
-
 }

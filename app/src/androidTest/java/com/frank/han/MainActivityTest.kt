@@ -24,6 +24,6 @@ class MainActivityTest {
     @Test
     fun testEvent() {
         val scenario = mainActivityRule.scenario
-        scenario.moveToState(Lifecycle.State.RESUMED)
+        scenario.recreate()
     }
 }
