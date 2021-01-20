@@ -3,10 +3,8 @@ package com.frank.han.util
 import com.frank.han.data.repo.entity.LicenseDTO
 import com.frank.han.data.repo.entity.RepoDTO
 import com.frank.han.data.repo.entity.RepoPO
-import com.frank.han.data.repo.entity.RepoVO
 import com.frank.han.data.user.entity.UserDTO
 import com.frank.han.data.user.entity.UserPO
-import com.frank.han.data.user.entity.UserVO
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
@@ -49,7 +47,8 @@ class ModelMapperTest {
     fun testRepoPO2VO() {
         val repoPO = RepoPO(2L, "name1", false, 1L)
         val repoVO = ModelMapper.map(repoPO)
-        assertThat(repoVO).isEqualTo(RepoVO("name1", false))
+        assertThat(repoVO.desc).isEqualTo("name1")
+        assertThat(repoVO.isPrivate).isFalse()
     }
 
     @Test
@@ -70,6 +69,6 @@ class ModelMapperTest {
     fun testUserPO2VO() {
         val userPO = UserPO(1L, "login1", "name1")
         val userVO = ModelMapper.map(userPO)
-        assertThat(userVO).isEqualTo(UserVO("name1"))
+        assertThat(userVO.username).isEqualTo("name1")
     }
 }

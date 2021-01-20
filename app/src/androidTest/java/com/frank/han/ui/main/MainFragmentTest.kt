@@ -69,17 +69,12 @@ class MainFragmentTest {
             counter1 = it.getCounter()
         }
         onView(withId(R.id.userBtn)).perform(click())
-        sleep(1000)
+        sleep(2000)
         var counter2 = 0
         scenario.onFragment {
+            navController.navigateUp()
             counter2 = it.getCounter()
         }
         assertThat(counter2).isEqualTo(counter1 + 1)
-        var counter3 = 0
-        scenario.onFragment {
-            navController.navigateUp()
-            counter3 = it.getCounter()
-        }
-        assertThat(counter3).isEqualTo(counter1 + 1)
     }
 }
