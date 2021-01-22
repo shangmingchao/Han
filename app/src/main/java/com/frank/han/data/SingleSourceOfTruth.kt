@@ -31,20 +31,20 @@ fun <V, D, P> getResource(
 ): LiveData<Resource<V>> = liveData(Dispatchers.IO, 0) {
     emit(Resource.Loading())
     val localResource = getLocalResource(databaseQuery)
-    emitSource(localResource.map { resMapping(it, pvMapping) })
+    emitSource(localResource.map { it.resMapping(pvMapping) })
     val remoteResource = getRemoteResource(networkCall)
     if (remoteResource is Resource.Success) {
         saveCallResult.invoke(dpMapping(remoteResource.data!!))
     } else if (remoteResource is Resource.Errors) {
         emit(Resource.Errors(remoteResource.errorInfo!!))
-        emitSource(localResource.map { resMapping(it, pvMapping) })
+        emitSource(localResource.map { it.resMapping(pvMapping) })
     }
 }
 
-fun <S, D> resMapping(src: Resource<S>, mapping: (S) -> D): Resource<D> = when (src) {
-    is Resource.Loading -> Resource.Loading(src.data?.let(mapping))
-    is Resource.Success -> Resource.Success(mapping(src.data!!))
-    is Resource.Errors -> Resource.Errors(src.errorInfo!!, src.data?.let(mapping))
+fun <S, D> Resource<S>.resMapping(mapping: (S) -> D): Resource<D> = when (this) {
+    is Resource.Loading -> Resource.Loading(data?.let(mapping))
+    is Resource.Success -> Resource.Success(mapping(data!!))
+    is Resource.Errors -> Resource.Errors(errorInfo!!, data?.let(mapping))
 }
 
 suspend fun <T> getRemoteResource(call: suspend () -> T): Resource<T> = try {
@@ -68,9 +68,10 @@ suspend fun <T> getRemoteResource(call: suspend () -> T): Resource<T> = try {
 }
 
 fun <T> getLocalResource(query: () -> Flow<T>): LiveData<Resource<T>> = try {
-    query.invoke().asLiveData().map { if (it != null) Resource.Success(it) else Resource.Errors<T>(
-        ErrorInfo.DBError("empty")
-    )
+    query.invoke().asLiveData().map {
+        if (it != null) Resource.Success(it) else Resource.Errors<T>(
+            ErrorInfo.DBError("empty")
+        )
     }
 } catch (e: Exception) {
     MutableLiveData(Resource.Errors(ErrorInfo.DBError(e.message!!)))

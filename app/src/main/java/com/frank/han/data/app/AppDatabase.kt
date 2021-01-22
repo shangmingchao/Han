@@ -2,10 +2,10 @@ package com.frank.han.data.app
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.frank.han.data.repo.RepoDao
-import com.frank.han.data.repo.entity.RepoPO
-import com.frank.han.data.user.UserDao
-import com.frank.han.data.user.entity.UserPO
+import com.frank.han.data.github.repo.RepoDao
+import com.frank.han.data.github.repo.entity.RepoPO
+import com.frank.han.data.github.user.UserDao
+import com.frank.han.data.github.user.entity.UserPO
 
 /**
  *

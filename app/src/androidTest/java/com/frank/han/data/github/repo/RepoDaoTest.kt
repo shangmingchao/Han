@@ -1,10 +1,10 @@
-package com.frank.han.data.user
+package com.frank.han.data.github.repo
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.frank.han.data.app.AppDatabase
-import com.frank.han.data.user.entity.UserPO
+import com.frank.han.data.github.repo.entity.RepoPO
 import com.google.common.truth.Truth.assertThat
 import java.io.IOException
 import kotlinx.coroutines.flow.first
@@ -15,15 +15,15 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * UserDaoTest
+ * RepoDaoTest
  *
  * @author frank
  * @date 2021/1/11 11:46 AM
  */
 @RunWith(AndroidJUnit4::class)
-class UserDaoTest {
+class RepoDaoTest {
 
-    private lateinit var userDao: UserDao
+    private lateinit var repoDao: RepoDao
     private lateinit var db: AppDatabase
 
     @Before
@@ -32,7 +32,7 @@ class UserDaoTest {
             ApplicationProvider.getApplicationContext(),
             AppDatabase::class.java
         ).build()
-        userDao = db.userDao()
+        repoDao = db.repoDao()
     }
 
     @After
@@ -44,11 +44,9 @@ class UserDaoTest {
     @Test
     @Throws(Exception::class)
     fun testUser() = runBlocking {
-        val user = UserPO(1L, "login1", "name1")
-        userDao.saveUser(user)
-        val idUser = userDao.getUserById("1").first()
-        assertThat(idUser).isEqualTo(user)
-        val nameUser = userDao.getUserByName("login1").first()
-        assertThat(nameUser).isEqualTo(user)
+        val repos = listOf(RepoPO(1L, "name1", false, 1L))
+        repoDao.saveRepo(repos)
+        val expected = repoDao.getUserRepos("login1").first()
+        assertThat(expected).isNull()
     }
 }

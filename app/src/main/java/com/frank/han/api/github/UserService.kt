@@ -1,6 +1,6 @@
 package com.frank.han.api.github
 
-import com.frank.han.data.user.entity.UserDTO
+import com.frank.han.data.github.user.entity.UserDTO
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -13,6 +13,11 @@ import retrofit2.http.Path
  */
 interface UserService {
 
-    @GET("/users/{username}")
+    /**
+     * Get user's information
+     * @param username user's login name
+     * @return UserDTO
+     */
+    @GET("users/{username}")
     suspend fun getASingleUser(@Path("username") username: String): UserDTO
 }

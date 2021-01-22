@@ -1,6 +1,6 @@
-package com.frank.han.data.repo.entity
+package com.frank.han.data.github.repo.entity
 
-import com.frank.han.data.user.entity.UserDTO
+import com.frank.han.data.github.user.entity.UserDTO
 import com.google.gson.annotations.SerializedName
 
 /**

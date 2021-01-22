@@ -1,10 +1,10 @@
 package com.frank.han.util
 
-import com.frank.han.data.repo.entity.LicenseDTO
-import com.frank.han.data.repo.entity.RepoDTO
-import com.frank.han.data.repo.entity.RepoPO
-import com.frank.han.data.user.entity.UserDTO
-import com.frank.han.data.user.entity.UserPO
+import com.frank.han.data.github.repo.entity.LicenseDTO
+import com.frank.han.data.github.repo.entity.RepoDTO
+import com.frank.han.data.github.repo.entity.RepoPO
+import com.frank.han.data.github.user.entity.UserDTO
+import com.frank.han.data.github.user.entity.UserPO
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 

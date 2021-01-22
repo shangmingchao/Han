@@ -1,5 +1,6 @@
 package com.frank.han.di
 
+import com.frank.han.ui.article.ArticleViewModel
 import com.frank.han.ui.repo.RepoViewModel
 import com.frank.han.ui.user.UserViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -15,6 +16,12 @@ val viewModelModule = module {
     viewModel { (username: String) ->
         UserViewModel(
             get(), username, get()
+        )
+    }
+
+    viewModel { (id: String, page: Int) ->
+        ArticleViewModel(
+            get(), id, page, get()
         )
     }
 }

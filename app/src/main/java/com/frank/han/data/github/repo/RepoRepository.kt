@@ -1,8 +1,8 @@
-package com.frank.han.data.repo
+package com.frank.han.data.github.repo
 
 import com.frank.han.api.github.RepoService
-import com.frank.han.data.repo.entity.RepoDTO
-import com.frank.han.data.repo.entity.RepoPO
+import com.frank.han.data.github.repo.entity.RepoDTO
+import com.frank.han.data.github.repo.entity.RepoPO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull

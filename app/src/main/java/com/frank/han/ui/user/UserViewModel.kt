@@ -5,8 +5,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import com.frank.han.data.Resource
 import com.frank.han.data.getResource
-import com.frank.han.data.user.UserRepository
-import com.frank.han.data.user.entity.UserVO
+import com.frank.han.data.github.user.UserRepository
+import com.frank.han.data.github.user.entity.UserVO
 import com.frank.han.util.ModelMapper.map
 
 /**

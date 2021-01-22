@@ -1,9 +1,11 @@
 package com.frank.han.api
 
 /**
- *
- *
- * @author frank
- * @date 2019/12/12 11:50 AM
+ * GitHub
  */
 const val GITHUB_END_POINT = "https://api.github.com/"
+
+/**
+ * 玩 Android
+ */
+const val WAN_END_POINT = "https://www.wanandroid.com/"

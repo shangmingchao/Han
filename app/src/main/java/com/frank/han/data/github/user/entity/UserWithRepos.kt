@@ -1,8 +1,8 @@
-package com.frank.han.data.user.entity
+package com.frank.han.data.github.user.entity
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.frank.han.data.repo.entity.RepoPO
+import com.frank.han.data.github.repo.entity.RepoPO
 
 /**
  *

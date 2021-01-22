@@ -1,8 +1,8 @@
-package com.frank.han.data.user
+package com.frank.han.data.github.user
 
 import com.frank.han.api.github.UserService
-import com.frank.han.data.user.entity.UserDTO
-import com.frank.han.data.user.entity.UserPO
+import com.frank.han.data.github.user.entity.UserDTO
+import com.frank.han.data.github.user.entity.UserPO
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 

@@ -22,16 +22,32 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".ui.article.ArticleActivity" />
+
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
             tools:node="merge">
-            <meta-data android:name="com.frank.han.components.StethoInitializer"
+            <meta-data
+                android:name="com.frank.han.components.StethoInitializer"
                 android:value="androidx.startup" />
-            <meta-data android:name="com.frank.han.components.KoinInitializer"
+            <meta-data
+                android:name="com.frank.han.components.KoinInitializer"
                 android:value="androidx.startup" />
         </provider>
+
+        <meta-data
+            android:name="android.max_aspect"
+            android:value="2.6" />
+
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" />
+
+        <meta-data
+            android:name="notch.config"
+            android:value="portrait|landscape" />
 
     </application>
 

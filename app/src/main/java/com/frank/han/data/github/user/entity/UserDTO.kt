@@ -1,4 +1,4 @@
-package com.frank.han.data.user.entity
+package com.frank.han.data.github.user.entity
 
 /**
  *

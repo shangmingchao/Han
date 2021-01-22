@@ -1,12 +1,12 @@
-package com.frank.han.data.repo
+package com.frank.han.data.github.repo
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy.REPLACE
 import androidx.room.Query
 import androidx.room.Transaction
-import com.frank.han.data.repo.entity.RepoPO
-import com.frank.han.data.user.entity.UserWithRepos
+import com.frank.han.data.github.repo.entity.RepoPO
+import com.frank.han.data.github.user.entity.UserWithRepos
 import kotlinx.coroutines.flow.Flow
 
 /**

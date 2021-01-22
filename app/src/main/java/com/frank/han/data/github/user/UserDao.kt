@@ -1,10 +1,10 @@
-package com.frank.han.data.user
+package com.frank.han.data.github.user
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.frank.han.data.user.entity.UserPO
+import com.frank.han.data.github.user.entity.UserPO
 import kotlinx.coroutines.flow.Flow
 
 /**

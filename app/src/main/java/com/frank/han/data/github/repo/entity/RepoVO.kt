@@ -1,4 +1,4 @@
-package com.frank.han.data.repo.entity
+package com.frank.han.data.github.repo.entity
 
 /**
  *

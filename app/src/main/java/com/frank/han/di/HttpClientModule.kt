@@ -3,6 +3,7 @@ package com.frank.han.di
 import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.frank.han.BuildConfig
 import com.frank.han.api.GITHUB_END_POINT
+import com.frank.han.api.WAN_END_POINT
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -17,6 +18,7 @@ const val INTERCEPTOR_LOGCAT = "logcat"
 const val INTERCEPTOR_CONSOLE = "console"
 
 const val RETROFIT_GITHUB = "github"
+const val RETROFIT_WAN = "wan"
 
 val httpClientModule = module {
 
@@ -44,6 +46,14 @@ val httpClientModule = module {
     single<Retrofit>(named(RETROFIT_GITHUB)) {
         get<Retrofit.Builder>()
             .baseUrl(GITHUB_END_POINT)
+            .client(get())
+            .addConverterFactory(GsonConverterFactory.create(get()))
+            .build()
+    }
+
+    single<Retrofit>(named(RETROFIT_WAN)) {
+        get<Retrofit.Builder>()
+            .baseUrl(WAN_END_POINT)
             .client(get())
             .addConverterFactory(GsonConverterFactory.create(get()))
             .build()
