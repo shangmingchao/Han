@@ -21,11 +21,14 @@ class ArticleFragment : BaseFragment(R.layout.fragment_article) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         articleViewModel.articles.observe(viewLifecycleOwner) {
-            articleTextView.setResource(it.resMapping { articles ->
-                articles.data.datas.joinToString(
-                    separator = "\n",
-                    transform = { article -> "<<${article.title}>> by ${article.author}" })
-            })
+            articleTextView.setResource(
+                it.resMapping { articles ->
+                    articles.data.datas.joinToString(
+                        separator = "\n",
+                        transform = { article -> "<<${article.title}>> by ${article.author}" }
+                    )
+                }
+            )
         }
     }
 }

@@ -12,9 +12,9 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.frank.han.R
 import com.google.common.truth.Truth.assertThat
-import java.lang.Thread.sleep
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.lang.Thread.sleep
 
 /**
  * MainFragment UI test

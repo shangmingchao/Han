@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
-import java.net.SocketTimeoutException
-import java.net.UnknownHostException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 
 const val CODE_UNKNOWN = 0
 const val CODE_SOCKET_TIMEOUT = 1

@@ -15,8 +15,8 @@ class KoinInitializer : Initializer<KoinApplication> {
             androidLogger()
             androidContext(context)
             modules(
-                    serializationModule, httpClientModule, webServiceModule, databaseModule,
-                    repositoryModule, viewModelModule
+                serializationModule, httpClientModule, webServiceModule, databaseModule,
+                repositoryModule, viewModelModule
             )
         }
     }

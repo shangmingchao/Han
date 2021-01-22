@@ -23,11 +23,14 @@ class RepoFragment : BaseFragment(R.layout.fragment_repo) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         repoViewModel.repo.observe(viewLifecycleOwner) {
-            repoTextView.setResource(it.resMapping { repos ->
-                repos.joinToString(
-                    separator = "\n",
-                    transform = { repo -> "<<${repo.desc}>>: ${repo.isPrivate}" })
-            })
+            repoTextView.setResource(
+                it.resMapping { repos ->
+                    repos.joinToString(
+                        separator = "\n",
+                        transform = { repo -> "<<${repo.desc}>>: ${repo.isPrivate}" }
+                    )
+                }
+            )
         }
     }
 }

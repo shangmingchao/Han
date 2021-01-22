@@ -6,13 +6,13 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.frank.han.data.app.AppDatabase
 import com.frank.han.data.github.user.entity.UserPO
 import com.google.common.truth.Truth.assertThat
-import java.io.IOException
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.io.IOException
 
 /**
  * UserDaoTest

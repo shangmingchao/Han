@@ -17,7 +17,7 @@ buildscript {
 }
 
 plugins {
-    id "com.diffplug.gradle.spotless" version "3.26.0"
+    id "com.diffplug.spotless" version "5.9.0"
 }
 
 allprojects {
@@ -31,7 +31,7 @@ allprojects {
 spotless {
     kotlin {
         target "**/*.kt"
-        ktlint("0.35.0").userData([
+        ktlint("0.40.0").userData([
                 'max_line_length': '100',
                 'disabled_rules' : 'no-wildcard-imports'
         ])

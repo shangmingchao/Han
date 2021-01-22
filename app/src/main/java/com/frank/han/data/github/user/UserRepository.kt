@@ -18,11 +18,11 @@ class UserRepository(
 ) {
 
     suspend fun getRemoteUser(username: String): UserDTO =
-            userService.getASingleUser(username)
+        userService.getASingleUser(username)
 
     fun getLocalUser(username: String): Flow<UserPO> =
-            userDao.getUserByName(username).distinctUntilChanged()
+        userDao.getUserByName(username).distinctUntilChanged()
 
     suspend fun saveLocalUser(user: UserPO) =
-            userDao.saveUser(user)
+        userDao.saveUser(user)
 }

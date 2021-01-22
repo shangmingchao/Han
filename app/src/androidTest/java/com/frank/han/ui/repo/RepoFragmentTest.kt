@@ -23,7 +23,7 @@ class RepoFragmentTest {
     @Test
     fun testEvent() {
         launchFragmentInContainer<RepoFragment>(bundleOf("username" to "google"))
-        onView(withId(R.id.repoText)).check(matches(withContentDescription(R.string.repo)))
+        onView(withId(R.id.repoTextView)).check(matches(withContentDescription(R.string.repo)))
         Thread.sleep(2000)
     }
 }

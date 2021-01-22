@@ -10,15 +10,13 @@ import com.frank.han.data.wan.wechat.entity.ArticlesDTO
  * @author frank
  * @date 2019/12/8 7:47 PM
  */
-class ArticleRepository(
-    private val weChatService: WeChatService,
-) {
+class ArticleRepository(private val weChatService: WeChatService) {
 
     /**
      * Get article's list
      * @param id user's id
      * @param page page
-     * @return BaseDTO<ArticlesDTO>
+     * @return article's list
      */
     suspend fun getArticleList(id: String, page: Int): BaseDTO<ArticlesDTO> =
         weChatService.getArticleList(id, page)
