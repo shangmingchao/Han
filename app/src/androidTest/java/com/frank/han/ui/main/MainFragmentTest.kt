@@ -12,9 +12,10 @@ import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.frank.han.R
 import com.google.common.truth.Truth.assertThat
+import java.lang.Thread.sleep
+import kotlinx.android.synthetic.main.fragment_main.counterText
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.lang.Thread.sleep
 
 /**
  * MainFragment UI test
@@ -60,19 +61,19 @@ class MainFragmentTest {
     fun testCounter() {
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
         val scenario = launchFragmentInContainer<MainFragment>()
-        var counter1 = 0
+        var counter1 = ""
         scenario.onFragment {
             navController.setGraph(R.navigation.nav_main)
             Navigation.setViewNavController(it.requireView(), navController)
-            counter1 = it.getCounter()
+            counter1 = it.counterText.text.toString()
         }
         onView(withId(R.id.userBtn)).perform(click())
         sleep(2000)
-        var counter2 = 0
+        var counter2 = ""
         scenario.onFragment {
             navController.navigateUp()
-            counter2 = it.getCounter()
+            counter2 = it.counterText.text.toString()
         }
-        assertThat(counter2).isEqualTo(counter1 + 1)
+        assertThat(counter2).isNotEqualTo(counter1)
     }
 }

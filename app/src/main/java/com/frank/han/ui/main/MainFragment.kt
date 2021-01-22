@@ -50,12 +50,4 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
             counterText.text = format(getString(R.string.user_click), "$it")
         }
     }
-
-    fun getCounter(): Int {
-        return try {
-            counterText.text.toString().toInt()
-        } catch (e: Exception) {
-            0
-        }
-    }
 }
