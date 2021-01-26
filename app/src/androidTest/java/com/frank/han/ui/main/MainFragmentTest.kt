@@ -11,8 +11,8 @@ import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.frank.han.R
+import com.frank.han.widget.HTextView
 import com.google.common.truth.Truth.assertThat
-import kotlinx.android.synthetic.main.fragment_main.counterText
 import org.junit.Test
 import org.junit.runner.RunWith
 import java.lang.Thread.sleep
@@ -31,6 +31,7 @@ class MainFragmentTest {
         launchFragmentInContainer<MainFragment>()
         onView(withId(R.id.userBtn)).check(matches(isDisplayed()))
         onView(withId(R.id.repoBtn)).check(matches(isDisplayed()))
+        onView(withId(R.id.articleBtn)).check(matches(isDisplayed()))
     }
 
     @Test
@@ -65,14 +66,14 @@ class MainFragmentTest {
         scenario.onFragment {
             navController.setGraph(R.navigation.nav_main)
             Navigation.setViewNavController(it.requireView(), navController)
-            counter1 = it.counterText.text.toString()
+            counter1 = it.requireView().findViewById<HTextView>(R.id.counterText).text.toString()
         }
         onView(withId(R.id.userBtn)).perform(click())
         sleep(2000)
         var counter2 = ""
         scenario.onFragment {
             navController.navigateUp()
-            counter2 = it.counterText.text.toString()
+            counter2 = it.requireView().findViewById<HTextView>(R.id.counterText).text.toString()
         }
         assertThat(counter2).isNotEqualTo(counter1)
     }

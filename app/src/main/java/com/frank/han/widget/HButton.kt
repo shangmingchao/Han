@@ -9,8 +9,18 @@ import android.util.AttributeSet
  * @author frank
  * @date 2019/12/13 3:16 PM
  */
-class HButton @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : HTextView(context, attrs, defStyleAttr)
+class HButton : HTextView {
+
+    constructor(context: Context) : this(context, null)
+    constructor(context: Context, attrs: AttributeSet?) : this(
+        context,
+        attrs,
+        android.R.attr.textViewStyle
+    )
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
+        context,
+        attrs,
+        defStyleAttr
+    )
+}

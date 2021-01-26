@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
+import com.frank.han.databinding.ActivityMainBinding
 import com.frank.han.util.hideSystemUI
-import kotlinx.android.synthetic.main.activity_main.*
 
 /**
  * Main Activity
@@ -16,13 +16,16 @@ import kotlinx.android.synthetic.main.activity_main.*
  */
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var viewBinding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        viewBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
         window.hideSystemUI()
-        setSupportActionBar(toolbar)
+        setSupportActionBar(viewBinding.toolbar)
         val navController = findNavController(R.id.nav_host_main)
         val appBarConfiguration = AppBarConfiguration(navController.graph)
-        toolbar.setupWithNavController(navController, appBarConfiguration)
+        viewBinding.toolbar.setupWithNavController(navController, appBarConfiguration)
     }
 }

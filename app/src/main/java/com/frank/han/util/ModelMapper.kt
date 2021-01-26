@@ -8,7 +8,7 @@ import com.frank.han.data.github.user.entity.UserPO
 import com.frank.han.data.github.user.entity.UserVO
 
 /**
- *
+ * ModelMapper. Should be replaced
  *
  * @author frank
  * @date 2019/12/20 4:07 PM

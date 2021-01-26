@@ -1,32 +1,29 @@
-package com.frank.han.ui.user
+package com.frank.han.ui.article
 
-import androidx.core.os.bundleOf
 import androidx.fragment.app.testing.launchFragmentInContainer
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.withContentDescription
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.frank.han.R
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.lang.Thread.sleep
 
 /**
- * UserFragment UI test
+ * ArticleFragment UI test
  *
  * @author frank
  * @date 2021/1/11 11:46 AM
  */
 @RunWith(AndroidJUnit4::class)
-class UserFragmentTest {
+class ArticleFragmentTest {
 
     @Test
     fun testEvent() {
-        launchFragmentInContainer<UserFragment>(bundleOf("username" to "google"))
-        onView(withId(R.id.userTextView)).check(matches(withContentDescription(R.string.user)))
-        sleep(5000)
-        onView(withId(R.id.userTextView)).check(matches(withText("Google")))
+        launchFragmentInContainer<ArticleFragment>()
+        onView(withId(R.id.articleTextView))
+            .check(matches(withContentDescription(R.string.article)))
+        Thread.sleep(5000)
     }
 }

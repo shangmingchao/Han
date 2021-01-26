@@ -1,11 +1,12 @@
 package com.frank.han.ui.repo
 
 import android.os.Bundle
+import android.view.View
 import androidx.navigation.fragment.navArgs
 import com.frank.han.R
 import com.frank.han.data.resMapping
+import com.frank.han.databinding.FragmentRepoBinding
 import com.frank.han.ui.BaseFragment
-import kotlinx.android.synthetic.main.fragment_repo.repoTextView
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -17,13 +18,15 @@ import org.koin.core.parameter.parametersOf
  */
 class RepoFragment : BaseFragment(R.layout.fragment_repo) {
 
+    private var _viewBinding: FragmentRepoBinding? = null
+    private val viewBinding get() = _viewBinding!!
     private val args by navArgs<RepoFragmentArgs>()
     private val repoViewModel: RepoViewModel by viewModel { parametersOf(args.username) }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         repoViewModel.repo.observe(viewLifecycleOwner) {
-            repoTextView.setResource(
+            viewBinding.repoTextView.setResource(
                 it.resMapping { repos ->
                     repos.joinToString(
                         separator = "\n",
@@ -32,5 +35,15 @@ class RepoFragment : BaseFragment(R.layout.fragment_repo) {
                 }
             )
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        _viewBinding = FragmentRepoBinding.bind(view)
+    }
+
+    override fun onDestroyView() {
+        _viewBinding = null
+        super.onDestroyView()
     }
 }
