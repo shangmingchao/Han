@@ -1,15 +1,12 @@
 package com.frank.han.util
 
-import com.frank.han.data.github.repo.entity.LicenseDTO
-import com.frank.han.data.github.repo.entity.RepoDTO
 import com.frank.han.data.github.repo.entity.RepoPO
-import com.frank.han.data.github.user.entity.UserDTO
 import com.frank.han.data.github.user.entity.UserPO
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 
 /**
- *
+ * ModelMapper Test
  *
  * @author frank
  * @date 2019/12/18 3:11 PM
@@ -18,27 +15,7 @@ class ModelMapperTest {
 
     @Test
     fun testRepoDTO2PO() {
-        val userDTO = UserDTO(
-            "", 1L, "", "", "", "", "",
-            "", "", "", "", "", "", "",
-            "", "", "", false, "", "", "",
-            "", "", false, "", 0, 0, 0,
-            0, "", ""
-        )
-        val licenseDTO = LicenseDTO("", "", "", "", "")
-        val repoDTO = RepoDTO(
-            2L, "", "name1", "", false,
-            userDTO, "", "", false, "", "", "",
-            "", "", "", "", "", "", "",
-            "", "", "", "", "", "", "",
-            "", "", "", "", "", "", "",
-            "", "", "", "", "", "", "",
-            "", "", "", "", "", "", "",
-            "", "", "", "", "", "", "",
-            0, 0, 0, false, false, false, false,
-            false, 0, false, false, 0, 0, 0,
-            0, "", "", licenseDTO, ""
-        )
+        val repoDTO = mockRepo()
         val repoPO = ModelMapper.map(repoDTO)
         assertThat(repoPO).isEqualTo(RepoPO(2L, "name1", false, 1L))
     }
@@ -53,14 +30,7 @@ class ModelMapperTest {
 
     @Test
     fun testUserDTO2PO() {
-        val userDTO = UserDTO(
-            "login1", 1L, "", "", "",
-            "", "", "", "", "",
-            "", "", "", "", "",
-            "", "", false, "name1", "",
-            "", "", "", false, "",
-            0, 0, 0, 0, "", ""
-        )
+        val userDTO = mockUser()
         val userPO = ModelMapper.map(userDTO)
         assertThat(userPO).isEqualTo(UserPO(1L, "login1", "name1"))
     }
