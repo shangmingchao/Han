@@ -22,7 +22,7 @@ class ArticleViewModel(
     private val articleRepository: ArticleRepository
 ) : ViewModel() {
 
-    val articles by lazy { getArticleList() }
+    val articles by lazy(LazyThreadSafetyMode.NONE) { getArticleList() }
 
     private fun getArticleList(): LiveData<Resource<BaseDTO<ArticlesDTO>>> = getNetResource {
         articleRepository.getArticleList(id, page)

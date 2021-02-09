@@ -21,7 +21,7 @@ class UserViewModel(
     private val userRepository: UserRepository
 ) : ViewModel() {
 
-    val user by lazy { getUser(username) }
+    val user by lazy(LazyThreadSafetyMode.NONE) { getUser(username) }
 
     private fun getUser(username: String): LiveData<Resource<UserVO>> = getResource(
         databaseQuery = { userRepository.getLocalUser(username) },

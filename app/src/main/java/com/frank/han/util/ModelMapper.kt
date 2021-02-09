@@ -13,6 +13,9 @@ import com.frank.han.data.github.user.entity.UserVO
  * @author frank
  * @date 2019/12/20 4:07 PM
  */
+@Deprecated(
+    "Should be replaced in feature"
+)
 object ModelMapper {
 
     fun map(dto: RepoDTO): RepoPO {

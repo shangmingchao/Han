@@ -18,9 +18,19 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface RepoDao {
 
+    /**
+     * save Repo
+     *
+     * @param repo List<RepoPO>
+     */
     @Insert(onConflict = REPLACE)
     suspend fun saveRepo(repo: List<RepoPO>)
 
+    /**
+     * Get user's repos by username
+     * @param username String
+     * @return Flow<UserWithRepos>
+     */
     @Transaction
     @Query("SELECT * FROM UserPO WHERE login = :username")
     fun getUserRepos(username: String): Flow<UserWithRepos>

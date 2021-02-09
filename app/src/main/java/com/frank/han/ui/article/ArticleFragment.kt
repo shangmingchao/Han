@@ -3,7 +3,10 @@ package com.frank.han.ui.article
 import android.os.Bundle
 import android.view.View
 import com.frank.han.R
+import com.frank.han.data.Resource
 import com.frank.han.data.resMapping
+import com.frank.han.data.wan.BaseDTO
+import com.frank.han.data.wan.wechat.entity.ArticlesDTO
 import com.frank.han.databinding.FragmentArticleBinding
 import com.frank.han.ui.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -24,14 +27,7 @@ class ArticleFragment : BaseFragment(R.layout.fragment_article) {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         articleViewModel.articles.observe(viewLifecycleOwner) {
-            viewBinding.articleTextView.setResource(
-                it.resMapping { articles ->
-                    articles.data.datas.joinToString(
-                        separator = "\n",
-                        transform = { article -> "<<${article.title}>> by ${article.author}" }
-                    )
-                }
-            )
+            viewBinding.articleTextView.setResource(formatRes(it))
         }
     }
 
@@ -43,5 +39,12 @@ class ArticleFragment : BaseFragment(R.layout.fragment_article) {
     override fun onDestroyView() {
         _viewBinding = null
         super.onDestroyView()
+    }
+
+    private fun formatRes(res: Resource<BaseDTO<ArticlesDTO>>) = res.resMapping { articles ->
+        articles.data.datas.joinToString(
+            separator = "\n",
+            transform = { article -> "<<${article.title}>> by ${article.author}" }
+        )
     }
 }

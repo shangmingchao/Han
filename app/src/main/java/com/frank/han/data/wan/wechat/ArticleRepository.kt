@@ -14,6 +14,7 @@ class ArticleRepository(private val weChatService: WeChatService) {
 
     /**
      * Get article's list
+     *
      * @param id user's id
      * @param page page
      * @return article's list

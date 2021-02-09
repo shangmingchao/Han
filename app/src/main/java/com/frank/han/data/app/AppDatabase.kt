@@ -17,8 +17,18 @@ import com.frank.han.data.github.user.entity.UserPO
 @Database(entities = [RepoPO::class, UserPO::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
+    /**
+     * Repo DAO
+     *
+     * @return RepoDao
+     */
     abstract fun repoDao(): RepoDao
 
+    /**
+     * user DAO
+     *
+     * @return UserDao
+     */
     abstract fun userDao(): UserDao
 
     companion object {

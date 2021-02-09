@@ -18,6 +18,9 @@ package com.frank.han.util
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 /**
  * Represents a list of capture values from a LiveData.
@@ -41,7 +44,7 @@ class LiveDataValueCapture<T> {
  * Extension function to capture all values that are emitted to a LiveData<T> during the execution of
  * `captureBlock`.
  *
- * @param captureBlock a lambda that will
+ * @param block a lambda that will
  */
 inline fun <T> LiveData<T>.captureValues(block: LiveDataValueCapture<T>.() -> Unit) {
     val capture = LiveDataValueCapture<T>()
@@ -61,10 +64,38 @@ inline fun <T> LiveData<T>.captureValues(block: LiveDataValueCapture<T>.() -> Un
  */
 fun <T> LiveData<T>.getValueForTest(): T? {
     var value: T? = null
-    var observer = Observer<T> {
+    val observer = Observer<T> {
         value = it
     }
     observeForever(observer)
     removeObserver(observer)
     return value
+}
+
+fun <T> LiveData<T>.getOrAwaitValue(
+    time: Long = 2,
+    timeUnit: TimeUnit = TimeUnit.SECONDS,
+    afterObserve: () -> Unit = {}
+): T {
+    var data: T? = null
+    val latch = CountDownLatch(1)
+    val observer = object : Observer<T> {
+        override fun onChanged(o: T?) {
+            data = o
+            latch.countDown()
+            this@getOrAwaitValue.removeObserver(this)
+        }
+    }
+    this.observeForever(observer)
+
+    afterObserve.invoke()
+
+    // Don't wait indefinitely if the LiveData is not set.
+    if (!latch.await(time, timeUnit)) {
+        this.removeObserver(observer)
+        throw TimeoutException("LiveData value was never set.")
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    return data as T
 }

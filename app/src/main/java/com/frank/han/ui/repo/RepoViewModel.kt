@@ -21,7 +21,7 @@ class RepoViewModel(
     private val repoRepository: RepoRepository
 ) : ViewModel() {
 
-    val repo by lazy { getRepo(username) }
+    val repo by lazy(LazyThreadSafetyMode.NONE) { getRepo(username) }
 
     private fun getRepo(username: String): LiveData<Resource<List<RepoVO>>> = getResource(
         databaseQuery = { repoRepository.getLocalRepo(username) },

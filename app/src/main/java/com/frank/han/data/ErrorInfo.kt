@@ -1,7 +1,7 @@
 package com.frank.han.data
 
 /**
- *
+ * The normal error
  *
  * @author frank
  * @date 2019/12/23 10:11 AM

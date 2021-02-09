@@ -16,12 +16,29 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface UserDao {
 
+    /**
+     * Save user
+     *
+     * @param user UserPO
+     */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveUser(user: UserPO)
 
+    /**
+     * Get user by user's id
+     *
+     * @param userId String
+     * @return Flow<UserPO>
+     */
     @Query("SELECT * FROM UserPO WHERE id = :userId")
     fun getUserById(userId: String): Flow<UserPO>
 
+    /**
+     * Get user by user's username
+     *
+     * @param username String
+     * @return Flow<UserPO>
+     */
     @Query("SELECT * FROM UserPO WHERE login = :username")
     fun getUserByName(username: String): Flow<UserPO>
 }
