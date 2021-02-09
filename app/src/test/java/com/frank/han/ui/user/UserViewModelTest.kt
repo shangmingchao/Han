@@ -26,6 +26,8 @@ import retrofit2.mock.NetworkBehavior
 import java.lang.Thread.sleep
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 
 /**
  * UserViewModel Test
@@ -96,7 +98,7 @@ class UserViewModelTest {
         userViewModel.user.observeForever(observer)
         sleep(100)
         assertThat(userViewModel.user.value).isInstanceOf(Resource.Loading::class.java)
-        sleep(1000)
+        sleep(2000)
         assertThat(userViewModel.user.value).isInstanceOf(Resource.Success::class.java)
         userViewModel.user.removeObserver(observer)
     }
