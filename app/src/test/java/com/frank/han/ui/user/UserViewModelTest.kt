@@ -26,8 +26,6 @@ import retrofit2.mock.NetworkBehavior
 import java.lang.Thread.sleep
 import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 
 /**
  * UserViewModel Test
