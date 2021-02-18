@@ -6,7 +6,7 @@ build_versions.target_sdk = 30
 ext.build_versions = build_versions
 
 def versions = [:]
-versions.android_gradle_plugin = '4.1.1'
+versions.android_gradle_plugin = '4.1.2'
 versions.kotlin = "1.4.10"
 versions.findbugs = "3.0.2"
 versions.androidx_core = "1.5.0-beta01"
