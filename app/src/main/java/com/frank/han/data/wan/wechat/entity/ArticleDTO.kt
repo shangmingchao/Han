@@ -1,5 +1,11 @@
 package com.frank.han.data.wan.wechat.entity
 
+/**
+ * ArticlesDTO
+ *
+ * @author frank
+ * @date 2019/12/18 2:37 PM
+ */
 data class ArticlesDTO(
     val curPage: Int,
     val datas: List<ArticleDTO>,
@@ -10,6 +16,9 @@ data class ArticlesDTO(
     val total: Int
 )
 
+/**
+ * ArticleDTO
+ */
 data class ArticleDTO(
     val apkLink: String,
     val audit: Int,
@@ -46,6 +55,9 @@ data class ArticleDTO(
     val zan: Int
 )
 
+/**
+ * Tag
+ */
 data class Tag(
     val name: String,
     val url: String

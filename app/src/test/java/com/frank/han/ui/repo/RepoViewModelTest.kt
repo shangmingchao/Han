@@ -16,6 +16,9 @@ import com.frank.han.util.MainCoroutineScopeRule
 import com.frank.han.util.getGitHubRetrofit
 import com.frank.han.util.mockRepo
 import com.google.common.truth.Truth.assertThat
+import java.lang.Thread.sleep
+import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -25,9 +28,6 @@ import org.junit.Test
 import retrofit2.mock.Calls.response
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
-import java.lang.Thread.sleep
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 /**
  * RepoViewModel Test
@@ -70,7 +70,7 @@ class RepoViewModelTest {
     private val repoServiceDelegate =
         MockRetrofit.Builder(getGitHubRetrofit()).networkBehavior(behavior).build()
             .create(RepoService::class.java)
-    private val remoteSuccess: RepoService = object : RepoService {
+    private val repoService: RepoService = object : RepoService {
         override suspend fun listUserRepositories(username: String): List<RepoDTO> {
             return repoServiceDelegate.returning(response(listOf(mockRepo())))
                 .listUserRepositories("google")
@@ -86,7 +86,7 @@ class RepoViewModelTest {
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         val repoViewModel =
-            RepoViewModel(SavedStateHandle(), "google", RepoRepository(remoteSuccess, localFailed))
+            RepoViewModel(SavedStateHandle(), "google", RepoRepository(repoService, localFailed))
         assertThat(repoViewModel.repo.value).isNull()
         val observer = Observer<Resource<List<RepoVO>>> {}
         repoViewModel.repo.observeForever(observer)
@@ -94,6 +94,26 @@ class RepoViewModelTest {
         assertThat(repoViewModel.repo.value).isInstanceOf(Resource.Loading::class.java)
         sleep(2000)
         assertThat(repoViewModel.repo.value).isInstanceOf(Resource.Success::class.java)
+        repoViewModel.repo.removeObserver(observer)
+    }
+
+    /**
+     * localFailedRemoteFailed
+     */
+    @Test
+    fun localFailedRemoteFailed() = coroutineScope.runBlockingTest {
+        behavior.setDelay(1000, TimeUnit.MILLISECONDS)
+        behavior.setVariancePercent(0)
+        behavior.setFailurePercent(100)
+        val repoViewModel =
+            RepoViewModel(SavedStateHandle(), "google", RepoRepository(repoService, localFailed))
+        assertThat(repoViewModel.repo.value).isNull()
+        val observer = Observer<Resource<List<RepoVO>>> {}
+        repoViewModel.repo.observeForever(observer)
+        sleep(100)
+        assertThat(repoViewModel.repo.value).isInstanceOf(Resource.Loading::class.java)
+        sleep(2000)
+        assertThat(repoViewModel.repo.value).isInstanceOf(Resource.Errors::class.java)
         repoViewModel.repo.removeObserver(observer)
     }
 }

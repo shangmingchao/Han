@@ -27,6 +27,9 @@ class UserRepositoryTest {
     private val behavior = NetworkBehavior.create(Random(2847))
     private lateinit var userService: UserService
 
+    /**
+     * create WebService
+     */
     @Before
     fun create() {
         val retrofit = MockRetrofit.Builder(getGitHubRetrofit()).networkBehavior(behavior).build()

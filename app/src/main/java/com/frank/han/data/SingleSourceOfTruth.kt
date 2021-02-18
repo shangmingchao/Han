@@ -5,10 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
+import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 
 const val CODE_UNKNOWN = 0
 const val CODE_SOCKET_TIMEOUT = 1
@@ -61,22 +62,12 @@ fun <S, D> Resource<S>.resMapping(mapping: (S) -> D): Resource<D> = when (this) 
  */
 suspend fun <T> getRemoteResource(call: suspend () -> T): Resource<T> = try {
     Resource.Success(call.invoke())
-} catch (e: Exception) {
-    when (e) {
-        is SocketTimeoutException -> Resource.Errors(
-            ErrorInfo.NetError(
-                CODE_SOCKET_TIMEOUT,
-                e.message!!
-            )
-        )
-        is UnknownHostException -> Resource.Errors(
-            ErrorInfo.NetError(
-                CODE_UNKNOWN_HOST,
-                e.message!!
-            )
-        )
-        else -> Resource.Errors(ErrorInfo.OtherError(CODE_UNKNOWN, e.message!!))
-    }
+} catch (e: SocketTimeoutException) {
+    Resource.Errors(ErrorInfo.NetError(CODE_SOCKET_TIMEOUT, e.message!!))
+} catch (e: UnknownHostException) {
+    Resource.Errors(ErrorInfo.NetError(CODE_UNKNOWN_HOST, e.message!!))
+} catch (e: IOException) {
+    Resource.Errors(ErrorInfo.OtherError(CODE_UNKNOWN, e.message!!))
 }
 
 /**

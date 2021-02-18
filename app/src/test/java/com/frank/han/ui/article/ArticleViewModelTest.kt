@@ -12,15 +12,15 @@ import com.frank.han.util.MainCoroutineScopeRule
 import com.frank.han.util.getWanRetrofit
 import com.frank.han.util.mockArticles
 import com.google.common.truth.Truth.assertThat
+import java.lang.Thread.sleep
+import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
 import org.junit.Test
 import retrofit2.mock.Calls.response
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
-import java.lang.Thread.sleep
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 /**
  * ArticleViewModel Test
@@ -40,22 +40,22 @@ class ArticleViewModelTest {
     private val articleServiceDelegate =
         MockRetrofit.Builder(getWanRetrofit()).networkBehavior(behavior).build()
             .create(WeChatService::class.java)
-    private val remoteSuccess: WeChatService = object : WeChatService {
+    private val weChatService: WeChatService = object : WeChatService {
         override suspend fun getArticleList(id: String, page: Int): BaseDTO<ArticlesDTO> {
             return articleServiceDelegate.returning(response(mockArticles())).getArticleList("1", 1)
         }
     }
 
     /**
-     * localFailedRemoteSuccess
+     * remoteSuccess
      */
     @Test
-    fun localFailedRemoteSuccess() = coroutineScope.runBlockingTest {
+    fun remoteSuccess() = coroutineScope.runBlockingTest {
         behavior.setDelay(1000, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         val articleViewModel =
-            ArticleViewModel(SavedStateHandle(), "", 1, ArticleRepository(remoteSuccess))
+            ArticleViewModel(SavedStateHandle(), "", 1, ArticleRepository(weChatService))
         assertThat(articleViewModel.articles.value).isNull()
         val observer = Observer<Resource<BaseDTO<ArticlesDTO>>> {}
         articleViewModel.articles.observeForever(observer)
@@ -63,6 +63,26 @@ class ArticleViewModelTest {
         assertThat(articleViewModel.articles.value).isInstanceOf(Resource.Loading::class.java)
         sleep(2000)
         assertThat(articleViewModel.articles.value).isInstanceOf(Resource.Success::class.java)
+        articleViewModel.articles.removeObserver(observer)
+    }
+
+    /**
+     * remoteFailed
+     */
+    @Test
+    fun remoteFailed() = coroutineScope.runBlockingTest {
+        behavior.setDelay(1000, TimeUnit.MILLISECONDS)
+        behavior.setVariancePercent(0)
+        behavior.setFailurePercent(100)
+        val articleViewModel =
+            ArticleViewModel(SavedStateHandle(), "", 1, ArticleRepository(weChatService))
+        assertThat(articleViewModel.articles.value).isNull()
+        val observer = Observer<Resource<BaseDTO<ArticlesDTO>>> {}
+        articleViewModel.articles.observeForever(observer)
+        sleep(100)
+        assertThat(articleViewModel.articles.value).isInstanceOf(Resource.Loading::class.java)
+        sleep(2000)
+        assertThat(articleViewModel.articles.value).isInstanceOf(Resource.Errors::class.java)
         articleViewModel.articles.removeObserver(observer)
     }
 }

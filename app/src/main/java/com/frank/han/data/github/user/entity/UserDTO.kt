@@ -1,7 +1,7 @@
 package com.frank.han.data.github.user.entity
 
 /**
- *
+ * UserDTO
  *
  * @author frank
  * @date 2019/12/18 2:37 PM

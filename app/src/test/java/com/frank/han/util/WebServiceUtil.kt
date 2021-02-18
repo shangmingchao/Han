@@ -11,7 +11,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  * Get GitHub retrofit
  * @return Retrofit
  */
-fun getGitHubRetrofit() = Retrofit.Builder()
+fun getGitHubRetrofit(): Retrofit = Retrofit.Builder()
     .baseUrl(GITHUB_END_POINT)
     .client(OkHttpClient())
     .addConverterFactory(GsonConverterFactory.create(Gson()))
@@ -21,7 +21,7 @@ fun getGitHubRetrofit() = Retrofit.Builder()
  * Get Wan retrofit
  * @return Retrofit
  */
-fun getWanRetrofit() = Retrofit.Builder()
+fun getWanRetrofit(): Retrofit = Retrofit.Builder()
     .baseUrl(WAN_END_POINT)
     .client(OkHttpClient())
     .addConverterFactory(GsonConverterFactory.create(Gson()))

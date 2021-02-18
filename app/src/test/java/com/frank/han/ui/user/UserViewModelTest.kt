@@ -14,6 +14,9 @@ import com.frank.han.util.MainCoroutineScopeRule
 import com.frank.han.util.getGitHubRetrofit
 import com.frank.han.util.mockUser
 import com.google.common.truth.Truth.assertThat
+import java.lang.Thread.sleep
+import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -23,9 +26,6 @@ import org.junit.Test
 import retrofit2.mock.Calls.response
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
-import java.lang.Thread.sleep
-import java.util.*
-import java.util.concurrent.TimeUnit
 
 /**
  * UserViewModel Test
@@ -78,7 +78,7 @@ class UserViewModelTest {
     private val userServiceDelegate =
         MockRetrofit.Builder(getGitHubRetrofit()).networkBehavior(behavior).build()
             .create(UserService::class.java)
-    private val remoteSuccess: UserService = object : UserService {
+    private val userService: UserService = object : UserService {
         override suspend fun getASingleUser(username: String): UserDTO {
             return userServiceDelegate.returning(response(mockUser())).getASingleUser("google")
         }
@@ -93,7 +93,7 @@ class UserViewModelTest {
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         val userViewModel =
-            UserViewModel(SavedStateHandle(), "google", UserRepository(remoteSuccess, localFailed))
+            UserViewModel(SavedStateHandle(), "google", UserRepository(userService, localFailed))
         assertThat(userViewModel.user.value).isNull()
         val observer = Observer<Resource<UserVO>> {}
         userViewModel.user.observeForever(observer)
@@ -101,6 +101,26 @@ class UserViewModelTest {
         assertThat(userViewModel.user.value).isInstanceOf(Resource.Loading::class.java)
         sleep(2000)
         assertThat(userViewModel.user.value).isInstanceOf(Resource.Success::class.java)
+        userViewModel.user.removeObserver(observer)
+    }
+
+    /**
+     * localFailedRemoteFailed
+     */
+    @Test
+    fun localFailedRemoteFailed() = coroutineScope.runBlockingTest {
+        behavior.setDelay(1000, TimeUnit.MILLISECONDS)
+        behavior.setVariancePercent(0)
+        behavior.setFailurePercent(100)
+        val userViewModel =
+            UserViewModel(SavedStateHandle(), "google", UserRepository(userService, localFailed))
+        assertThat(userViewModel.user.value).isNull()
+        val observer = Observer<Resource<UserVO>> {}
+        userViewModel.user.observeForever(observer)
+        sleep(100)
+        assertThat(userViewModel.user.value).isInstanceOf(Resource.Loading::class.java)
+        sleep(2000)
+        assertThat(userViewModel.user.value).isInstanceOf(Resource.Errors::class.java)
         userViewModel.user.removeObserver(observer)
     }
 }

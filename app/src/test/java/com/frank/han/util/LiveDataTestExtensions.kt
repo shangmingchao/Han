@@ -72,6 +72,15 @@ fun <T> LiveData<T>.getValueForTest(): T? {
     return value
 }
 
+/**
+ * getOrAwaitValue
+ *
+ * @receiver LiveData<T>
+ * @param time time
+ * @param timeUnit TimeUnit
+ * @param afterObserve Function0<Unit>
+ * @return T
+ */
 fun <T> LiveData<T>.getOrAwaitValue(
     time: Long = 2,
     timeUnit: TimeUnit = TimeUnit.SECONDS,
