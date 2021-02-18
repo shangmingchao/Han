@@ -12,15 +12,15 @@ import com.frank.han.util.MainCoroutineScopeRule
 import com.frank.han.util.getWanRetrofit
 import com.frank.han.util.mockArticles
 import com.google.common.truth.Truth.assertThat
-import java.lang.Thread.sleep
-import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Rule
 import org.junit.Test
 import retrofit2.mock.Calls.response
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
+import java.lang.Thread.sleep
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * ArticleViewModel Test

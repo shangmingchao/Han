@@ -14,9 +14,6 @@ import com.frank.han.util.MainCoroutineScopeRule
 import com.frank.han.util.getGitHubRetrofit
 import com.frank.han.util.mockUser
 import com.google.common.truth.Truth.assertThat
-import java.lang.Thread.sleep
-import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
@@ -26,6 +23,9 @@ import org.junit.Test
 import retrofit2.mock.Calls.response
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
+import java.lang.Thread.sleep
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 /**
  * UserViewModel Test
