@@ -24,6 +24,9 @@ class MainActivityTest {
     @get:Rule
     var mainActivityRule = activityScenarioRule<MainActivity>()
 
+    /**
+     * Test MainActivity's event
+     */
     @Test
     fun testEvent() {
         onView(withId(R.id.toolbar)).check(matches(isDisplayed()))

@@ -19,12 +19,29 @@ class RepoRepository(
     private val repoDao: RepoDao
 ) {
 
+    /**
+     * getRemoteRepo
+     *
+     * @param username username
+     * @return List<RepoDTO>
+     */
     suspend fun getRemoteRepo(username: String): List<RepoDTO> =
         repoService.listUserRepositories(username)
 
+    /**
+     * getLocalRepo
+     *
+     * @param username username
+     * @return Flow<List<RepoPO>>
+     */
     fun getLocalRepo(username: String): Flow<List<RepoPO>> =
         repoDao.getUserRepos(username).distinctUntilChanged().filterNotNull().map { it.repos }
 
+    /**
+     * saveLocalRepo
+     *
+     * @param repos List<RepoPO>
+     */
     suspend fun saveLocalRepo(repos: List<RepoPO>) =
         repoDao.saveRepo(repos)
 }

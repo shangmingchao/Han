@@ -8,7 +8,7 @@ import com.frank.han.data.github.user.UserDao
 import com.frank.han.data.github.user.entity.UserPO
 
 /**
- *
+ * AppDatabase
  *
  * @see <a href="https://developer.android.com/training/data-storage/room">Room</a>
  * @author frank

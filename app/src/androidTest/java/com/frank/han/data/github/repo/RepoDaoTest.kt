@@ -22,9 +22,14 @@ class RepoDaoTest {
     @get:Rule
     val dbRule = AppDatabaseRule()
 
+    /**
+     * Test RepoDao
+     *
+     * @throws Exception
+     */
     @Test
     @Throws(Exception::class)
-    fun testUser() = runBlocking {
+    fun testRepo() = runBlocking {
         val repoDao = dbRule.db.repoDao()
         val repos = listOf(RepoPO(1L, "name1", false, 1L))
         repoDao.saveRepo(repos)

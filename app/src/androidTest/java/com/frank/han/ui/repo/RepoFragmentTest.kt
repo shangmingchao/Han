@@ -20,6 +20,9 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class RepoFragmentTest {
 
+    /**
+     * Test UserFragment's event
+     */
     @Test
     fun testEvent() {
         launchFragmentInContainer<RepoFragment>(bundleOf("username" to "google"))

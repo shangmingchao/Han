@@ -27,6 +27,9 @@ class DITest : KoinTest {
         )
     }
 
+    /**
+     * testHttpClientModule
+     */
     @Test
     fun testHttpClientModule() {
         val retrofit1 = get<Retrofit>(named(RETROFIT_GITHUB))

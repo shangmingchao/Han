@@ -22,6 +22,9 @@ import java.lang.Thread.sleep
 @RunWith(AndroidJUnit4::class)
 class UserFragmentTest {
 
+    /**
+     * Test UserFragment's event
+     */
     @Test
     fun testEvent() {
         launchFragmentInContainer<UserFragment>(bundleOf("username" to "google"))

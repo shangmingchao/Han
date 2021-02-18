@@ -22,6 +22,11 @@ class UserDaoTest {
     @get:Rule
     val dbRule = AppDatabaseRule()
 
+    /**
+     * Test UserDao
+     *
+     * @throws Exception
+     */
     @Test
     @Throws(Exception::class)
     fun testUser() = runBlocking {

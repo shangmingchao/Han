@@ -10,7 +10,24 @@ sealed class ErrorInfo(
     val code: Int,
     val msg: String
 ) {
+    /**
+     * Network Error
+     *
+     * @constructor creates NetError
+     */
     class NetError(code: Int, msg: String) : ErrorInfo(code, msg)
+
+    /**
+     * Database Error
+     *
+     * @constructor creates DBError
+     */
     class DBError(msg: String) : ErrorInfo(CODE_DB_ERROR, msg)
+
+    /**
+     * Other Error
+     *
+     * @constructor creates OtherError
+     */
     class OtherError(code: Int, msg: String) : ErrorInfo(code, msg)
 }

@@ -84,6 +84,9 @@ class UserViewModelTest {
         }
     }
 
+    /**
+     * localFailedRemoteSuccess
+     */
     @Test
     fun localFailedRemoteSuccess() = coroutineScope.runBlockingTest {
         behavior.setDelay(1000, TimeUnit.MILLISECONDS)

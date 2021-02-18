@@ -26,6 +26,9 @@ import java.lang.Thread.sleep
 @RunWith(AndroidJUnit4::class)
 class MainFragmentTest {
 
+    /**
+     * testUIState
+     */
     @Test
     fun testUIState() {
         launchFragmentInContainer<MainFragment>()
@@ -34,6 +37,9 @@ class MainFragmentTest {
         onView(withId(R.id.articleBtn)).check(matches(isDisplayed()))
     }
 
+    /**
+     * testUserNav
+     */
     @Test
     fun testUserNav() {
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
@@ -46,6 +52,9 @@ class MainFragmentTest {
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.userFragment)
     }
 
+    /**
+     * testRepoNav
+     */
     @Test
     fun testRepoNav() {
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())
@@ -58,6 +67,9 @@ class MainFragmentTest {
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.repoFragment)
     }
 
+    /**
+     * testCounter
+     */
     @Test
     fun testCounter() {
         val navController = TestNavHostController(ApplicationProvider.getApplicationContext())

@@ -17,12 +17,29 @@ class UserRepository(
     private val userDao: UserDao
 ) {
 
+    /**
+     * getRemoteUser
+     *
+     * @param username username
+     * @return UserDTO
+     */
     suspend fun getRemoteUser(username: String): UserDTO =
         userService.getASingleUser(username)
 
+    /**
+     * getLocalUser
+     *
+     * @param username username
+     * @return Flow<UserPO>
+     */
     fun getLocalUser(username: String): Flow<UserPO> =
         userDao.getUserByName(username).distinctUntilChanged()
 
+    /**
+     * saveLocalUser
+     *
+     * @param user UserPO
+     */
     suspend fun saveLocalUser(user: UserPO) =
         userDao.saveUser(user)
 }

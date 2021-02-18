@@ -19,6 +19,9 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class ArticleFragmentTest {
 
+    /**
+     * Test ArticleFragment's event
+     */
     @Test
     fun testEvent() {
         launchFragmentInContainer<ArticleFragment>()

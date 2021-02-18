@@ -13,6 +13,9 @@ import org.junit.Test
  */
 class ModelMapperTest {
 
+    /**
+     * testRepoDTO2PO
+     */
     @Test
     fun testRepoDTO2PO() {
         val repoDTO = mockRepo()
@@ -20,6 +23,9 @@ class ModelMapperTest {
         assertThat(repoPO).isEqualTo(RepoPO(2L, "name1", false, 1L))
     }
 
+    /**
+     * testRepoPO2VO
+     */
     @Test
     fun testRepoPO2VO() {
         val repoPO = RepoPO(2L, "name1", false, 1L)
@@ -28,6 +34,9 @@ class ModelMapperTest {
         assertThat(repoVO.isPrivate).isFalse()
     }
 
+    /**
+     * testUserDTO2PO
+     */
     @Test
     fun testUserDTO2PO() {
         val userDTO = mockUser()
@@ -35,6 +44,9 @@ class ModelMapperTest {
         assertThat(userPO).isEqualTo(UserPO(1L, "login1", "name1"))
     }
 
+    /**
+     * testUserPO2VO
+     */
     @Test
     fun testUserPO2VO() {
         val userPO = UserPO(1L, "login1", "name1")

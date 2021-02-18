@@ -16,11 +16,10 @@ const val CODE_UNKNOWN_HOST = 2
 const val CODE_DB_ERROR = 3
 
 /**
+ * Get single source
  *
  * [P] refer to the PO object of database, [D] refer to the DTO object of network,
  * [V] refer to the VO object of UI
- * @author frank
- * @date 2019/12/9 11:06 AM
  */
 fun <V, D, P> getResource(
     databaseQuery: () -> Flow<P>,
@@ -41,12 +40,25 @@ fun <V, D, P> getResource(
     }
 }
 
+/**
+ * Mapping Resource
+ *
+ * @receiver Resource<S>
+ * @param mapping Function1<S, D>
+ * @return Resource<D>
+ */
 fun <S, D> Resource<S>.resMapping(mapping: (S) -> D): Resource<D> = when (this) {
     is Resource.Loading -> Resource.Loading(data?.let(mapping))
     is Resource.Success -> Resource.Success(mapping(data!!))
     is Resource.Errors -> Resource.Errors(errorInfo!!, data?.let(mapping))
 }
 
+/**
+ * Get Resource from network
+ *
+ * @param call SuspendFunction0<T>
+ * @return Resource<T>
+ */
 suspend fun <T> getRemoteResource(call: suspend () -> T): Resource<T> = try {
     Resource.Success(call.invoke())
 } catch (e: Exception) {
@@ -67,6 +79,12 @@ suspend fun <T> getRemoteResource(call: suspend () -> T): Resource<T> = try {
     }
 }
 
+/**
+ * Get Resource from local database
+ *
+ * @param query Function0<Flow<T>>
+ * @return LiveData<Resource<T>>
+ */
 fun <T> getLocalResource(query: () -> Flow<T>): LiveData<Resource<T>> = try {
     query.invoke().asLiveData().map {
         if (it != null) Resource.Success(it) else Resource.Errors<T>(

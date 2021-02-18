@@ -15,6 +15,9 @@ class AppDatabaseRule : ExternalResource() {
 
     lateinit var db: AppDatabase
 
+    /**
+     * open db
+     */
     override fun before() {
         db = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
@@ -22,6 +25,9 @@ class AppDatabaseRule : ExternalResource() {
         ).build()
     }
 
+    /**
+     * close db
+     */
     override fun after() {
         db.close()
     }

@@ -38,6 +38,9 @@ class UserRepositoryTest {
         }
     }
 
+    /**
+     * testService
+     */
     @Test
     fun testService() = runBlocking {
         behavior.setDelay(1000, TimeUnit.MILLISECONDS)
