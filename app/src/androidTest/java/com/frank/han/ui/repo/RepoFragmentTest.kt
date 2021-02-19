@@ -10,6 +10,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.frank.han.R
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.lang.Thread.sleep
 
 /**
  * UserFragment UI test
@@ -27,6 +28,6 @@ class RepoFragmentTest {
     fun testEvent() {
         launchFragmentInContainer<RepoFragment>(bundleOf("username" to "google"))
         onView(withId(R.id.repoTextView)).check(matches(withContentDescription(R.string.repo)))
-        Thread.sleep(2000)
+        sleep(2000)
     }
 }

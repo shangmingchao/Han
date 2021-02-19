@@ -9,6 +9,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.frank.han.R
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.lang.Thread.sleep
 
 /**
  * ArticleFragment UI test
@@ -27,6 +28,6 @@ class ArticleFragmentTest {
         launchFragmentInContainer<ArticleFragment>()
         onView(withId(R.id.articleTextView))
             .check(matches(withContentDescription(R.string.article)))
-        Thread.sleep(5000)
+        sleep(5000)
     }
 }
