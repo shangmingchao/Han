@@ -2,8 +2,10 @@ package com.frank.han.data.github.user
 
 import com.frank.han.api.github.UserService
 import com.frank.han.data.github.user.entity.UserDTO
+import com.frank.han.util.MOCK_USER_LOGIN
+import com.frank.han.util.MOCK_USER_NAME
 import com.frank.han.util.getGitHubRetrofit
-import com.frank.han.util.mockUser
+import com.frank.han.util.mockUserDTO
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -36,7 +38,8 @@ class UserRepositoryTest {
         val userServiceDelegate = retrofit.create(UserService::class.java)
         userService = object : UserService {
             override suspend fun getASingleUser(username: String): UserDTO {
-                return userServiceDelegate.returning(response(mockUser())).getASingleUser("google")
+                return userServiceDelegate.returning(response(mockUserDTO))
+                    .getASingleUser(MOCK_USER_NAME)
             }
         }
     }
@@ -46,14 +49,14 @@ class UserRepositoryTest {
      */
     @Test
     fun testService() = runBlocking {
-        behavior.setDelay(1000, TimeUnit.MILLISECONDS)
+        behavior.setDelay(100, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         val time = measureTimeMillis {
             val userRepository = UserRepository(userService, mock(UserDao::class.java))
-            val user = runBlocking { userRepository.getRemoteUser("google") }
-            assertThat(user.login).isEqualTo("login1")
+            val user = runBlocking { userRepository.getRemoteUser(MOCK_USER_NAME) }
+            assertThat(user.login).isEqualTo(MOCK_USER_LOGIN)
         }
-        assertThat(time).isAtLeast(1000)
+        assertThat(time).isAtLeast(100)
     }
 }

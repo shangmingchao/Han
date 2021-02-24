@@ -3,6 +3,7 @@ package com.frank.han.data.wan.wechat
 import com.frank.han.api.wan.WeChatService
 import com.frank.han.data.wan.BaseDTO
 import com.frank.han.data.wan.wechat.entity.ArticlesDTO
+import com.frank.han.util.MOCK_ARTICLE_TITLE
 import com.frank.han.util.getWanRetrofit
 import com.frank.han.util.mockArticles
 import com.google.common.truth.Truth.assertThat
@@ -27,6 +28,9 @@ class ArticleRepositoryTest {
     private val behavior = NetworkBehavior.create(Random(2847))
     private lateinit var articleService: WeChatService
 
+    private val id = "1"
+    private val page = 1
+
     /**
      * create WebService
      */
@@ -36,8 +40,8 @@ class ArticleRepositoryTest {
         val articleServiceDelegate = retrofit.create(WeChatService::class.java)
         articleService = object : WeChatService {
             override suspend fun getArticleList(id: String, page: Int): BaseDTO<ArticlesDTO> {
-                return articleServiceDelegate.returning(Calls.response(mockArticles()))
-                    .getArticleList("1", 1)
+                return articleServiceDelegate.returning(Calls.response(mockArticles))
+                    .getArticleList(id, page)
             }
         }
     }
@@ -47,14 +51,14 @@ class ArticleRepositoryTest {
      */
     @Test
     fun testService() = runBlocking {
-        behavior.setDelay(1000, TimeUnit.MILLISECONDS)
+        behavior.setDelay(100, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         val time = measureTimeMillis {
             val articleRepository = ArticleRepository(articleService)
-            val articles = runBlocking { articleRepository.getArticleList("1", 1) }
-            assertThat(articles.data.datas.first().title).isEqualTo("title1")
+            val articles = runBlocking { articleRepository.getArticleList(id, page) }
+            assertThat(articles.data.datas.first().title).isEqualTo(MOCK_ARTICLE_TITLE)
         }
-        assertThat(time).isAtLeast(1000)
+        assertThat(time).isAtLeast(100)
     }
 }

@@ -7,6 +7,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
@@ -15,6 +16,7 @@ const val CODE_UNKNOWN = 0
 const val CODE_SOCKET_TIMEOUT = 1
 const val CODE_UNKNOWN_HOST = 2
 const val CODE_DB_ERROR = 3
+const val CODE_HTTP_EXCEPTION = 4
 
 /**
  * Get single source
@@ -66,6 +68,8 @@ suspend fun <T> getRemoteResource(call: suspend () -> T): Resource<T> = try {
     Resource.Errors(ErrorInfo.NetError(CODE_SOCKET_TIMEOUT, e.message!!))
 } catch (e: UnknownHostException) {
     Resource.Errors(ErrorInfo.NetError(CODE_UNKNOWN_HOST, e.message!!))
+} catch (e: HttpException) {
+    Resource.Errors(ErrorInfo.NetError(CODE_HTTP_EXCEPTION, e.message!!))
 } catch (e: IOException) {
     Resource.Errors(ErrorInfo.OtherError(CODE_UNKNOWN, e.message!!))
 }

@@ -1,51 +1,81 @@
 package com.frank.han.util
 
 import com.frank.han.data.github.repo.entity.RepoDTO
+import com.frank.han.data.github.repo.entity.RepoPO
 import com.frank.han.data.github.user.entity.UserDTO
+import com.frank.han.data.github.user.entity.UserPO
 import com.frank.han.data.wan.BaseDTO
 import com.frank.han.data.wan.wechat.entity.ArticleDTO
 import com.frank.han.data.wan.wechat.entity.ArticlesDTO
 
 /**
- * mockUser
- *
- * @return UserDTO
+ * MOCK_USER_ID
  */
-fun mockUser() = UserDTO(
-    "login1", 1L, "name1",
-)
+const val MOCK_USER_ID = 1L
 
 /**
- * mockRepo
- *
- * @return RepoDTO
+ * MOCK_USER_LOGIN
  */
-fun mockRepo() = RepoDTO(
-    2L, "name1", false, mockUser(),
-)
+const val MOCK_USER_LOGIN = "login1"
+
+/**
+ * MOCK_USER_NAME
+ */
+const val MOCK_USER_NAME = "name1"
+
+/**
+ * MOCK_REPO_ID
+ */
+const val MOCK_REPO_ID = 2L
+
+/**
+ * MOCK_REPO_NAME
+ */
+const val MOCK_REPO_NAME = "repo1"
+
+/**
+ * MOCK_ARTICLE_AUTHOR
+ */
+const val MOCK_ARTICLE_AUTHOR = "author1"
+
+/**
+ * MOCK_ARTICLE_TITLE
+ */
+const val MOCK_ARTICLE_TITLE = "title1"
+
+/**
+ * mockUserDTO
+ */
+val mockUserDTO = UserDTO(MOCK_USER_LOGIN, MOCK_USER_ID, MOCK_USER_NAME)
+
+/**
+ * mockUserPO
+ */
+val mockUserPO = UserPO(MOCK_USER_ID, MOCK_USER_LOGIN, MOCK_USER_NAME)
+
+/**
+ * mockRepoDTO
+ */
+val mockRepoDTO = RepoDTO(MOCK_REPO_ID, MOCK_REPO_NAME, false, mockUserDTO)
+
+/**
+ * mockRepoPO
+ */
+val mockRepoPO = RepoPO(MOCK_REPO_ID, MOCK_REPO_NAME, false, MOCK_USER_ID)
 
 /**
  * mockArticle
- *
- * @return ArticleDTO
  */
-fun mockArticle() = ArticleDTO(
-    "", 1, "", false, 1,
-    "", false, 1, "", "",
-    "", false, "", 1, "",
-    "", "", "", "", "",
-    1, 1, 1, 1, "",
-    1, "", emptyList(), "title1", 1,
-    1, 1, 1
-)
+val mockArticle = ArticleDTO(MOCK_ARTICLE_AUTHOR, MOCK_ARTICLE_TITLE)
 
 /**
  * mockArticles
- *
- * @return BaseDTO<ArticlesDTO>
  */
-fun mockArticles(): BaseDTO<ArticlesDTO> {
-    val articles = listOf(mockArticle())
-    val articlesDTO = ArticlesDTO(1, articles, 1, false, 1, 1, 1)
-    return BaseDTO(articlesDTO, 0, "")
-}
+val mockArticles = BaseDTO(
+    ArticlesDTO(
+        1, listOf(mockArticle), 1,
+        false, 1, 1, 1
+    ),
+    0,
+    "",
+)

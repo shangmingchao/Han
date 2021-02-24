@@ -2,8 +2,10 @@ package com.frank.han.data.github.repo
 
 import com.frank.han.api.github.RepoService
 import com.frank.han.data.github.repo.entity.RepoDTO
+import com.frank.han.util.MOCK_REPO_NAME
+import com.frank.han.util.MOCK_USER_NAME
 import com.frank.han.util.getGitHubRetrofit
-import com.frank.han.util.mockRepo
+import com.frank.han.util.mockRepoDTO
 import com.google.common.truth.Truth
 import kotlinx.coroutines.runBlocking
 import org.junit.Before
@@ -36,8 +38,8 @@ class RepoRepositoryTest {
         val repoServiceDelegate = retrofit.create(RepoService::class.java)
         repoService = object : RepoService {
             override suspend fun listUserRepositories(username: String): List<RepoDTO> {
-                return repoServiceDelegate.returning(Calls.response(listOf(mockRepo())))
-                    .listUserRepositories("google")
+                return repoServiceDelegate.returning(Calls.response(listOf(mockRepoDTO)))
+                    .listUserRepositories(MOCK_USER_NAME)
             }
         }
     }
@@ -47,14 +49,14 @@ class RepoRepositoryTest {
      */
     @Test
     fun testService() = runBlocking {
-        behavior.setDelay(1000, TimeUnit.MILLISECONDS)
+        behavior.setDelay(100, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         val time = measureTimeMillis {
             val repoRepository = RepoRepository(repoService, Mockito.mock(RepoDao::class.java))
-            val repos = runBlocking { repoRepository.getRemoteRepo("google") }
-            Truth.assertThat(repos.first().name).isEqualTo("name1")
+            val repos = runBlocking { repoRepository.getRemoteRepo(MOCK_USER_NAME) }
+            Truth.assertThat(repos.first().name).isEqualTo(MOCK_REPO_NAME)
         }
-        Truth.assertThat(time).isAtLeast(1000)
+        Truth.assertThat(time).isAtLeast(100)
     }
 }

@@ -35,6 +35,10 @@ class LiveDataValueCapture<T> {
             _values.toList() // copy to avoid returning reference to mutable list
         }
 
+    /**
+     * add Value
+     * @param value T?
+     */
     fun addValue(value: T?) = synchronized(lock) {
         _values += value
     }

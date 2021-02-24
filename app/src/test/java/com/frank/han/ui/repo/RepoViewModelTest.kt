@@ -1,7 +1,6 @@
 package com.frank.han.ui.repo
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
 import com.frank.han.api.github.RepoService
 import com.frank.han.data.Resource
@@ -9,17 +8,20 @@ import com.frank.han.data.github.repo.RepoDao
 import com.frank.han.data.github.repo.RepoRepository
 import com.frank.han.data.github.repo.entity.RepoDTO
 import com.frank.han.data.github.repo.entity.RepoPO
-import com.frank.han.data.github.repo.entity.RepoVO
-import com.frank.han.data.github.user.entity.UserPO
 import com.frank.han.data.github.user.entity.UserWithRepos
+import com.frank.han.util.MOCK_USER_NAME
 import com.frank.han.util.MainCoroutineScopeRule
+import com.frank.han.util.captureValues
 import com.frank.han.util.getGitHubRetrofit
-import com.frank.han.util.mockRepo
+import com.frank.han.util.mockRepoDTO
+import com.frank.han.util.mockRepoPO
+import com.frank.han.util.mockUserPO
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.withContext
 import org.junit.Rule
 import org.junit.Test
 import retrofit2.mock.Calls.response
@@ -28,6 +30,7 @@ import retrofit2.mock.NetworkBehavior
 import java.lang.Thread.sleep
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.coroutines.coroutineContext
 
 /**
  * RepoViewModel Test
@@ -44,26 +47,33 @@ class RepoViewModelTest {
     val instantExecutorRule = InstantTaskExecutorRule()
 
     private val behavior = NetworkBehavior.create(Random(2847))
-    private val localFailed = object : RepoDao {
 
-        private var dbRepo: UserWithRepos? = null
-        private val dbFlow = MutableSharedFlow<UserWithRepos>()
+    private var dbRepo: UserWithRepos? = null
+
+    private val repoDao = object : RepoDao {
+
+        val observerChannel = Channel<Unit>(Channel.CONFLATED)
+        lateinit var dbFlow: Flow<UserWithRepos>
 
         override suspend fun saveRepo(repo: List<RepoPO>) {
-            if (dbRepo?.repos != repo) {
-                dbFlow.emit(UserWithRepos(UserPO(1L, "", ""), repo))
-            }
-            dbRepo = UserWithRepos(UserPO(1L, "", ""), repo)
+            dbRepo = UserWithRepos(mockUserPO, repo)
+            observerChannel.offer(Unit)
         }
 
         override fun getUserRepos(username: String): Flow<UserWithRepos> {
-            return dbFlow.also {
-                coroutineScope.launch {
-                    if (dbRepo != null) {
-                        dbFlow.emit(dbRepo!!)
+            dbFlow = flow {
+                observerChannel.offer(Unit)
+                withContext(coroutineContext) {
+                    try {
+                        for (signal in observerChannel) {
+                            withContext(coroutineContext) { dbRepo?.let { emit(it) } }
+                        }
+                    } finally {
+                        // ignore
                     }
                 }
             }
+            return dbFlow
         }
     }
 
@@ -72,8 +82,8 @@ class RepoViewModelTest {
             .create(RepoService::class.java)
     private val repoService: RepoService = object : RepoService {
         override suspend fun listUserRepositories(username: String): List<RepoDTO> {
-            return repoServiceDelegate.returning(response(listOf(mockRepo())))
-                .listUserRepositories("google")
+            return repoServiceDelegate.returning(response(listOf(mockRepoDTO)))
+                .listUserRepositories(MOCK_USER_NAME)
         }
     }
 
@@ -82,19 +92,19 @@ class RepoViewModelTest {
      */
     @Test
     fun localFailedRemoteSuccess() = coroutineScope.runBlockingTest {
-        behavior.setDelay(1000, TimeUnit.MILLISECONDS)
+        dbRepo = null
+        behavior.setDelay(100, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
+        behavior.setErrorPercent(0)
         val repoViewModel =
-            RepoViewModel(SavedStateHandle(), "google", RepoRepository(repoService, localFailed))
-        assertThat(repoViewModel.repo.value).isNull()
-        val observer = Observer<Resource<List<RepoVO>>> {}
-        repoViewModel.repo.observeForever(observer)
-        sleep(100)
-        assertThat(repoViewModel.repo.value).isInstanceOf(Resource.Loading::class.java)
-        sleep(2000)
-        assertThat(repoViewModel.repo.value).isInstanceOf(Resource.Success::class.java)
-        repoViewModel.repo.removeObserver(observer)
+            RepoViewModel(SavedStateHandle(), MOCK_USER_NAME, RepoRepository(repoService, repoDao))
+        repoViewModel.repo.captureValues {
+            sleep(200)
+            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
+            assertThat(this.values[1]).isInstanceOf(Resource.Success::class.java)
+            assertThat(this.values.size).isEqualTo(2)
+        }
     }
 
     /**
@@ -102,18 +112,60 @@ class RepoViewModelTest {
      */
     @Test
     fun localFailedRemoteFailed() = coroutineScope.runBlockingTest {
-        behavior.setDelay(1000, TimeUnit.MILLISECONDS)
+        dbRepo = null
+        behavior.setDelay(100, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(100)
+        behavior.setErrorPercent(0)
         val repoViewModel =
-            RepoViewModel(SavedStateHandle(), "google", RepoRepository(repoService, localFailed))
-        assertThat(repoViewModel.repo.value).isNull()
-        val observer = Observer<Resource<List<RepoVO>>> {}
-        repoViewModel.repo.observeForever(observer)
-        sleep(100)
-        assertThat(repoViewModel.repo.value).isInstanceOf(Resource.Loading::class.java)
-        sleep(2000)
-        assertThat(repoViewModel.repo.value).isInstanceOf(Resource.Errors::class.java)
-        repoViewModel.repo.removeObserver(observer)
+            RepoViewModel(SavedStateHandle(), MOCK_USER_NAME, RepoRepository(repoService, repoDao))
+        repoViewModel.repo.captureValues {
+            sleep(200)
+            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
+            assertThat(this.values[1]).isInstanceOf(Resource.Errors::class.java)
+            assertThat(this.values.size).isEqualTo(2)
+        }
+    }
+
+    /**
+     * localSuccessRemoteSuccess
+     */
+    @Test
+    fun localSuccessRemoteSuccess() = coroutineScope.runBlockingTest {
+        dbRepo = UserWithRepos(mockUserPO, listOf(mockRepoPO))
+        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setVariancePercent(0)
+        behavior.setFailurePercent(0)
+        behavior.setErrorPercent(0)
+        val repoViewModel =
+            RepoViewModel(SavedStateHandle(), MOCK_USER_NAME, RepoRepository(repoService, repoDao))
+        repoViewModel.repo.captureValues {
+            sleep(200)
+            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
+            assertThat(this.values[1]).isInstanceOf(Resource.Success::class.java)
+            assertThat(this.values.size).isEqualTo(2)
+        }
+    }
+
+    /**
+     * localSuccessRemoteFailed
+     */
+    @Test
+    fun localSuccessRemoteFailed() = coroutineScope.runBlockingTest {
+        dbRepo = UserWithRepos(mockUserPO, listOf(mockRepoPO))
+        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setVariancePercent(0)
+        behavior.setFailurePercent(100)
+        behavior.setErrorPercent(0)
+        val repoViewModel =
+            RepoViewModel(SavedStateHandle(), MOCK_USER_NAME, RepoRepository(repoService, repoDao))
+        repoViewModel.repo.captureValues {
+            sleep(200)
+            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
+            assertThat(this.values[1]).isInstanceOf(Resource.Success::class.java)
+            assertThat(this.values[2]).isInstanceOf(Resource.Errors::class.java)
+            assertThat(this.values[3]).isInstanceOf(Resource.Success::class.java)
+            assertThat(this.values.size).isEqualTo(4)
+        }
     }
 }
