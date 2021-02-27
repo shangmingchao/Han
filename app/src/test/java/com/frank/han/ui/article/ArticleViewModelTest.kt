@@ -3,6 +3,10 @@ package com.frank.han.ui.article
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import com.frank.han.api.wan.WeChatService
+import com.frank.han.data.ERROR_CODE_NET_HTTP_EXCEPTION
+import com.frank.han.data.ERROR_CODE_NET_SOCKET_TIMEOUT
+import com.frank.han.data.ERROR_CODE_NET_UNKNOWN_HOST
+import com.frank.han.data.NetError
 import com.frank.han.data.Resource
 import com.frank.han.data.wan.BaseDTO
 import com.frank.han.data.wan.wechat.ArticleRepository
@@ -22,6 +26,8 @@ import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
 import java.io.IOException
 import java.lang.Thread.sleep
+import java.net.SocketTimeoutException
+import java.net.UnknownHostException
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -74,10 +80,10 @@ class ArticleViewModelTest {
     }
 
     /**
-     * remoteFailed
+     * remoteFailedIOException
      */
     @Test
-    fun remoteFailed() = coroutineScope.runBlockingTest {
+    fun remoteFailedIOException() = coroutineScope.runBlockingTest {
         call = response(mockArticles)
         behavior.setDelay(100, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
@@ -89,6 +95,52 @@ class ArticleViewModelTest {
             sleep(200)
             assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
             assertThat(this.values[1]).isInstanceOf(Resource.Errors::class.java)
+            assertThat(this.values.size).isEqualTo(2)
+        }
+    }
+
+    /**
+     * remoteFailedSocketTimeoutException
+     */
+    @Test
+    fun remoteFailedSocketTimeoutException() = coroutineScope.runBlockingTest {
+        call = response(mockArticles)
+        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setVariancePercent(0)
+        behavior.setFailurePercent(100)
+        behavior.setErrorPercent(0)
+        behavior.setFailureException(SocketTimeoutException("MockSocketTimeoutException"))
+        val articleViewModel =
+            ArticleViewModel(SavedStateHandle(), id, page, ArticleRepository(weChatService))
+        articleViewModel.articles.captureValues {
+            sleep(200)
+            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
+            assertThat((this.values[1]?.errorInfo as NetError).code).isEqualTo(
+                ERROR_CODE_NET_SOCKET_TIMEOUT
+            )
+            assertThat(this.values.size).isEqualTo(2)
+        }
+    }
+
+    /**
+     * remoteFailedUnknownHostException
+     */
+    @Test
+    fun remoteFailedUnknownHostException() = coroutineScope.runBlockingTest {
+        call = response(mockArticles)
+        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setVariancePercent(0)
+        behavior.setFailurePercent(100)
+        behavior.setErrorPercent(0)
+        behavior.setFailureException(UnknownHostException("MockUnknownHostException"))
+        val articleViewModel =
+            ArticleViewModel(SavedStateHandle(), id, page, ArticleRepository(weChatService))
+        articleViewModel.articles.captureValues {
+            sleep(200)
+            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
+            assertThat((this.values[1]?.errorInfo as NetError).code).isEqualTo(
+                ERROR_CODE_NET_UNKNOWN_HOST
+            )
             assertThat(this.values.size).isEqualTo(2)
         }
     }
@@ -108,7 +160,9 @@ class ArticleViewModelTest {
         articleViewModel.articles.captureValues {
             sleep(200)
             assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
-            assertThat(this.values[1]).isInstanceOf(Resource.Errors::class.java)
+            assertThat((this.values[1]?.errorInfo as NetError).code).isEqualTo(
+                ERROR_CODE_NET_HTTP_EXCEPTION
+            )
             assertThat(this.values.size).isEqualTo(2)
         }
     }

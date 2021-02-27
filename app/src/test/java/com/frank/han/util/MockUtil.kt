@@ -73,8 +73,8 @@ val mockArticle = ArticleDTO(MOCK_ARTICLE_AUTHOR, MOCK_ARTICLE_TITLE)
  */
 val mockArticles = BaseDTO(
     ArticlesDTO(
-        1, listOf(mockArticle), 1,
-        false, 1, 1, 1
+        0, listOf(mockArticle), 0,
+        false, 0, 0, 0
     ),
     0,
     "",

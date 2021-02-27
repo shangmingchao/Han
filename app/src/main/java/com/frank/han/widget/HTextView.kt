@@ -31,7 +31,7 @@ open class HTextView : AppCompatTextView, BaseView<CharSequence> {
         text = when (resource) {
             is Resource.Loading -> resources.getString(R.string.loading)
             is Resource.Success -> resource.data
-            is Resource.Errors -> resources.getString(R.string.empty_text)
+            is Resource.Errors -> resources.getString(R.string.data_error)
         }
     }
 }

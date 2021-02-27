@@ -108,5 +108,7 @@ class UserRepository(
 ## More
 
 Practices: Kotlin, Coroutine, Flow, LiveData, ViewModel, Retrofit, Room, Koin, etc.  
-Single Source Of Truth + Data Driven  
+
+Single Source Of Truth + Data Driven + Testing  
+
 See [Android project exercises](https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/android_project_exercises.md)  

@@ -1,8 +1,11 @@
 package com.frank.han.ui.user
 
+import android.database.sqlite.SQLiteOutOfMemoryException
+import android.database.sqlite.SQLiteReadOnlyDatabaseException
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import com.frank.han.api.github.UserService
+import com.frank.han.data.DBError
 import com.frank.han.data.Resource
 import com.frank.han.data.github.user.UserDao
 import com.frank.han.data.github.user.UserRepository
@@ -47,6 +50,8 @@ class UserViewModelTest {
     private val behavior = NetworkBehavior.create(Random(2847))
 
     private var dbUser: UserPO? = null
+    private var dbQueryException: Exception? = null
+    private var dbSaveException: Exception? = null
 
     private val userDao = object : UserDao {
 
@@ -54,6 +59,7 @@ class UserViewModelTest {
         lateinit var dbFlow: Flow<UserPO>
 
         override suspend fun saveUser(user: UserPO) {
+            dbSaveException?.let { throw it }
             dbUser = user
             observerChannel.offer(Unit)
         }
@@ -68,7 +74,10 @@ class UserViewModelTest {
                 withContext(coroutineContext) {
                     try {
                         for (signal in observerChannel) {
-                            withContext(coroutineContext) { dbUser?.let { emit(it) } }
+                            withContext(coroutineContext) {
+                                dbQueryException?.let { throw it }
+                                dbUser?.let { emit(it) }
+                            }
                         }
                     } finally {
                         // ignore
@@ -168,6 +177,55 @@ class UserViewModelTest {
             assertThat(this.values[2]).isInstanceOf(Resource.Errors::class.java)
             assertThat(this.values[3]).isInstanceOf(Resource.Success::class.java)
             assertThat(this.values.size).isEqualTo(4)
+        }
+    }
+
+    /**
+     * localQueryExceptionRemoteSuccess
+     *
+     * Note: Flow will not work if databaseQuery throws an exception. So the further saveCallResult will not be signaled.
+     * It's a bug?!
+     */
+    @Test
+    fun localQueryExceptionRemoteSuccess() = coroutineScope.runBlockingTest {
+        dbQueryException = SQLiteReadOnlyDatabaseException("MockSQLiteReadOnlyDatabaseException!")
+        dbUser = null
+        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setVariancePercent(0)
+        behavior.setFailurePercent(0)
+        behavior.setErrorPercent(0)
+        val userViewModel =
+            UserViewModel(SavedStateHandle(), MOCK_USER_NAME, UserRepository(userService, userDao))
+        userViewModel.user.captureValues {
+            sleep(200)
+            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
+            assertThat((this.values[1]?.errorInfo as DBError).e).isInstanceOf(
+                SQLiteReadOnlyDatabaseException::class.java
+            )
+            assertThat(this.values.size).isEqualTo(2)
+        }
+    }
+
+    /**
+     * localSaveExceptionRemoteSuccess
+     *
+     * User will not be signaled if saveResult failed
+     */
+    @Test
+    fun localSaveExceptionRemoteSuccess() = coroutineScope.runBlockingTest {
+        dbSaveException = SQLiteOutOfMemoryException("MockSQLiteOutOfMemoryException!")
+        dbUser = mockUserPO
+        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setVariancePercent(0)
+        behavior.setFailurePercent(0)
+        behavior.setErrorPercent(0)
+        val userViewModel =
+            UserViewModel(SavedStateHandle(), MOCK_USER_NAME, UserRepository(userService, userDao))
+        userViewModel.user.captureValues {
+            sleep(200)
+            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
+            assertThat(this.values[1]).isInstanceOf(Resource.Success::class.java)
+            assertThat(this.values.size).isEqualTo(2)
         }
     }
 }

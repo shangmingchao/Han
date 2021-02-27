@@ -58,6 +58,12 @@ class ArticleRepositoryTest {
             val articleRepository = ArticleRepository(articleService)
             val articles = runBlocking { articleRepository.getArticleList(id, page) }
             assertThat(articles.data.datas.first().title).isEqualTo(MOCK_ARTICLE_TITLE)
+            assertThat(articles.data.curPage).isEqualTo(0)
+            assertThat(articles.data.offset).isEqualTo(0)
+            assertThat(articles.data.over).isEqualTo(false)
+            assertThat(articles.data.pageCount).isEqualTo(0)
+            assertThat(articles.data.size).isEqualTo(0)
+            assertThat(articles.data.total).isEqualTo(0)
         }
         assertThat(time).isAtLeast(100)
     }

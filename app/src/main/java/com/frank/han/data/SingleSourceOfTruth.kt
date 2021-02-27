@@ -1,25 +1,21 @@
 package com.frank.han.data
 
+import android.database.sqlite.SQLiteException
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
-const val CODE_UNKNOWN = 0
-const val CODE_SOCKET_TIMEOUT = 1
-const val CODE_UNKNOWN_HOST = 2
-const val CODE_DB_ERROR = 3
-const val CODE_HTTP_EXCEPTION = 4
-
 /**
- * Get single source
+ * Get Single Source of Truth
  *
  * [P] refer to the PO object of database, [D] refer to the DTO object of network,
  * [V] refer to the VO object of UI
@@ -36,7 +32,11 @@ fun <V, D, P> getResource(
     emitSource(localResource.map { it.resMapping(pvMapping) })
     val remoteResource = getRemoteResource(networkCall)
     if (remoteResource is Resource.Success) {
-        saveCallResult.invoke(dpMapping(remoteResource.data!!))
+        try {
+            saveCallResult.invoke(dpMapping(remoteResource.data!!))
+        } catch (e: SQLiteException) {
+            // ignore
+        }
     } else if (remoteResource is Resource.Errors) {
         emit(Resource.Errors(remoteResource.errorInfo!!))
         emitSource(localResource.map { it.resMapping(pvMapping) })
@@ -44,11 +44,7 @@ fun <V, D, P> getResource(
 }
 
 /**
- * Mapping Resource
- *
- * @receiver Resource<S>
- * @param mapping Function1<S, D>
- * @return Resource<D>
+ * Mapping data in Resource wrapper
  */
 fun <S, D> Resource<S>.resMapping(mapping: (S) -> D): Resource<D> = when (this) {
     is Resource.Loading -> Resource.Loading(data?.let(mapping))
@@ -58,34 +54,35 @@ fun <S, D> Resource<S>.resMapping(mapping: (S) -> D): Resource<D> = when (this) 
 
 /**
  * Get Resource from network
- *
- * @param call SuspendFunction0<T>
- * @return Resource<T>
  */
 suspend fun <T> getRemoteResource(call: suspend () -> T): Resource<T> = try {
     Resource.Success(call.invoke())
 } catch (e: SocketTimeoutException) {
-    Resource.Errors(ErrorInfo.NetError(CODE_SOCKET_TIMEOUT, e.message!!))
+    Resource.Errors(NetError(ERROR_CODE_NET_SOCKET_TIMEOUT, e))
 } catch (e: UnknownHostException) {
-    Resource.Errors(ErrorInfo.NetError(CODE_UNKNOWN_HOST, e.message!!))
+    Resource.Errors(NetError(ERROR_CODE_NET_UNKNOWN_HOST, e))
 } catch (e: HttpException) {
-    Resource.Errors(ErrorInfo.NetError(CODE_HTTP_EXCEPTION, e.message!!))
+    Resource.Errors(NetError(ERROR_CODE_NET_HTTP_EXCEPTION, e))
 } catch (e: IOException) {
-    Resource.Errors(ErrorInfo.OtherError(CODE_UNKNOWN, e.message!!))
+    Resource.Errors(NetError(ERROR_CODE_COMMON, e))
 }
 
 /**
- * Get Resource from local database
+ * Get Resource from database
  *
- * @param query Function0<Flow<T>>
- * @return LiveData<Resource<T>>
+ * Note: Flow will not work if databaseQuery throws an exception. So the further saveCallResult will not be signaled.
+ * It's a bug?!
  */
-fun <T> getLocalResource(query: () -> Flow<T>): LiveData<Resource<T>> = try {
-    query.invoke().asLiveData().map {
-        if (it != null) Resource.Success(it) else Resource.Errors<T>(
-            ErrorInfo.DBError("empty")
-        )
+fun <T> getLocalResource(query: () -> Flow<T>): LiveData<Resource<T>> = query.invoke()
+    .map { Pair<T?, Throwable?>(it, null) }
+    .catch { e -> emit(Pair<T?, Throwable?>(null, e)) }
+    .asLiveData()
+    .map {
+        it.first?.let { data ->
+            return@map Resource.Success(data)
+        }
+        it.second?.let { e ->
+            return@map Resource.Errors(DBError(ERROR_CODE_COMMON, e))
+        }
+        return@map Resource.Errors(DBError(ERROR_CODE_DB_NO_DATA, null))
     }
-} catch (e: Exception) {
-    MutableLiveData(Resource.Errors(ErrorInfo.DBError(e.message!!)))
-}

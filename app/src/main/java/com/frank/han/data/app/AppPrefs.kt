@@ -36,7 +36,6 @@ class AppPrefs(
     suspend fun increaseCounter() {
         dataStore.edit {
             val cur = it[counter] ?: 0
-            println("increaseCounter $cur in thread ${Thread.currentThread().name}")
             it[counter] = cur + 1
         }
     }
