@@ -6,8 +6,9 @@ import androidx.lifecycle.ViewModel
 import com.frank.han.data.Resource
 import com.frank.han.data.getResource
 import com.frank.han.data.github.user.UserRepository
+import com.frank.han.data.github.user.entity.UserDTO
+import com.frank.han.data.github.user.entity.UserPO
 import com.frank.han.data.github.user.entity.UserVO
-import com.frank.han.util.ModelMapper.map
 
 /**
  *
@@ -30,4 +31,12 @@ class UserViewModel(
         pvMapping = { map(it) },
         saveCallResult = { userRepository.saveLocalUser(it) }
     )
+
+    private fun map(dto: UserDTO): UserPO {
+        return UserPO(dto.id, dto.login, dto.name, dto.public_repos)
+    }
+
+    private fun map(po: UserPO): UserVO {
+        return UserVO(po.name, "contributes: ${po.public_repos}")
+    }
 }

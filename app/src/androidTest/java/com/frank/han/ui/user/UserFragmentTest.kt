@@ -28,8 +28,8 @@ class UserFragmentTest {
     @Test
     fun testEvent() {
         launchFragmentInContainer<UserFragment>(bundleOf("username" to "google"))
-        onView(withId(R.id.userTextView)).check(matches(withContentDescription(R.string.user)))
-        sleep(5000)
-        onView(withId(R.id.userTextView)).check(matches(withText("Google")))
+        onView(withId(R.id.username)).check(matches(withContentDescription(R.string.user)))
+        sleep(2000)
+        onView(withId(R.id.username)).check(matches(withText("Google")))
     }
 }

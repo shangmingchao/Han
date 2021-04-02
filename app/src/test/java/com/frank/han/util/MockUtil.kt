@@ -24,6 +24,11 @@ const val MOCK_USER_LOGIN = "login1"
 const val MOCK_USER_NAME = "name1"
 
 /**
+ * MOCK_USER_PUBLIC_REPOS
+ */
+const val MOCK_USER_PUBLIC_REPOS = 128
+
+/**
  * MOCK_REPO_ID
  */
 const val MOCK_REPO_ID = 2L
@@ -46,12 +51,12 @@ const val MOCK_ARTICLE_TITLE = "title1"
 /**
  * mockUserDTO
  */
-val mockUserDTO = UserDTO(MOCK_USER_LOGIN, MOCK_USER_ID, MOCK_USER_NAME)
+val mockUserDTO = UserDTO(MOCK_USER_ID, MOCK_USER_LOGIN, MOCK_USER_NAME, MOCK_USER_PUBLIC_REPOS)
 
 /**
  * mockUserPO
  */
-val mockUserPO = UserPO(MOCK_USER_ID, MOCK_USER_LOGIN, MOCK_USER_NAME)
+val mockUserPO = UserPO(MOCK_USER_ID, MOCK_USER_LOGIN, MOCK_USER_NAME, MOCK_USER_PUBLIC_REPOS)
 
 /**
  * mockRepoDTO

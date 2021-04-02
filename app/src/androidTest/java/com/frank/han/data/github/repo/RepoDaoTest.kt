@@ -1,8 +1,9 @@
 package com.frank.han.data.github.repo
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.frank.han.data.github.repo.entity.RepoPO
 import com.frank.han.util.AppDatabaseRule
+import com.frank.han.util.MOCKED_USER_LOGIN
+import com.frank.han.util.mockedRepoPO
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -31,9 +32,9 @@ class RepoDaoTest {
     @Throws(Exception::class)
     fun testRepo() = runBlocking {
         val repoDao = dbRule.db.repoDao()
-        val repos = listOf(RepoPO(1L, "name1", false, 1L))
+        val repos = listOf(mockedRepoPO)
         repoDao.saveRepo(repos)
-        val expected = repoDao.getUserRepos("login1").first()
+        val expected = repoDao.getUserRepos(MOCKED_USER_LOGIN).first()
         assertThat(expected).isNull()
     }
 }

@@ -8,5 +8,5 @@ package com.frank.han.data.github.repo.entity
  */
 data class RepoVO(
     var desc: String,
-    var isPrivate: Boolean
+    var color: Int,
 )

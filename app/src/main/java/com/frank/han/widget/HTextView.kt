@@ -4,7 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import com.frank.han.R
+import com.frank.han.data.Error
+import com.frank.han.data.Loading
 import com.frank.han.data.Resource
+import com.frank.han.data.Success
 
 /**
  * Custom TextView
@@ -12,7 +15,7 @@ import com.frank.han.data.Resource
  * @author frank
  * @date 2019/12/13 3:16 PM
  */
-open class HTextView : AppCompatTextView, BaseView<CharSequence> {
+open class HTextView : AppCompatTextView, BaseView {
 
     constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(
@@ -27,11 +30,11 @@ open class HTextView : AppCompatTextView, BaseView<CharSequence> {
         defStyleAttr
     )
 
-    override fun setResource(resource: Resource<CharSequence>) {
+    override fun <T> bindResource(resource: Resource<T>) {
         text = when (resource) {
-            is Resource.Loading -> resources.getString(R.string.loading)
-            is Resource.Success -> resource.data
-            is Resource.Errors -> resources.getString(R.string.data_error)
+            is Loading -> resources.getString(R.string.loading)
+            is Success -> resource.data as CharSequence
+            is Error -> resources.getString(R.string.data_error)
         }
     }
 }

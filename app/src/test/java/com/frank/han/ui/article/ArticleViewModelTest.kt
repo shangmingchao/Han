@@ -6,8 +6,10 @@ import com.frank.han.api.wan.WeChatService
 import com.frank.han.data.ERROR_CODE_NET_HTTP_EXCEPTION
 import com.frank.han.data.ERROR_CODE_NET_SOCKET_TIMEOUT
 import com.frank.han.data.ERROR_CODE_NET_UNKNOWN_HOST
+import com.frank.han.data.Error
+import com.frank.han.data.Loading
 import com.frank.han.data.NetError
-import com.frank.han.data.Resource
+import com.frank.han.data.Success
 import com.frank.han.data.wan.BaseDTO
 import com.frank.han.data.wan.wechat.ArticleRepository
 import com.frank.han.data.wan.wechat.entity.ArticlesDTO
@@ -73,8 +75,8 @@ class ArticleViewModelTest {
             ArticleViewModel(SavedStateHandle(), id, page, ArticleRepository(weChatService))
         articleViewModel.articles.captureValues {
             sleep(200)
-            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
-            assertThat(this.values[1]).isInstanceOf(Resource.Success::class.java)
+            assertThat(this.values[0]).isInstanceOf(Loading::class.java)
+            assertThat(this.values[1]).isInstanceOf(Success::class.java)
             assertThat(this.values.size).isEqualTo(2)
         }
     }
@@ -93,8 +95,8 @@ class ArticleViewModelTest {
             ArticleViewModel(SavedStateHandle(), id, page, ArticleRepository(weChatService))
         articleViewModel.articles.captureValues {
             sleep(200)
-            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
-            assertThat(this.values[1]).isInstanceOf(Resource.Errors::class.java)
+            assertThat(this.values[0]).isInstanceOf(Loading::class.java)
+            assertThat(this.values[1]).isInstanceOf(Error::class.java)
             assertThat(this.values.size).isEqualTo(2)
         }
     }
@@ -114,8 +116,8 @@ class ArticleViewModelTest {
             ArticleViewModel(SavedStateHandle(), id, page, ArticleRepository(weChatService))
         articleViewModel.articles.captureValues {
             sleep(200)
-            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
-            assertThat((this.values[1]?.errorInfo as NetError).code).isEqualTo(
+            assertThat(this.values[0]).isInstanceOf(Loading::class.java)
+            assertThat(((this.values[1] as Error).errorInfo as NetError).code).isEqualTo(
                 ERROR_CODE_NET_SOCKET_TIMEOUT
             )
             assertThat(this.values.size).isEqualTo(2)
@@ -137,8 +139,8 @@ class ArticleViewModelTest {
             ArticleViewModel(SavedStateHandle(), id, page, ArticleRepository(weChatService))
         articleViewModel.articles.captureValues {
             sleep(200)
-            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
-            assertThat((this.values[1]?.errorInfo as NetError).code).isEqualTo(
+            assertThat(this.values[0]).isInstanceOf(Loading::class.java)
+            assertThat(((this.values[1] as Error).errorInfo as NetError).code).isEqualTo(
                 ERROR_CODE_NET_UNKNOWN_HOST
             )
             assertThat(this.values.size).isEqualTo(2)
@@ -159,8 +161,8 @@ class ArticleViewModelTest {
             ArticleViewModel(SavedStateHandle(), id, page, ArticleRepository(weChatService))
         articleViewModel.articles.captureValues {
             sleep(200)
-            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
-            assertThat((this.values[1]?.errorInfo as NetError).code).isEqualTo(
+            assertThat(this.values[0]).isInstanceOf(Loading::class.java)
+            assertThat(((this.values[1] as Error).errorInfo as NetError).code).isEqualTo(
                 ERROR_CODE_NET_HTTP_EXCEPTION
             )
             assertThat(this.values.size).isEqualTo(2)

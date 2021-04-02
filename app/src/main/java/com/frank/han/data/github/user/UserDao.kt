@@ -30,7 +30,7 @@ interface UserDao {
      * @param userId String
      * @return Flow<UserPO>
      */
-    @Query("SELECT * FROM UserPO WHERE id = :userId")
+    @Query("SELECT * FROM UserPO WHERE login = :userId")
     fun getUserById(userId: String): Flow<UserPO>
 
     /**
@@ -39,6 +39,6 @@ interface UserDao {
      * @param username String
      * @return Flow<UserPO>
      */
-    @Query("SELECT * FROM UserPO WHERE login = :username")
+    @Query("SELECT * FROM UserPO WHERE name = :username")
     fun getUserByName(username: String): Flow<UserPO>
 }

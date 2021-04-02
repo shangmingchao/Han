@@ -8,12 +8,12 @@ import com.frank.han.data.Resource
  * @author frank
  * @date 2019/12/13 3:16 PM
  */
-interface BaseView<T> {
+interface BaseView {
 
     /**
      * Set resource
      *
      * @param resource Resource
      */
-    fun setResource(resource: Resource<T>)
+    fun <T> bindResource(resource: Resource<T>)
 }

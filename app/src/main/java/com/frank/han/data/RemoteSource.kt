@@ -13,6 +13,6 @@ import kotlinx.coroutines.Dispatchers
 fun <T> getNetResource(
     networkCall: suspend () -> T
 ): LiveData<Resource<T>> = liveData(Dispatchers.IO, 0) {
-    emit(Resource.Loading())
+    emit(Loading())
     emit(getRemoteResource(networkCall))
 }

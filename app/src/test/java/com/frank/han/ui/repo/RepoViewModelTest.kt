@@ -3,7 +3,9 @@ package com.frank.han.ui.repo
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.SavedStateHandle
 import com.frank.han.api.github.RepoService
-import com.frank.han.data.Resource
+import com.frank.han.data.Error
+import com.frank.han.data.Loading
+import com.frank.han.data.Success
 import com.frank.han.data.github.repo.RepoDao
 import com.frank.han.data.github.repo.RepoRepository
 import com.frank.han.data.github.repo.entity.RepoDTO
@@ -101,8 +103,8 @@ class RepoViewModelTest {
             RepoViewModel(SavedStateHandle(), MOCK_USER_NAME, RepoRepository(repoService, repoDao))
         repoViewModel.repo.captureValues {
             sleep(200)
-            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
-            assertThat(this.values[1]).isInstanceOf(Resource.Success::class.java)
+            assertThat(this.values[0]).isInstanceOf(Loading::class.java)
+            assertThat(this.values[1]).isInstanceOf(Success::class.java)
             assertThat(this.values.size).isEqualTo(2)
         }
     }
@@ -121,8 +123,8 @@ class RepoViewModelTest {
             RepoViewModel(SavedStateHandle(), MOCK_USER_NAME, RepoRepository(repoService, repoDao))
         repoViewModel.repo.captureValues {
             sleep(200)
-            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
-            assertThat(this.values[1]).isInstanceOf(Resource.Errors::class.java)
+            assertThat(this.values[0]).isInstanceOf(Loading::class.java)
+            assertThat(this.values[1]).isInstanceOf(Error::class.java)
             assertThat(this.values.size).isEqualTo(2)
         }
     }
@@ -141,8 +143,8 @@ class RepoViewModelTest {
             RepoViewModel(SavedStateHandle(), MOCK_USER_NAME, RepoRepository(repoService, repoDao))
         repoViewModel.repo.captureValues {
             sleep(200)
-            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
-            assertThat(this.values[1]).isInstanceOf(Resource.Success::class.java)
+            assertThat(this.values[0]).isInstanceOf(Loading::class.java)
+            assertThat(this.values[1]).isInstanceOf(Success::class.java)
             assertThat(this.values.size).isEqualTo(2)
         }
     }
@@ -161,10 +163,10 @@ class RepoViewModelTest {
             RepoViewModel(SavedStateHandle(), MOCK_USER_NAME, RepoRepository(repoService, repoDao))
         repoViewModel.repo.captureValues {
             sleep(200)
-            assertThat(this.values[0]).isInstanceOf(Resource.Loading::class.java)
-            assertThat(this.values[1]).isInstanceOf(Resource.Success::class.java)
-            assertThat(this.values[2]).isInstanceOf(Resource.Errors::class.java)
-            assertThat(this.values[3]).isInstanceOf(Resource.Success::class.java)
+            assertThat(this.values[0]).isInstanceOf(Loading::class.java)
+            assertThat(this.values[1]).isInstanceOf(Success::class.java)
+            assertThat(this.values[2]).isInstanceOf(Error::class.java)
+            assertThat(this.values[3]).isInstanceOf(Success::class.java)
             assertThat(this.values.size).isEqualTo(4)
         }
     }

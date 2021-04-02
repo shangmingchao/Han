@@ -3,11 +3,14 @@ package com.frank.han.ui.repo
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import com.frank.han.App
+import com.frank.han.R
 import com.frank.han.data.Resource
 import com.frank.han.data.getResource
 import com.frank.han.data.github.repo.RepoRepository
+import com.frank.han.data.github.repo.entity.RepoDTO
+import com.frank.han.data.github.repo.entity.RepoPO
 import com.frank.han.data.github.repo.entity.RepoVO
-import com.frank.han.util.ModelMapper.map
 
 /**
  *
@@ -30,4 +33,15 @@ class RepoViewModel(
         pvMapping = { it.map { po -> map(po) } },
         saveCallResult = { repoRepository.saveLocalRepo(it) }
     )
+
+    private fun map(dto: RepoDTO): RepoPO {
+        return RepoPO(dto.id, dto.name, dto.is_private, dto.owner.id)
+    }
+
+    private fun map(po: RepoPO): RepoVO {
+        val color = App.instance.resources.getColor(
+            if (po.is_private) R.color.colorPrimary else R.color.colorPrimaryDark,
+        )
+        return RepoVO(po.name, color)
+    }
 }

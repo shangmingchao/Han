@@ -1,8 +1,10 @@
 package com.frank.han.data.github.user
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.frank.han.data.github.user.entity.UserPO
 import com.frank.han.util.AppDatabaseRule
+import com.frank.han.util.MOCKED_USER_LOGIN
+import com.frank.han.util.MOCKED_USER_NAME
+import com.frank.han.util.mockedUserPO
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -31,11 +33,11 @@ class UserDaoTest {
     @Throws(Exception::class)
     fun testUser() = runBlocking {
         val userDao = dbRule.db.userDao()
-        val user = UserPO(1L, "login1", "name1")
+        val user = mockedUserPO
         userDao.saveUser(user)
-        val idUser = userDao.getUserById("1").first()
+        val idUser = userDao.getUserById(MOCKED_USER_LOGIN).first()
         assertThat(idUser).isEqualTo(user)
-        val nameUser = userDao.getUserByName("login1").first()
+        val nameUser = userDao.getUserByName(MOCKED_USER_NAME).first()
         assertThat(nameUser).isEqualTo(user)
     }
 }

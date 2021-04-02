@@ -28,6 +28,6 @@ class ArticleFragmentTest {
         launchFragmentInContainer<ArticleFragment>()
         onView(withId(R.id.articleTextView))
             .check(matches(withContentDescription(R.string.article)))
-        sleep(5000)
+        sleep(2000)
     }
 }

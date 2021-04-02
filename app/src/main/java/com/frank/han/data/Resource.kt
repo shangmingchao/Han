@@ -6,32 +6,28 @@ package com.frank.han.data
  * @author frank
  * @date 2019/12/9 11:11 AM
  */
-sealed class Resource<out T>(
-    val data: T? = null,
-    val errorInfo: ErrorInfo? = null
-) {
+sealed class Resource<out T>
 
-    /**
-     * Loading
-     *
-     * @param T type of data
-     * @constructor creates Loading
-     */
-    class Loading<T>(data: T? = null) : Resource<T>(data)
+/**
+ * Loading
+ *
+ * @param T type of data
+ * @constructor creates Loading
+ */
+class Loading<T>(val data: T? = null) : Resource<T>()
 
-    /**
-     * Success
-     *
-     * @param T type of data
-     * @constructor creates Success
-     */
-    class Success<T>(data: T) : Resource<T>(data)
+/**
+ * Success
+ *
+ * @param T type of data
+ * @constructor creates Success
+ */
+class Success<T>(val data: T) : Resource<T>()
 
-    /**
-     * Failed or Error
-     *
-     * @param T type of data
-     * @constructor creates Errors
-     */
-    class Errors<T>(errorInfo: ErrorInfo, data: T? = null) : Resource<T>(data, errorInfo)
-}
+/**
+ * Failed or Error
+ *
+ * @param T type of data
+ * @constructor creates Errors
+ */
+class Error<T>(val errorInfo: ErrorInfo, val data: T? = null) : Resource<T>()

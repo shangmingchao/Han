@@ -12,5 +12,11 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        app = this
+    }
+
+    companion object {
+        private var app: Application? = null
+        val instance get() = app!!
     }
 }

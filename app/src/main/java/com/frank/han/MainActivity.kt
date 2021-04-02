@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
-        window.hideSystemUI()
         setSupportActionBar(viewBinding.toolbar)
         val navController = findNavController(R.id.nav_host_main)
         val appBarConfiguration = AppBarConfiguration(navController.graph)

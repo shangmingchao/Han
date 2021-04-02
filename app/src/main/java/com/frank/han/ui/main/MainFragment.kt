@@ -11,6 +11,7 @@ import com.frank.han.data.app.AppPrefs
 import com.frank.han.databinding.FragmentMainBinding
 import com.frank.han.ui.BaseFragment
 import com.frank.han.ui.article.ArticleActivity
+import com.frank.han.util.binding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.internal.format
@@ -24,8 +25,7 @@ import org.koin.android.ext.android.inject
  */
 class MainFragment : BaseFragment(R.layout.fragment_main) {
 
-    private var _viewBinding: FragmentMainBinding? = null
-    private val viewBinding get() = _viewBinding!!
+    private val viewBinding by binding(FragmentMainBinding::bind)
 
     private val appPrefs: AppPrefs by inject()
 
@@ -50,15 +50,5 @@ class MainFragment : BaseFragment(R.layout.fragment_main) {
         appPrefs.getCounter().asLiveData().observe(viewLifecycleOwner) {
             viewBinding.counterText.text = format(getString(R.string.user_click), "$it")
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _viewBinding = FragmentMainBinding.bind(view)
-    }
-
-    override fun onDestroyView() {
-        _viewBinding = null
-        super.onDestroyView()
     }
 }

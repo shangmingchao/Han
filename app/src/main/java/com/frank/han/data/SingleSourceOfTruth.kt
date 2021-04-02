@@ -27,18 +27,20 @@ fun <V, D, P> getResource(
     pvMapping: (P) -> V,
     saveCallResult: suspend (P) -> Unit
 ): LiveData<Resource<V>> = liveData(Dispatchers.IO, 0) {
-    emit(Resource.Loading())
+    emit(Loading())
     val localResource = getLocalResource(databaseQuery)
     emitSource(localResource.map { it.resMapping(pvMapping) })
     val remoteResource = getRemoteResource(networkCall)
-    if (remoteResource is Resource.Success) {
+    if (remoteResource is Success) {
         try {
-            saveCallResult.invoke(dpMapping(remoteResource.data!!))
+            println("aaaa, saveCallResult: ${remoteResource.data}")
+            saveCallResult.invoke(dpMapping(remoteResource.data))
         } catch (e: SQLiteException) {
             // ignore
+            println("aaaa, SQLiteException: ${remoteResource.data}")
         }
-    } else if (remoteResource is Resource.Errors) {
-        emit(Resource.Errors(remoteResource.errorInfo!!))
+    } else if (remoteResource is Error) {
+        emit(Error(remoteResource.errorInfo))
         emitSource(localResource.map { it.resMapping(pvMapping) })
     }
 }
@@ -47,24 +49,24 @@ fun <V, D, P> getResource(
  * Mapping data in Resource wrapper
  */
 fun <S, D> Resource<S>.resMapping(mapping: (S) -> D): Resource<D> = when (this) {
-    is Resource.Loading -> Resource.Loading(data?.let(mapping))
-    is Resource.Success -> Resource.Success(mapping(data!!))
-    is Resource.Errors -> Resource.Errors(errorInfo!!, data?.let(mapping))
+    is Loading -> Loading(data?.let(mapping))
+    is Success -> Success(mapping(data))
+    is Error -> Error(errorInfo, data?.let(mapping))
 }
 
 /**
  * Get Resource from network
  */
 suspend fun <T> getRemoteResource(call: suspend () -> T): Resource<T> = try {
-    Resource.Success(call.invoke())
+    Success(call.invoke())
 } catch (e: SocketTimeoutException) {
-    Resource.Errors(NetError(ERROR_CODE_NET_SOCKET_TIMEOUT, e))
+    Error(NetError(ERROR_CODE_NET_SOCKET_TIMEOUT, e))
 } catch (e: UnknownHostException) {
-    Resource.Errors(NetError(ERROR_CODE_NET_UNKNOWN_HOST, e))
+    Error(NetError(ERROR_CODE_NET_UNKNOWN_HOST, e))
 } catch (e: HttpException) {
-    Resource.Errors(NetError(ERROR_CODE_NET_HTTP_EXCEPTION, e))
+    Error(NetError(ERROR_CODE_NET_HTTP_EXCEPTION, e))
 } catch (e: IOException) {
-    Resource.Errors(NetError(ERROR_CODE_COMMON, e))
+    Error(NetError(ERROR_CODE_COMMON, e))
 }
 
 /**
@@ -79,10 +81,10 @@ fun <T> getLocalResource(query: () -> Flow<T>): LiveData<Resource<T>> = query.in
     .asLiveData()
     .map {
         it.first?.let { data ->
-            return@map Resource.Success(data)
+            return@map Success(data)
         }
         it.second?.let { e ->
-            return@map Resource.Errors(DBError(ERROR_CODE_COMMON, e))
+            return@map Error(DBError(ERROR_CODE_COMMON, e))
         }
-        return@map Resource.Errors(DBError(ERROR_CODE_DB_NO_DATA, null))
+        return@map Error(DBError(ERROR_CODE_DB_NO_DATA, null))
     }

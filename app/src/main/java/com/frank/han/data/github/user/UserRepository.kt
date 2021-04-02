@@ -33,7 +33,7 @@ class UserRepository(
      * @return Flow<UserPO>
      */
     fun getLocalUser(username: String): Flow<UserPO> =
-        userDao.getUserByName(username).distinctUntilChanged()
+        userDao.getUserById(username).distinctUntilChanged()
 
     /**
      * saveLocalUser
