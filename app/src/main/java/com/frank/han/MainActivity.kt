@@ -6,7 +6,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.frank.han.databinding.ActivityMainBinding
-import com.frank.han.util.hideSystemUI
 
 /**
  * Main Activity
