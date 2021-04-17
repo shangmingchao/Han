@@ -1,10 +1,10 @@
 package com.frank.han.util
 
-import android.app.Activity
 import android.app.Dialog
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.ComponentActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
@@ -23,22 +23,25 @@ import kotlin.reflect.KProperty
  * @author frank
  * @date 2019/12/16 3:51 PM
  */
-fun <VB : ViewBinding> Activity.binding(inflate: (LayoutInflater) -> VB) = lazy {
-    inflate(layoutInflater).apply { setContentView(root) }
+fun <VB : ViewBinding> ComponentActivity.binding(inflate: (LayoutInflater) -> VB) = lazy {
+    inflate(layoutInflater).also {
+        setContentView(it.root)
+    }
 }
 
 fun <VB : ViewBinding> Fragment.binding(bind: (View) -> VB) =
     FragmentBindingDelegate(bind)
 
 fun <VB : ViewBinding> Dialog.binding(inflate: (LayoutInflater) -> VB) = lazy {
-    inflate(layoutInflater).apply { setContentView(root) }
+    inflate(layoutInflater).also { setContentView(it.root) }
 }
 
 fun <VB : ViewBinding> ViewGroup.binding(
     inflate: (LayoutInflater, ViewGroup?, Boolean) -> VB,
     attachToParent: Boolean = true
-) =
+) = lazy {
     inflate(LayoutInflater.from(context), if (attachToParent) this else null, attachToParent)
+}
 
 fun <VB : ViewBinding> TabLayout.Tab.setCustomView(
     inflate: (LayoutInflater) -> VB,
@@ -47,30 +50,30 @@ fun <VB : ViewBinding> TabLayout.Tab.setCustomView(
     customView = inflate(LayoutInflater.from(parent!!.context)).apply(onBindView).root
 }
 
+inline fun <reified VB : ViewBinding> TabLayout.Tab.bindCustomView(
+    bind: (View) -> VB,
+    onBindView: VB.() -> Unit
+) =
+    customView?.let { bind(it).run(onBindView) }
+
 class FragmentBindingDelegate<VB : ViewBinding>(
     private val bind: (View) -> VB
 ) : ReadOnlyProperty<Fragment, VB> {
 
-    private var lifecycleObserver: LifecycleObserver? = null
-    private var _binding: VB? = null
-    private val binding: VB get() = _binding!!
+    private var binding: VB? = null
 
     @Suppress("UNCHECKED_CAST")
     override fun getValue(thisRef: Fragment, property: KProperty<*>): VB {
-        if (lifecycleObserver == null) {
-            lifecycleObserver = object : LifecycleObserver {
+        if (binding == null) {
+            binding = bind(thisRef.requireView())
+            thisRef.viewLifecycleOwner.lifecycle.addObserver(object : LifecycleObserver {
                 @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
                 fun onDestroyView() {
-                    _binding = null
+                    binding = null
                 }
-            }.also {
-                thisRef.viewLifecycleOwner.lifecycle.addObserver(it)
-            }
+            })
         }
-        if (_binding == null) {
-            _binding = bind(thisRef.requireView())
-        }
-        return binding
+        return binding!!
     }
 }
 
