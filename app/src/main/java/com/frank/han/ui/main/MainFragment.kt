@@ -2,7 +2,6 @@ package com.frank.han.ui.main
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
