@@ -137,9 +137,11 @@ dependencies {
     kapt deps.glide.compiler
 
     testImplementation deps.androidx_test.arch_core
+    testImplementation deps.androidx_test.junit_ktx
     testImplementation deps.kotlinx_coroutines_test
     testImplementation deps.junit
     testImplementation deps.mockito
+    testImplementation deps.robolectric
     testImplementation deps.google_truth
     testImplementation deps.retrofit.mock
     testImplementation deps.room.testing

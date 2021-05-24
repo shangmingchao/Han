@@ -3,7 +3,7 @@ package com.frank.han.ui.user
 import android.database.sqlite.SQLiteOutOfMemoryException
 import android.database.sqlite.SQLiteReadOnlyDatabaseException
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.SavedStateHandle
+import com.frank.han.App
 import com.frank.han.api.github.UserService
 import com.frank.han.data.DBError
 import com.frank.han.data.Error
@@ -23,15 +23,19 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.withContext
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 import retrofit2.mock.Calls.response
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
 import java.lang.Thread.sleep
-import java.util.*
+import java.util.Random
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.coroutineContext
 
@@ -41,6 +45,7 @@ import kotlin.coroutines.coroutineContext
  * @author frank
  * @date 2019/12/18 3:11 PM
  */
+@RunWith(RobolectricTestRunner::class)
 class UserViewModelTest {
 
     @get:Rule
@@ -49,8 +54,9 @@ class UserViewModelTest {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
+    private val app = RuntimeEnvironment.application as App
+    private val testDispatcher = TestCoroutineDispatcher()
     private val behavior = NetworkBehavior.create(Random(2847))
-
     private var dbUser: UserPO? = null
     private var dbQueryException: Exception? = null
     private var dbSaveException: Exception? = null
@@ -67,11 +73,17 @@ class UserViewModelTest {
         }
 
         override fun getUserById(userId: String): Flow<UserPO> {
-            return flow { }
+            dbFlow = mockUserFlow()
+            return dbFlow
         }
 
         override fun getUserByName(username: String): Flow<UserPO> {
-            dbFlow = flow {
+            dbFlow = mockUserFlow()
+            return dbFlow
+        }
+
+        private fun mockUserFlow(): Flow<UserPO> {
+            return flow {
                 observerChannel.offer(Unit)
                 withContext(coroutineContext) {
                     try {
@@ -86,7 +98,6 @@ class UserViewModelTest {
                     }
                 }
             }
-            return dbFlow
         }
     }
 
@@ -106,14 +117,14 @@ class UserViewModelTest {
     @Test
     fun localFailedRemoteSuccess() = coroutineScope.runBlockingTest {
         dbUser = null
-        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         behavior.setErrorPercent(0)
         val userViewModel =
-            UserViewModel(SavedStateHandle(), MOCK_USER_NAME, UserRepository(userService, userDao))
+            UserViewModel(app, testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
         userViewModel.user.captureValues {
-            sleep(200)
+            sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
             assertThat(this.values[1]).isInstanceOf(Success::class.java)
             assertThat(this.values.size).isEqualTo(2)
@@ -126,14 +137,14 @@ class UserViewModelTest {
     @Test
     fun localFailedRemoteFailed() = coroutineScope.runBlockingTest {
         dbUser = null
-        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(100)
         behavior.setErrorPercent(0)
         val userViewModel =
-            UserViewModel(SavedStateHandle(), MOCK_USER_NAME, UserRepository(userService, userDao))
+            UserViewModel(app, testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
         userViewModel.user.captureValues {
-            sleep(200)
+            sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
             assertThat(this.values[1]).isInstanceOf(Error::class.java)
             assertThat(this.values.size).isEqualTo(2)
@@ -146,14 +157,14 @@ class UserViewModelTest {
     @Test
     fun localSuccessRemoteSuccess() = coroutineScope.runBlockingTest {
         dbUser = mockUserPO
-        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         behavior.setErrorPercent(0)
         val userViewModel =
-            UserViewModel(SavedStateHandle(), MOCK_USER_NAME, UserRepository(userService, userDao))
+            UserViewModel(app, testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
         userViewModel.user.captureValues {
-            sleep(200)
+            sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
             assertThat(this.values[1]).isInstanceOf(Success::class.java)
             assertThat(this.values.size).isEqualTo(2)
@@ -166,14 +177,14 @@ class UserViewModelTest {
     @Test
     fun localSuccessRemoteFailed() = coroutineScope.runBlockingTest {
         dbUser = mockUserPO
-        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(100)
         behavior.setErrorPercent(0)
         val userViewModel =
-            UserViewModel(SavedStateHandle(), MOCK_USER_NAME, UserRepository(userService, userDao))
+            UserViewModel(app, testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
         userViewModel.user.captureValues {
-            sleep(200)
+            sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
             assertThat(this.values[1]).isInstanceOf(Success::class.java)
             assertThat(this.values[2]).isInstanceOf(Error::class.java)
@@ -192,14 +203,14 @@ class UserViewModelTest {
     fun localQueryExceptionRemoteSuccess() = coroutineScope.runBlockingTest {
         dbQueryException = SQLiteReadOnlyDatabaseException("MockSQLiteReadOnlyDatabaseException!")
         dbUser = null
-        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         behavior.setErrorPercent(0)
         val userViewModel =
-            UserViewModel(SavedStateHandle(), MOCK_USER_NAME, UserRepository(userService, userDao))
+            UserViewModel(app, testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
         userViewModel.user.captureValues {
-            sleep(200)
+            sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
             assertThat(((this.values[1] as Error).errorInfo as DBError).e).isInstanceOf(
                 SQLiteReadOnlyDatabaseException::class.java
@@ -217,14 +228,14 @@ class UserViewModelTest {
     fun localSaveExceptionRemoteSuccess() = coroutineScope.runBlockingTest {
         dbSaveException = SQLiteOutOfMemoryException("MockSQLiteOutOfMemoryException!")
         dbUser = mockUserPO
-        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         behavior.setErrorPercent(0)
         val userViewModel =
-            UserViewModel(SavedStateHandle(), MOCK_USER_NAME, UserRepository(userService, userDao))
+            UserViewModel(app, testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
         userViewModel.user.captureValues {
-            sleep(200)
+            sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
             assertThat(this.values[1]).isInstanceOf(Success::class.java)
             assertThat(this.values.size).isEqualTo(2)

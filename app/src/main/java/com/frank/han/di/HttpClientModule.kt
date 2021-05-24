@@ -4,6 +4,7 @@ import com.facebook.stetho.okhttp3.StethoInterceptor
 import com.frank.han.BuildConfig
 import com.frank.han.api.GITHUB_END_POINT
 import com.frank.han.api.WAN_END_POINT
+import kotlinx.coroutines.Dispatchers
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -58,4 +59,6 @@ val httpClientModule = module {
             .addConverterFactory(GsonConverterFactory.create(get()))
             .build()
     }
+
+    single { Dispatchers.IO }
 }

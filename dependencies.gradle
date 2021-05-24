@@ -30,6 +30,7 @@ versions.google_truth = "1.1"
 versions.kotlinx_coroutines_test = "1.4.2"
 versions.junit = "4.12"
 versions.mockito = "1.10.19"
+versions.robolectric = "4.4"
 versions.espresso = "3.1.0"
 versions.jacoco_gradle_plugin = "0.1.5-SNAPSHOT"
 versions.retrofit = "2.9.0"
@@ -69,6 +70,7 @@ deps.androidx = androidx
 
 deps.junit = "junit:junit:$versions.junit"
 deps.mockito = "org.mockito:mockito-core:$versions.mockito"
+deps.robolectric = "org.robolectric:robolectric:$versions.robolectric"
 deps.google_truth = "com.google.truth:truth:$versions.google_truth"
 deps.kotlinx_coroutines_test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:$versions.kotlinx_coroutines_test"
 

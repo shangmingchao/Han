@@ -45,46 +45,53 @@ Create `keystore.properties` file at the project's root directory, Add `keyPassw
 ```kotlin
 class UserFragment : BaseFragment(R.layout.fragment_user) {
 
-    private var _viewBinding: FragmentUserBinding? = null
-    private val viewBinding get() = _viewBinding!!
+    private val viewBinding by binding(FragmentUserBinding::bind)
     private val args by navArgs<UserFragmentArgs>()
     private val userViewModel: UserViewModel by viewModel { parametersOf(args.username) }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        userViewModel.user.observe(viewLifecycleOwner) {
-            viewBinding.userTextView.setResource(it.resMapping { user -> user.username })
+        bindData(userViewModel.user, viewBinding, this::dataBinding)
+    }
+
+    private fun dataBinding(user: UserVO, viewBinding: FragmentUserBinding) {
+        viewBinding.apply {
+            username.text = user.username
+            description.text = user.description
         }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        _viewBinding = FragmentUserBinding.bind(view)
-    }
-
-    override fun onDestroyView() {
-        _viewBinding = null
-        super.onDestroyView()
     }
 }
 ```
 
 ```kotlin
 class UserViewModel(
-    private val handle: SavedStateHandle,
+    private val app: Application,
+    private val dispatcher: CoroutineDispatcher,
     private val username: String,
     private val userRepository: UserRepository
-) : ViewModel() {
+) : AndroidViewModel(app) {
 
     val user by lazy(LazyThreadSafetyMode.NONE) { getUser(username) }
 
     private fun getUser(username: String): LiveData<Resource<UserVO>> = getResource(
+        dispatcher = dispatcher,
         databaseQuery = { userRepository.getLocalUser(username) },
         networkCall = { userRepository.getRemoteUser(username) },
         dpMapping = { map(it) },
         pvMapping = { map(it) },
         saveCallResult = { userRepository.saveLocalUser(it) }
     )
+
+    private fun map(dto: UserDTO): UserPO {
+        return UserPO(dto.id, dto.login, dto.name, dto.public_repos)
+    }
+
+    private fun map(po: UserPO): UserVO {
+        val description = app.resources.getString(
+            R.string.contributes_desc, po.public_repos
+        )
+        return UserVO(po.name, description)
+    }
 }
 ```
 

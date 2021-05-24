@@ -11,10 +11,11 @@ import com.frank.han.databinding.FragmentMainBinding
 import com.frank.han.ui.BaseFragment
 import com.frank.han.ui.article.ArticleActivity
 import com.frank.han.util.binding
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.launch
 import okhttp3.internal.format
 import org.koin.android.ext.android.inject
+import org.koin.experimental.property.inject
 
 /**
  * MainFragment
@@ -25,13 +26,13 @@ import org.koin.android.ext.android.inject
 class MainFragment : BaseFragment(R.layout.fragment_main) {
 
     private val viewBinding by binding(FragmentMainBinding::bind)
-
+    private val dispatcher by inject<CoroutineDispatcher>()
     private val appPrefs: AppPrefs by inject()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewBinding.userBtn.setOnClickListener {
-            lifecycleScope.launch(Dispatchers.IO) {
+            lifecycleScope.launch(dispatcher) {
                 appPrefs.increaseCounter()
             }
             findNavController().navigate(

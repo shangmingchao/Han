@@ -1,7 +1,7 @@
 package com.frank.han.ui.repo
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.lifecycle.SavedStateHandle
+import com.frank.han.App
 import com.frank.han.api.github.RepoService
 import com.frank.han.data.Error
 import com.frank.han.data.Loading
@@ -22,15 +22,19 @@ import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.withContext
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 import retrofit2.mock.Calls.response
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
 import java.lang.Thread.sleep
-import java.util.*
+import java.util.Random
 import java.util.concurrent.TimeUnit
 import kotlin.coroutines.coroutineContext
 
@@ -40,6 +44,7 @@ import kotlin.coroutines.coroutineContext
  * @author frank
  * @date 2019/12/18 3:11 PM
  */
+@RunWith(RobolectricTestRunner::class)
 class RepoViewModelTest {
 
     @get:Rule
@@ -48,10 +53,10 @@ class RepoViewModelTest {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
+    private val app = RuntimeEnvironment.application as App
+    private val testDispatcher = TestCoroutineDispatcher()
     private val behavior = NetworkBehavior.create(Random(2847))
-
     private var dbRepo: UserWithRepos? = null
-
     private val repoDao = object : RepoDao {
 
         val observerChannel = Channel<Unit>(Channel.CONFLATED)
@@ -95,14 +100,14 @@ class RepoViewModelTest {
     @Test
     fun localFailedRemoteSuccess() = coroutineScope.runBlockingTest {
         dbRepo = null
-        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         behavior.setErrorPercent(0)
         val repoViewModel =
-            RepoViewModel(SavedStateHandle(), MOCK_USER_NAME, RepoRepository(repoService, repoDao))
+            RepoViewModel(app, testDispatcher, MOCK_USER_NAME, RepoRepository(repoService, repoDao))
         repoViewModel.repo.captureValues {
-            sleep(200)
+            sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
             assertThat(this.values[1]).isInstanceOf(Success::class.java)
             assertThat(this.values.size).isEqualTo(2)
@@ -115,14 +120,14 @@ class RepoViewModelTest {
     @Test
     fun localFailedRemoteFailed() = coroutineScope.runBlockingTest {
         dbRepo = null
-        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(100)
         behavior.setErrorPercent(0)
         val repoViewModel =
-            RepoViewModel(SavedStateHandle(), MOCK_USER_NAME, RepoRepository(repoService, repoDao))
+            RepoViewModel(app, testDispatcher, MOCK_USER_NAME, RepoRepository(repoService, repoDao))
         repoViewModel.repo.captureValues {
-            sleep(200)
+            sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
             assertThat(this.values[1]).isInstanceOf(Error::class.java)
             assertThat(this.values.size).isEqualTo(2)
@@ -135,14 +140,14 @@ class RepoViewModelTest {
     @Test
     fun localSuccessRemoteSuccess() = coroutineScope.runBlockingTest {
         dbRepo = UserWithRepos(mockUserPO, listOf(mockRepoPO))
-        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         behavior.setErrorPercent(0)
         val repoViewModel =
-            RepoViewModel(SavedStateHandle(), MOCK_USER_NAME, RepoRepository(repoService, repoDao))
+            RepoViewModel(app, testDispatcher, MOCK_USER_NAME, RepoRepository(repoService, repoDao))
         repoViewModel.repo.captureValues {
-            sleep(200)
+            sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
             assertThat(this.values[1]).isInstanceOf(Success::class.java)
             assertThat(this.values.size).isEqualTo(2)
@@ -155,14 +160,14 @@ class RepoViewModelTest {
     @Test
     fun localSuccessRemoteFailed() = coroutineScope.runBlockingTest {
         dbRepo = UserWithRepos(mockUserPO, listOf(mockRepoPO))
-        behavior.setDelay(100, TimeUnit.MILLISECONDS)
+        behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(100)
         behavior.setErrorPercent(0)
         val repoViewModel =
-            RepoViewModel(SavedStateHandle(), MOCK_USER_NAME, RepoRepository(repoService, repoDao))
+            RepoViewModel(app, testDispatcher, MOCK_USER_NAME, RepoRepository(repoService, repoDao))
         repoViewModel.repo.captureValues {
-            sleep(200)
+            sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
             assertThat(this.values[1]).isInstanceOf(Success::class.java)
             assertThat(this.values[2]).isInstanceOf(Error::class.java)

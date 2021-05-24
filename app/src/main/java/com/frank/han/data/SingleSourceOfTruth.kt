@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
@@ -21,23 +21,22 @@ import java.net.UnknownHostException
  * [V] refer to the VO object of UI
  */
 fun <V, D, P> getResource(
+    dispatcher: CoroutineDispatcher,
     databaseQuery: () -> Flow<P>,
     networkCall: suspend () -> D,
     dpMapping: (D) -> P,
     pvMapping: (P) -> V,
     saveCallResult: suspend (P) -> Unit
-): LiveData<Resource<V>> = liveData(Dispatchers.IO, 0) {
+): LiveData<Resource<V>> = liveData(dispatcher, 0) {
     emit(Loading())
     val localResource = getLocalResource(databaseQuery)
     emitSource(localResource.map { it.resMapping(pvMapping) })
     val remoteResource = getRemoteResource(networkCall)
     if (remoteResource is Success) {
         try {
-            println("aaaa, saveCallResult: ${remoteResource.data}")
             saveCallResult.invoke(dpMapping(remoteResource.data))
         } catch (e: SQLiteException) {
             // ignore
-            println("aaaa, SQLiteException: ${remoteResource.data}")
         }
     } else if (remoteResource is Error) {
         emit(Error(remoteResource.errorInfo))

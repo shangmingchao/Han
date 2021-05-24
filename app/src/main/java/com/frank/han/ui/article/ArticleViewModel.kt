@@ -1,13 +1,14 @@
 package com.frank.han.ui.article
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
 import com.frank.han.data.Resource
 import com.frank.han.data.getNetResource
 import com.frank.han.data.wan.BaseDTO
 import com.frank.han.data.wan.wechat.ArticleRepository
 import com.frank.han.data.wan.wechat.entity.ArticlesDTO
+import kotlinx.coroutines.CoroutineDispatcher
 
 /**
  * ArticleViewModel
@@ -16,15 +17,15 @@ import com.frank.han.data.wan.wechat.entity.ArticlesDTO
  * @date 2019/12/23 2:09 PM
  */
 class ArticleViewModel(
-    private val handle: SavedStateHandle,
+    app: Application,
+    private val dispatcher: CoroutineDispatcher,
     private val id: String,
     private val page: Int,
     private val articleRepository: ArticleRepository
-) : ViewModel() {
+) : AndroidViewModel(app) {
 
     val articles by lazy(LazyThreadSafetyMode.NONE) { getArticleList() }
 
-    private fun getArticleList(): LiveData<Resource<BaseDTO<ArticlesDTO>>> = getNetResource {
-        articleRepository.getArticleList(id, page)
-    }
+    private fun getArticleList(): LiveData<Resource<BaseDTO<ArticlesDTO>>> =
+        getNetResource(dispatcher) { articleRepository.getArticleList(id, page) }
 }
