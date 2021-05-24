@@ -1,5 +1,7 @@
 language: android
 dist: trusty
+jdk:
+  - oraclejdk11
 android:
   components:
     - build-tools-29.0.2
