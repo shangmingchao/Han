@@ -100,7 +100,7 @@ class RepoViewModelTest {
     @Test
     fun localFailedRemoteSuccess() = coroutineScope.runBlockingTest {
         dbRepo = null
-        behavior.setDelay(10, TimeUnit.MILLISECONDS)
+        behavior.setDelay(0, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         behavior.setErrorPercent(0)
