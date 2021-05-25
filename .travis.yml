@@ -1,7 +1,8 @@
 language: android
-dist: trusty
+dist: xenial
+sudo: required
 jdk:
-  - oraclejdk11
+  - openjdk11
 android:
   components:
     - build-tools-29.0.2
