@@ -2,7 +2,7 @@ language: android
 dist: xenial
 sudo: required
 jdk:
-  - openjdk11
+  - openjdk9
 android:
   components:
     - build-tools-29.0.2
