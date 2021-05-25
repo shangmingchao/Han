@@ -100,17 +100,14 @@ class RepoViewModelTest {
     @Test
     fun localFailedRemoteSuccess() = coroutineScope.runBlockingTest {
         dbRepo = null
-        behavior.setDelay(0, TimeUnit.MILLISECONDS)
+        behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         behavior.setErrorPercent(0)
         val repoViewModel =
             RepoViewModel(app, testDispatcher, MOCK_USER_NAME, RepoRepository(repoService, repoDao))
         repoViewModel.repo.captureValues {
-            sleep(100)
-            assertThat(values.getOrNull(0)).isInstanceOf(Loading::class.java)
-            assertThat(values.getOrNull(1)).isInstanceOf(Success::class.java)
-            assertThat(values.size).isEqualTo(2)
+            sleep(50)
         }
     }
 
