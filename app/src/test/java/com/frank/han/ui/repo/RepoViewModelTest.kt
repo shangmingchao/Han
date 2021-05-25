@@ -107,10 +107,10 @@ class RepoViewModelTest {
         val repoViewModel =
             RepoViewModel(app, testDispatcher, MOCK_USER_NAME, RepoRepository(repoService, repoDao))
         repoViewModel.repo.captureValues {
-            sleep(50)
-            assertThat(this.values[0]).isInstanceOf(Loading::class.java)
-            assertThat(this.values[1]).isInstanceOf(Success::class.java)
-            assertThat(this.values.size).isEqualTo(2)
+            sleep(100)
+            assertThat(values.getOrNull(0)).isInstanceOf(Loading::class.java)
+            assertThat(values.getOrNull(1)).isInstanceOf(Success::class.java)
+            assertThat(values.size).isEqualTo(2)
         }
     }
 
