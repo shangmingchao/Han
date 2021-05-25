@@ -5,6 +5,10 @@
 [![codecov](https://codecov.io/gh/shangmingchao/Han/branch/master/graph/badge.svg)](https://codecov.io/gh/shangmingchao/Han)
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
 
+Practices: Kotlin, Coroutine, Flow, LiveData, ViewModel, Retrofit, Room, Koin, etc.  
+
+**Single Source Of Truth** + **Data Driven** + **Testing**  
+
 It's a sample. Note that some changes (such as database schema modifications) are not backwards compatible during this alpha period and may cause the app to crash. In this case, please uninstall and re-install the app.
 
 ## Getting Started
@@ -113,9 +117,5 @@ class UserRepository(
 ```
 
 ## More
-
-Practices: Kotlin, Coroutine, Flow, LiveData, ViewModel, Retrofit, Room, Koin, etc.  
-
-**Single Source Of Truth** + **Data Driven** + **Testing**  
 
 See [Android project exercises](https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/android_project_exercises.md)  
