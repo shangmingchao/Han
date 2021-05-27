@@ -68,6 +68,14 @@ class MainFragmentTest {
     }
 
     /**
+     * testArticleNav
+     */
+    @Test
+    fun testArticleNav() {
+        onView(withId(R.id.articleBtn)).perform(click())
+    }
+
+    /**
      * testCounter
      */
     @Test

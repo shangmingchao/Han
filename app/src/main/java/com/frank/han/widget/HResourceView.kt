@@ -4,8 +4,12 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.frank.han.R
+import com.frank.han.data.DBError
 import com.frank.han.data.Error
 import com.frank.han.data.Loading
+import com.frank.han.data.NetError
+import com.frank.han.data.OtherError
 import com.frank.han.data.Resource
 import com.frank.han.data.Success
 
@@ -39,7 +43,12 @@ class HResourceView : ConstraintLayout, BaseView {
                 VISIBLE
             }
             is Error -> {
-                Toast.makeText(context, "${resource.errorInfo}", Toast.LENGTH_SHORT).show()
+                val tips = when (resource.errorInfo) {
+                    is DBError -> getDatabaseErrorMsg(resource.errorInfo)
+                    is NetError -> getNetworkErrorMsg(resource.errorInfo)
+                    is OtherError -> getUnknownErrorMsg(resource.errorInfo)
+                }
+                Toast.makeText(context, tips, Toast.LENGTH_SHORT).show()
                 GONE
             }
         }
@@ -51,5 +60,17 @@ class HResourceView : ConstraintLayout, BaseView {
         if (resource is Success) {
             successRun(resource.data)
         }
+    }
+
+    private fun getDatabaseErrorMsg(errorInfo: DBError): String {
+        return resources.getString(R.string.database_error, errorInfo.code)
+    }
+
+    private fun getNetworkErrorMsg(errorInfo: NetError): String {
+        return resources.getString(R.string.network_error, errorInfo.code)
+    }
+
+    private fun getUnknownErrorMsg(errorInfo: OtherError): String {
+        return resources.getString(R.string.unknown_error, errorInfo.code)
     }
 }

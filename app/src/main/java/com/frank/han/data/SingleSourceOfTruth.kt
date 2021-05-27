@@ -87,3 +87,24 @@ fun <T> getLocalResource(query: () -> Flow<T>): LiveData<Resource<T>> = query.in
         }
         return@map Error(DBError(ERROR_CODE_DB_NO_DATA, null))
     }
+
+/**
+ * onDatabaseError
+ */
+fun onDatabaseError(errorInfo: ErrorInfo) {
+    println("DatabaseError: $errorInfo")
+}
+
+/**
+ * onNetworkError
+ */
+fun onNetworkError(errorInfo: ErrorInfo) {
+    println("NetworkError: $errorInfo")
+}
+
+/**
+ * onUnknownError
+ */
+fun onUnknownError(errorInfo: ErrorInfo) {
+    println("UnknownError: $errorInfo")
+}

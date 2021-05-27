@@ -11,7 +11,14 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.viewbinding.ViewBinding
+import com.frank.han.data.DBError
+import com.frank.han.data.Error
+import com.frank.han.data.NetError
+import com.frank.han.data.OtherError
 import com.frank.han.data.Resource
+import com.frank.han.data.onDatabaseError
+import com.frank.han.data.onNetworkError
+import com.frank.han.data.onUnknownError
 import com.frank.han.widget.HResourceView
 import com.google.android.material.tabs.TabLayout
 import kotlin.properties.ReadOnlyProperty
@@ -77,7 +84,10 @@ class FragmentBindingDelegate<VB : ViewBinding>(
     }
 }
 
-inline fun <reified VO, reified VB : ViewBinding> Fragment.bindData(
+/**
+ * Render data in fragment by common logic(UI state in loading, normal, error)
+ */
+inline fun <reified VO, reified VB : ViewBinding> Fragment.commonRender(
     data: LiveData<Resource<VO>>,
     view: VB,
     noinline binding: (VO, VB) -> Unit
@@ -85,5 +95,12 @@ inline fun <reified VO, reified VB : ViewBinding> Fragment.bindData(
     data.observe(viewLifecycleOwner) { res ->
         val resourceView = view.root as? HResourceView ?: return@observe
         resourceView.dataBinding(res) { vo -> binding(vo, view) }
+        if (res is Error) {
+            when (res.errorInfo) {
+                is DBError -> onDatabaseError(res.errorInfo)
+                is NetError -> onNetworkError(res.errorInfo)
+                is OtherError -> onUnknownError(res.errorInfo)
+            }
+        }
     }
 }

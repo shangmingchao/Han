@@ -9,4 +9,8 @@
     <string name="empty_text">No data</string>
     <string name="user_desc">User\'s description</string>
     <string name="contributes_desc">contributes: %1$d</string>
+    <string name="title_and_author">%1$s by %2$s</string>
+    <string name="network_error">Network error: %1$d</string>
+    <string name="database_error">Database error: %1$d</string>
+    <string name="unknown_error">Unknown error: %1$d</string>
 </resources>

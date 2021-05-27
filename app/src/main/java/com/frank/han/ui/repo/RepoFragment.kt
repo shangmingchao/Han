@@ -6,8 +6,8 @@ import com.frank.han.R
 import com.frank.han.data.github.repo.entity.RepoVO
 import com.frank.han.databinding.FragmentRepoBinding
 import com.frank.han.ui.BaseFragment
-import com.frank.han.util.bindData
 import com.frank.han.util.binding
+import com.frank.han.util.commonRender
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -25,7 +25,7 @@ class RepoFragment : BaseFragment(R.layout.fragment_repo) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindData(repoViewModel.repo, viewBinding, this::dataBinding)
+        commonRender(repoViewModel.repo, viewBinding, this::dataBinding)
     }
 
     /**

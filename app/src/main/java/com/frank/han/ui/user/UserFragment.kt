@@ -6,8 +6,8 @@ import com.frank.han.R
 import com.frank.han.data.github.user.entity.UserVO
 import com.frank.han.databinding.FragmentUserBinding
 import com.frank.han.ui.BaseFragment
-import com.frank.han.util.bindData
 import com.frank.han.util.binding
+import com.frank.han.util.commonRender
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -25,7 +25,7 @@ class UserFragment : BaseFragment(R.layout.fragment_user) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindData(userViewModel.user, viewBinding, this::dataBinding)
+        commonRender(userViewModel.user, viewBinding, this::dataBinding)
     }
 
     /**

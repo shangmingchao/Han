@@ -6,8 +6,8 @@ import com.frank.han.data.wan.BaseDTO
 import com.frank.han.data.wan.wechat.entity.ArticlesDTO
 import com.frank.han.databinding.FragmentArticleBinding
 import com.frank.han.ui.BaseFragment
-import com.frank.han.util.bindData
 import com.frank.han.util.binding
+import com.frank.han.util.commonRender
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -24,7 +24,7 @@ class ArticleFragment : BaseFragment(R.layout.fragment_article) {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        bindData(articleViewModel.articles, viewBinding, this::dataBinding)
+        commonRender(articleViewModel.articles, viewBinding, this::dataBinding)
     }
 
     /**
@@ -35,7 +35,8 @@ class ArticleFragment : BaseFragment(R.layout.fragment_article) {
     private fun dataBinding(articles: BaseDTO<ArticlesDTO>, viewBinding: FragmentArticleBinding) {
         val data = articles.data.datas.firstOrNull() ?: return
         viewBinding.apply {
-            articleTextView.text = data.title
+            articleTextView.text =
+                resources.getString(R.string.title_and_author, data.title, data.author)
         }
     }
 }
