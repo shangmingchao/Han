@@ -12,9 +12,9 @@ import com.frank.han.data.NetError
 import com.frank.han.data.Success
 import com.frank.han.ui.main.MainFragment
 import com.google.common.truth.Truth.assertThat
-import java.net.UnknownHostException
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.net.UnknownHostException
 
 /**
  * HResourceView UI test
@@ -39,7 +39,8 @@ class HResourceViewTest {
                     NetError(
                         ERROR_CODE_NET_UNKNOWN_HOST,
                         UnknownHostException("")
-                    ), "mockError"
+                    ),
+                    "mockError"
                 )
             ) {}
             assertThat(container.visibility).isEqualTo(GONE)
