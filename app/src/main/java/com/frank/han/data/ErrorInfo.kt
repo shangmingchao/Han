@@ -53,3 +53,8 @@ const val ERROR_CODE_NET_SOCKET_TIMEOUT = 201
  * UnknownHostException
  */
 const val ERROR_CODE_NET_UNKNOWN_HOST = 202
+
+/**
+ * JsonParseException
+ */
+const val ERROR_CODE_JSON_PARSE_EXCEPTION = 203

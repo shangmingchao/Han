@@ -9,5 +9,5 @@ import android.app.Application
  * @date 2019/12/3 12:06 PM
  */
 class App : Application() {
-    // placeholder
+    // do nothing
 }

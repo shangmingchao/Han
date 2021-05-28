@@ -21,7 +21,6 @@ import com.frank.han.data.Success
  */
 class HResourceView : ConstraintLayout, BaseView {
 
-    constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(
         context,
         attrs,

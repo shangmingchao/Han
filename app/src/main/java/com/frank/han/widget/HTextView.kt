@@ -4,10 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatTextView
 import com.frank.han.R
-import com.frank.han.data.Error
-import com.frank.han.data.Loading
 import com.frank.han.data.Resource
-import com.frank.han.data.Success
 
 /**
  * Custom TextView
@@ -17,7 +14,6 @@ import com.frank.han.data.Success
  */
 open class HTextView : AppCompatTextView, BaseView {
 
-    constructor(context: Context) : this(context, null)
     constructor(context: Context, attrs: AttributeSet?) : this(
         context,
         attrs,
@@ -31,10 +27,6 @@ open class HTextView : AppCompatTextView, BaseView {
     )
 
     override fun <T> bindResource(resource: Resource<T>) {
-        text = when (resource) {
-            is Loading -> resources.getString(R.string.loading)
-            is Success -> resource.data as CharSequence
-            is Error -> resources.getString(R.string.data_error)
-        }
+        // do nothing
     }
 }

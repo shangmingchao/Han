@@ -5,12 +5,14 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
+import com.google.gson.JsonParseException
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 import java.io.IOException
+import java.lang.Exception
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
@@ -66,6 +68,10 @@ suspend fun <T> getRemoteResource(call: suspend () -> T): Resource<T> = try {
     Error(NetError(ERROR_CODE_NET_HTTP_EXCEPTION, e))
 } catch (e: IOException) {
     Error(NetError(ERROR_CODE_COMMON, e))
+} catch (e: JsonParseException) {
+    Error(NetError(ERROR_CODE_JSON_PARSE_EXCEPTION, e))
+} catch (e: Exception) {
+    Error(OtherError(ERROR_CODE_COMMON, e))
 }
 
 /**
