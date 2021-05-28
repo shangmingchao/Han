@@ -1,6 +1,7 @@
 package com.frank.han.ui.main
 
 import androidx.fragment.app.testing.launchFragmentInContainer
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.Navigation
 import androidx.navigation.testing.TestNavHostController
 import androidx.test.core.app.ApplicationProvider
@@ -72,6 +73,8 @@ class MainFragmentTest {
      */
     @Test
     fun testArticleNav() {
+        val scenario = launchFragmentInContainer<MainFragment>()
+        scenario.moveToState(Lifecycle.State.RESUMED)
         onView(withId(R.id.articleBtn)).perform(click())
     }
 
