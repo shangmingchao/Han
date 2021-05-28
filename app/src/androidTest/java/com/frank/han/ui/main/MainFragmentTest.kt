@@ -14,9 +14,9 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.frank.han.R
 import com.frank.han.widget.HTextView
 import com.google.common.truth.Truth.assertThat
+import java.lang.Thread.sleep
 import org.junit.Test
 import org.junit.runner.RunWith
-import java.lang.Thread.sleep
 
 /**
  * MainFragment UI test
@@ -64,6 +64,13 @@ class MainFragmentTest {
             navController.setGraph(R.navigation.nav_main)
             Navigation.setViewNavController(it.requireView(), navController)
         }
+        onView(withId(R.id.repoBtn)).perform(click())
+        assertThat(navController.currentDestination?.id).isEqualTo(R.id.repoFragment)
+        scenario.onFragment { navController.navigateUp() }
+        onView(withId(R.id.userBtn)).perform(click())
+        assertThat(navController.currentDestination?.id).isEqualTo(R.id.userFragment)
+        sleep(1000)
+        scenario.onFragment { navController.navigateUp() }
         onView(withId(R.id.repoBtn)).perform(click())
         assertThat(navController.currentDestination?.id).isEqualTo(R.id.repoFragment)
     }
