@@ -19,10 +19,6 @@ import com.frank.han.util.mockRepoDTO
 import com.frank.han.util.mockRepoPO
 import com.frank.han.util.mockUserPO
 import com.google.common.truth.Truth.assertThat
-import java.lang.Thread.sleep
-import java.util.Random
-import java.util.concurrent.TimeUnit
-import kotlin.coroutines.coroutineContext
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -37,6 +33,10 @@ import org.robolectric.RuntimeEnvironment
 import retrofit2.mock.Calls.response
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
+import java.lang.Thread.sleep
+import java.util.Random
+import java.util.concurrent.TimeUnit
+import kotlin.coroutines.coroutineContext
 
 /**
  * RepoViewModel Test
