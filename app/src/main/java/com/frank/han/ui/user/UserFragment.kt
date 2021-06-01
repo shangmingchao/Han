@@ -7,7 +7,7 @@ import com.frank.han.data.github.user.entity.UserVO
 import com.frank.han.databinding.FragmentUserBinding
 import com.frank.han.ui.BaseFragment
 import com.frank.han.util.binding
-import com.frank.han.util.commonRender
+import com.frank.han.util.renderPage
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -19,24 +19,17 @@ import org.koin.core.parameter.parametersOf
  */
 class UserFragment : BaseFragment(R.layout.fragment_user) {
 
-    private val viewBinding by binding(FragmentUserBinding::bind)
+    private val vb by binding(FragmentUserBinding::bind)
     private val args by navArgs<UserFragmentArgs>()
-    private val userViewModel: UserViewModel by viewModel { parametersOf(args.username) }
+    private val vm: UserViewModel by viewModel { parametersOf(args.username) }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        commonRender(userViewModel.user, viewBinding, this::dataBinding)
+        renderPage(vm.user, vb, FragmentUserBinding::dataBinding)
     }
+}
 
-    /**
-     * Bind data
-     *
-     * Should reduce indent?!
-     */
-    private fun dataBinding(user: UserVO, viewBinding: FragmentUserBinding) {
-        viewBinding.apply {
-            username.text = user.username
-            description.text = user.description
-        }
-    }
+private fun FragmentUserBinding.dataBinding(user: UserVO) {
+    username.text = user.username
+    description.text = user.description
 }

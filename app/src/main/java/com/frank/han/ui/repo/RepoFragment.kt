@@ -7,7 +7,7 @@ import com.frank.han.data.github.repo.entity.RepoVO
 import com.frank.han.databinding.FragmentRepoBinding
 import com.frank.han.ui.BaseFragment
 import com.frank.han.util.binding
-import com.frank.han.util.commonRender
+import com.frank.han.util.renderPage
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 
@@ -19,25 +19,18 @@ import org.koin.core.parameter.parametersOf
  */
 class RepoFragment : BaseFragment(R.layout.fragment_repo) {
 
-    private val viewBinding: FragmentRepoBinding by binding(FragmentRepoBinding::bind)
+    private val vb: FragmentRepoBinding by binding(FragmentRepoBinding::bind)
     private val args by navArgs<RepoFragmentArgs>()
-    private val repoViewModel: RepoViewModel by viewModel { parametersOf(args.username) }
+    private val vm: RepoViewModel by viewModel { parametersOf(args.username) }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        commonRender(repoViewModel.repo, viewBinding, this::dataBinding)
+        renderPage(vm.repo, vb, FragmentRepoBinding::dataBinding)
     }
+}
 
-    /**
-     * Bind data
-     *
-     * Should reduce indent?!
-     */
-    private fun dataBinding(repos: List<RepoVO>, viewBinding: FragmentRepoBinding) {
-        viewBinding.apply {
-            val repo = repos.firstOrNull() ?: return@apply
-            repoTextView.text = repo.desc
-            repoTextView.setTextColor(repo.color)
-        }
-    }
+private fun FragmentRepoBinding.dataBinding(repos: List<RepoVO>) {
+    val repo = repos.firstOrNull() ?: return
+    repoTextView.text = repo.desc
+    repoTextView.setTextColor(repo.color)
 }

@@ -1,9 +1,7 @@
 package com.frank.han.util
 
-import android.app.Dialog
 import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.activity.ComponentActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
@@ -20,7 +18,6 @@ import com.frank.han.data.onDatabaseError
 import com.frank.han.data.onNetworkError
 import com.frank.han.data.onUnknownError
 import com.frank.han.widget.HResourceView
-import com.google.android.material.tabs.TabLayout
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KProperty
 
@@ -38,30 +35,6 @@ fun <VB : ViewBinding> ComponentActivity.binding(inflate: (LayoutInflater) -> VB
 
 fun <VB : ViewBinding> Fragment.binding(bind: (View) -> VB) =
     FragmentBindingDelegate(bind)
-
-fun <VB : ViewBinding> Dialog.binding(inflate: (LayoutInflater) -> VB) = lazy {
-    inflate(layoutInflater).also { setContentView(it.root) }
-}
-
-fun <VB : ViewBinding> ViewGroup.binding(
-    inflate: (LayoutInflater, ViewGroup?, Boolean) -> VB,
-    attachToParent: Boolean = true
-) = lazy {
-    inflate(LayoutInflater.from(context), if (attachToParent) this else null, attachToParent)
-}
-
-fun <VB : ViewBinding> TabLayout.Tab.setCustomView(
-    inflate: (LayoutInflater) -> VB,
-    onBindView: VB.() -> Unit
-) {
-    customView = inflate(LayoutInflater.from(parent!!.context)).apply(onBindView).root
-}
-
-inline fun <reified VB : ViewBinding> TabLayout.Tab.bindCustomView(
-    bind: (View) -> VB,
-    onBindView: VB.() -> Unit
-) =
-    customView?.let { bind(it).run(onBindView) }
 
 class FragmentBindingDelegate<VB : ViewBinding>(
     private val bind: (View) -> VB
@@ -87,14 +60,14 @@ class FragmentBindingDelegate<VB : ViewBinding>(
 /**
  * Render data in fragment by common logic(UI state in loading, normal, error)
  */
-inline fun <reified VO, reified VB : ViewBinding> Fragment.commonRender(
+inline fun <reified VO, reified VB : ViewBinding> Fragment.renderPage(
     data: LiveData<Resource<VO>>,
-    view: VB,
-    noinline binding: (VO, VB) -> Unit
+    viewBinding: VB,
+    noinline dataBinding: (VB, VO) -> Unit
 ) {
     data.observe(viewLifecycleOwner) { res ->
-        val resourceView = view.root as? HResourceView ?: return@observe
-        resourceView.dataBinding(res) { vo -> binding(vo, view) }
+        val resourceView = viewBinding.root as? HResourceView ?: return@observe
+        resourceView.dataBinding(res) { vo -> dataBinding(viewBinding, vo) }
         if (res is Error) {
             when (res.errorInfo) {
                 is DBError -> onDatabaseError(res.errorInfo)
