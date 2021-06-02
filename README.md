@@ -44,6 +44,8 @@ Create `keystore.properties` file at the project's root directory, Add `keyPassw
 
 ## Sample
 
+### Fragment Sample
+
 ```kotlin
 class UserFragment : BaseFragment(R.layout.fragment_user) {
 
@@ -63,6 +65,8 @@ private fun FragmentUserBinding.dataBinding(user: UserVO) {
 }
 ```
 
+### Fragment Testing
+
 ```kotlin
 @RunWith(AndroidJUnit4::class)
 class UserFragmentTest {
@@ -79,6 +83,8 @@ class UserFragmentTest {
     }
 }
 ```
+
+### ViewModel
 
 ```kotlin
 class UserViewModel(
@@ -111,6 +117,8 @@ class UserViewModel(
     }
 }
 ```
+
+### ViewModel Testing
 
 ```kotlin
 @RunWith(RobolectricTestRunner::class)
@@ -312,6 +320,8 @@ class UserViewModelTest {
 }
 ```
 
+### Repository
+
 ```kotlin
 class UserRepository(
     private val userService: UserService,
@@ -328,6 +338,8 @@ class UserRepository(
             userDao.saveUser(user)
 }
 ```
+
+### Repository Testing
 
 ```kotlin
 class UserRepositoryTest {
@@ -368,6 +380,8 @@ class UserRepositoryTest {
 }
 ```
 
+### Database Testing
+
 ```kotlin
 @RunWith(AndroidJUnit4::class)
 class UserDaoTest {
@@ -393,6 +407,7 @@ class UserDaoTest {
     }
 }
 ```
+
 ## More
 
 See [Android project exercises](https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/android_project_exercises.md)  
