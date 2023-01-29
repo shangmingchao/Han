@@ -28,7 +28,7 @@ fun <V, D, P> getResource(
     networkCall: suspend () -> D,
     dpMapping: (D) -> P,
     pvMapping: (P) -> V,
-    saveCallResult: suspend (P) -> Unit
+    saveCallResult: suspend (P) -> Unit,
 ): LiveData<Resource<V>> = liveData(dispatcher, 0) {
     emit(Loading())
     val localResource = getLocalResource(databaseQuery)

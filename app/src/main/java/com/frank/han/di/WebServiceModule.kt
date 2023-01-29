@@ -10,17 +10,17 @@ import retrofit2.Retrofit
 val webServiceModule = module {
     single<RepoService> {
         get<Retrofit>(named(RETROFIT_GITHUB)).create(
-            RepoService::class.java
+            RepoService::class.java,
         )
     }
     single<UserService> {
         get<Retrofit>(named(RETROFIT_GITHUB)).create(
-            UserService::class.java
+            UserService::class.java,
         )
     }
     single<WeChatService> {
         get<Retrofit>(named(RETROFIT_WAN)).create(
-            WeChatService::class.java
+            WeChatService::class.java,
         )
     }
 }

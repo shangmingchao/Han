@@ -2,7 +2,8 @@
 <com.frank.han.widget.HResourceView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <com.frank.han.widget.HTextView
         android:id="@+id/articleTextView"
@@ -10,5 +11,6 @@
         android:layout_height="wrap_content"
         android:contentDescription="@string/article"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Article"/>
 </com.frank.han.widget.HResourceView>

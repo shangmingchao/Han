@@ -80,8 +80,13 @@ val mockedArticle = ArticleDTO(MOCKED_ARTICLE_AUTHOR, MOCKED_ARTICLE_TITLE)
  */
 val mockedArticles = BaseDTO(
     ArticlesDTO(
-        0, listOf(mockedArticle), 0,
-        false, 0, 0, 0
+        0,
+        listOf(mockedArticle),
+        0,
+        false,
+        0,
+        0,
+        0,
     ),
     0,
     "",

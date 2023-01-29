@@ -1,6 +1,7 @@
 package com.frank.han.ui.repo
 
 import android.os.Bundle
+import android.view.View
 import androidx.navigation.fragment.navArgs
 import com.frank.han.R
 import com.frank.han.data.github.repo.entity.RepoVO
@@ -23,8 +24,8 @@ class RepoFragment : BaseFragment(R.layout.fragment_repo) {
     private val args by navArgs<RepoFragmentArgs>()
     private val vm: RepoViewModel by viewModel { parametersOf(args.username) }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         renderPage(vm.repo, vb, FragmentRepoBinding::dataBinding)
     }
 }

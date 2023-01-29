@@ -3,6 +3,7 @@ package com.frank.han.ui.user
 import android.database.sqlite.SQLiteOutOfMemoryException
 import android.database.sqlite.SQLiteReadOnlyDatabaseException
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.core.app.ApplicationProvider
 import com.frank.han.App
 import com.frank.han.api.github.UserService
 import com.frank.han.data.DBError
@@ -14,30 +15,27 @@ import com.frank.han.data.github.user.UserRepository
 import com.frank.han.data.github.user.entity.UserDTO
 import com.frank.han.data.github.user.entity.UserPO
 import com.frank.han.util.MOCK_USER_NAME
-import com.frank.han.util.MainCoroutineScopeRule
+import com.frank.han.util.MainDispatcherRule
 import com.frank.han.util.captureValues
 import com.frank.han.util.getGitHubRetrofit
 import com.frank.han.util.mockUserDTO
 import com.frank.han.util.mockUserPO
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.runBlockingTest
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import retrofit2.mock.Calls.response
 import retrofit2.mock.MockRetrofit
 import retrofit2.mock.NetworkBehavior
 import java.lang.Thread.sleep
 import java.util.Random
 import java.util.concurrent.TimeUnit
-import kotlin.coroutines.coroutineContext
 
 /**
  * UserViewModel Test
@@ -49,13 +47,12 @@ import kotlin.coroutines.coroutineContext
 class UserViewModelTest {
 
     @get:Rule
-    val coroutineScope = MainCoroutineScopeRule()
+    val mainDispatcherRule = MainDispatcherRule()
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    private val app = RuntimeEnvironment.application as App
-    private val testDispatcher = TestCoroutineDispatcher()
+    private val app = ApplicationProvider.getApplicationContext<App>()
     private val behavior = NetworkBehavior.create(Random(2847))
     private var dbUser: UserPO? = null
     private var dbQueryException: Exception? = null
@@ -69,7 +66,7 @@ class UserViewModelTest {
         override suspend fun saveUser(user: UserPO) {
             dbSaveException?.let { throw it }
             dbUser = user
-            observerChannel.offer(Unit)
+            observerChannel.trySend(Unit).isSuccess
         }
 
         override fun getUserById(userId: String): Flow<UserPO> {
@@ -84,18 +81,10 @@ class UserViewModelTest {
 
         private fun mockUserFlow(): Flow<UserPO> {
             return flow {
-                observerChannel.offer(Unit)
-                withContext(coroutineContext) {
-                    try {
-                        for (signal in observerChannel) {
-                            withContext(coroutineContext) {
-                                dbQueryException?.let { throw it }
-                                dbUser?.let { emit(it) }
-                            }
-                        }
-                    } finally {
-                        // ignore
-                    }
+                observerChannel.trySend(Unit).isSuccess
+                for (signal in observerChannel) {
+                    dbQueryException?.let { throw it }
+                    dbUser?.let { emit(it) }
                 }
             }
         }
@@ -114,15 +103,16 @@ class UserViewModelTest {
     /**
      * localFailedRemoteSuccess
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun localFailedRemoteSuccess() = coroutineScope.runBlockingTest {
+    fun localFailedRemoteSuccess() = runTest {
         dbUser = null
         behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         behavior.setErrorPercent(0)
         val userViewModel =
-            UserViewModel(app, testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
+            UserViewModel(app, mainDispatcherRule.testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
         userViewModel.user.captureValues {
             sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
@@ -134,15 +124,16 @@ class UserViewModelTest {
     /**
      * localFailedRemoteFailed
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun localFailedRemoteFailed() = coroutineScope.runBlockingTest {
+    fun localFailedRemoteFailed() = runTest {
         dbUser = null
         behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(100)
         behavior.setErrorPercent(0)
         val userViewModel =
-            UserViewModel(app, testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
+            UserViewModel(app, mainDispatcherRule.testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
         userViewModel.user.captureValues {
             sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
@@ -154,15 +145,16 @@ class UserViewModelTest {
     /**
      * localSuccessRemoteSuccess
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun localSuccessRemoteSuccess() = coroutineScope.runBlockingTest {
+    fun localSuccessRemoteSuccess() = runTest {
         dbUser = mockUserPO
         behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         behavior.setErrorPercent(0)
         val userViewModel =
-            UserViewModel(app, testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
+            UserViewModel(app, mainDispatcherRule.testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
         userViewModel.user.captureValues {
             sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
@@ -174,15 +166,16 @@ class UserViewModelTest {
     /**
      * localSuccessRemoteFailed
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun localSuccessRemoteFailed() = coroutineScope.runBlockingTest {
+    fun localSuccessRemoteFailed() = runTest {
         dbUser = mockUserPO
         behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(100)
         behavior.setErrorPercent(0)
         val userViewModel =
-            UserViewModel(app, testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
+            UserViewModel(app, mainDispatcherRule.testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
         userViewModel.user.captureValues {
             sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
@@ -199,8 +192,9 @@ class UserViewModelTest {
      * Note: Flow will not work if databaseQuery throws an exception. So the further saveCallResult will not be signaled.
      * It's a bug?!
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun localQueryExceptionRemoteSuccess() = coroutineScope.runBlockingTest {
+    fun localQueryExceptionRemoteSuccess() = runTest {
         dbQueryException = SQLiteReadOnlyDatabaseException("MockSQLiteReadOnlyDatabaseException!")
         dbUser = null
         behavior.setDelay(10, TimeUnit.MILLISECONDS)
@@ -208,12 +202,12 @@ class UserViewModelTest {
         behavior.setFailurePercent(0)
         behavior.setErrorPercent(0)
         val userViewModel =
-            UserViewModel(app, testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
+            UserViewModel(app, mainDispatcherRule.testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
         userViewModel.user.captureValues {
             sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
             assertThat(((this.values[1] as Error).errorInfo as DBError).e).isInstanceOf(
-                SQLiteReadOnlyDatabaseException::class.java
+                SQLiteReadOnlyDatabaseException::class.java,
             )
             assertThat(this.values.size).isEqualTo(2)
         }
@@ -224,8 +218,9 @@ class UserViewModelTest {
      *
      * User will not be signaled if saveResult failed
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun localSaveExceptionRemoteSuccess() = coroutineScope.runBlockingTest {
+    fun localSaveExceptionRemoteSuccess() = runTest {
         dbSaveException = SQLiteOutOfMemoryException("MockSQLiteOutOfMemoryException!")
         dbUser = mockUserPO
         behavior.setDelay(10, TimeUnit.MILLISECONDS)
@@ -233,7 +228,7 @@ class UserViewModelTest {
         behavior.setFailurePercent(0)
         behavior.setErrorPercent(0)
         val userViewModel =
-            UserViewModel(app, testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
+            UserViewModel(app, mainDispatcherRule.testDispatcher, MOCK_USER_NAME, UserRepository(userService, userDao))
         userViewModel.user.captureValues {
             sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)

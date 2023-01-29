@@ -21,7 +21,7 @@ class ArticleViewModel(
     private val dispatcher: CoroutineDispatcher,
     private val id: String,
     private val page: Int,
-    private val articleRepository: ArticleRepository
+    private val articleRepository: ArticleRepository,
 ) : AndroidViewModel(app) {
 
     val articles by lazy(LazyThreadSafetyMode.NONE) { getArticleList() }

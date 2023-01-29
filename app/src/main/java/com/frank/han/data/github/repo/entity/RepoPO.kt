@@ -14,5 +14,5 @@ data class RepoPO(
     @PrimaryKey val id: Long,
     val name: String,
     val is_private: Boolean,
-    val owner_id: Long
+    val owner_id: Long,
 )

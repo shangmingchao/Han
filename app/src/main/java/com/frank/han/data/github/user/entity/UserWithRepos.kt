@@ -14,7 +14,7 @@ data class UserWithRepos(
     @Embedded val user: UserPO,
     @Relation(
         parentColumn = "id",
-        entityColumn = "owner_id"
+        entityColumn = "owner_id",
     )
-    val repos: List<RepoPO>
+    val repos: List<RepoPO>,
 )

@@ -9,19 +9,29 @@ import org.koin.dsl.module
 val viewModelModule = module {
     viewModel { (username: String) ->
         RepoViewModel(
-            get(), get(), username, get()
+            get(),
+            get(),
+            username,
+            get(),
         )
     }
 
     viewModel { (username: String) ->
         UserViewModel(
-            get(), get(), username, get()
+            get(),
+            get(),
+            username,
+            get(),
         )
     }
 
     viewModel { (id: String, page: Int) ->
         ArticleViewModel(
-            get(), get(), id, page, get()
+            get(),
+            get(),
+            id,
+            page,
+            get(),
         )
     }
 }

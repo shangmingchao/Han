@@ -30,7 +30,7 @@ class HResourceView : ConstraintLayout, BaseView {
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(
         context,
         attrs,
-        defStyleAttr
+        defStyleAttr,
     )
 
     override fun <T> bindResource(resource: Resource<T>) {

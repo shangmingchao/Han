@@ -22,7 +22,7 @@ class RepoViewModel(
     private val app: Application,
     private val dispatcher: CoroutineDispatcher,
     private val username: String,
-    private val repoRepository: RepoRepository
+    private val repoRepository: RepoRepository,
 ) : AndroidViewModel(app) {
 
     val repo by lazy(LazyThreadSafetyMode.NONE) { getRepo(username) }
@@ -33,7 +33,7 @@ class RepoViewModel(
         networkCall = { repoRepository.getRemoteRepo(username) },
         dpMapping = { it.map { dto -> map(dto) } },
         pvMapping = { it.map { po -> map(po) } },
-        saveCallResult = { repoRepository.saveLocalRepo(it) }
+        saveCallResult = { repoRepository.saveLocalRepo(it) },
     )
 
     private fun map(dto: RepoDTO): RepoPO {

@@ -24,6 +24,6 @@ interface WeChatService {
     @GET("wxarticle/list/{id}/{page}/json")
     suspend fun getArticleList(
         @Path("id") id: String,
-        @Path("page") page: Int
+        @Path("page") page: Int,
     ): BaseDTO<ArticlesDTO>
 }

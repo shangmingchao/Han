@@ -2,7 +2,12 @@ package com.frank.han.components
 
 import android.content.Context
 import androidx.startup.Initializer
-import com.frank.han.di.*
+import com.frank.han.di.databaseModule
+import com.frank.han.di.httpClientModule
+import com.frank.han.di.repositoryModule
+import com.frank.han.di.serializationModule
+import com.frank.han.di.viewModelModule
+import com.frank.han.di.webServiceModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.KoinApplication
@@ -21,8 +26,12 @@ class KoinInitializer : Initializer<KoinApplication> {
             androidLogger()
             androidContext(context)
             modules(
-                serializationModule, httpClientModule, webServiceModule, databaseModule,
-                repositoryModule, viewModelModule
+                serializationModule,
+                httpClientModule,
+                webServiceModule,
+                databaseModule,
+                repositoryModule,
+                viewModelModule,
             )
         }
     }

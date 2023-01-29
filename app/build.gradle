@@ -1,15 +1,17 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply plugin: 'androidx.navigation.safeargs.kotlin'
-apply plugin: 'jacoco-android'
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.devtools.ksp'
+    id 'androidx.navigation.safeargs.kotlin'
+    id 'com.dicedmelon.gradle.jacoco-android'
+}
 
 def sdkPropertiesFile = rootProject.file("sdk.properties")
 def sdkProperties = new Properties()
 sdkProperties.load(new FileInputStream(sdkPropertiesFile))
-def minSdk = sdkProperties['minSdk'].toInteger()
-def targetSdk = sdkProperties['targetSdk'].toInteger()
+def minSdkVersion = sdkProperties['minSdk'].toInteger()
+def targetSdkVersion = sdkProperties['targetSdk'].toInteger()
+def compileSdkVersion = sdkProperties['compileSdk'].toInteger()
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
@@ -31,6 +33,7 @@ jacoco {
 
 tasks.withType(Test) {
     jacoco.includeNoLocationClasses = true
+    jacoco.excludes = ['jdk.internal.*']
 }
 
 jacocoAndroidUnitTestReport {
@@ -38,15 +41,18 @@ jacocoAndroidUnitTestReport {
 }
 
 android {
-    compileSdkVersion build_versions.target_sdk
+    namespace 'com.frank.han'
+    compileSdk compileSdkVersion
 
     defaultConfig {
         applicationId "com.frank.han"
-        minSdkVersion minSdk
-        targetSdkVersion targetSdk
+        minSdk minSdkVersion
+        targetSdk targetSdkVersion
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
-
+        vectorDrawables {
+            useSupportLibrary true
+        }
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -72,6 +78,11 @@ android {
 
     buildFeatures {
         viewBinding true
+        compose true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.4.0'
     }
 
     testOptions {
@@ -88,6 +99,12 @@ android {
         jvmTarget = "1.8"
     }
 
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+
     applicationVariants.all { variant ->
         variant.outputs.all {
             outputFileName = "${variant.name}_${versionMajor}.${versionMinor}.${versionPatch}.${versionBuild}.apk"
@@ -96,9 +113,8 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation deps.kotlin
     implementation deps.androidx.appcompat
+    implementation deps.androidx.appcompat_resources
     implementation deps.androidx.recyclerview
     implementation deps.androidx.constraintlayout
     implementation deps.androidx.startup
@@ -112,29 +128,37 @@ dependencies {
     implementation deps.androidx.ktx_lifecycle_livedata
     implementation deps.androidx.ktx_navigation_fragment
     implementation deps.androidx.ktx_navigation_ui
+    implementation deps.androidx.room_core
+    implementation deps.androidx.room_ktx
+    implementation deps.androidx.window
+    def composeBom = platform(deps.compose_bom)
+    implementation composeBom
+    implementation deps.androidx.compose_material3
+    implementation deps.androidx.compose_ui_tooling_preview
+    implementation deps.androidx.compose_material_icons_core
+    implementation deps.androidx.compose_material_icons_extended
+    implementation deps.androidx.compose_material_window
+    implementation deps.androidx.compose_activity
+    implementation deps.androidx.compose_viewmodel
+    implementation deps.androidx.compose_livedata
+    ksp deps.androidx.room_compiler
 
     implementation deps.retrofit.core
     implementation deps.retrofit.converter_gson
 
     implementation deps.okhttp.logging_interceptor
 
-    implementation deps.room.core
-    kapt deps.room.compiler
-    implementation deps.room.ktx
-
     implementation deps.koin.core
-    implementation deps.koin.ext
     implementation deps.koin.android
-    implementation deps.koin.androidx_scope
-    implementation deps.koin.androidx_viewmodel
-    implementation deps.koin.androidx_fragment
-    implementation deps.koin.androidx_ext
+    implementation deps.koin.workmanager
+    implementation deps.koin.navigation
+    implementation deps.koin.compose
 
     implementation deps.stetho.core
     implementation deps.stetho.okhttp3_helper
 
     implementation deps.glide.core
-    kapt deps.glide.compiler
+    ksp deps.glide.compiler
 
     testImplementation deps.androidx_test.arch_core
     testImplementation deps.androidx_test.junit_ktx
@@ -144,7 +168,7 @@ dependencies {
     testImplementation deps.robolectric
     testImplementation deps.google_truth
     testImplementation deps.retrofit.mock
-    testImplementation deps.room.testing
+    testImplementation deps.androidx_test.room
     testImplementation deps.koin.test
 
     androidTestImplementation deps.androidx_test.core
@@ -158,7 +182,11 @@ dependencies {
     androidTestImplementation deps.androidx_test.espresso_contrib
     androidTestImplementation deps.androidx_test.espresso_intents
     androidTestImplementation deps.google_truth
+    androidTestImplementation composeBom
+    androidTestImplementation deps.androidx_test.compose_junit4
 
     debugImplementation deps.androidx_test.core
     debugImplementation deps.androidx_test.fragment
+    debugImplementation  deps.androidx_test.compose_ui_tooling
+    debugImplementation  deps.androidx_test.compose_ui_test_manifest
 }

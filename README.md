@@ -407,7 +407,3 @@ class UserDaoTest {
     }
 }
 ```
-
-## More
-
-See [Android project exercises](https://github.com/shangmingchao/shangmingchao.github.io/blob/master/blog/android_project_exercises.md)  

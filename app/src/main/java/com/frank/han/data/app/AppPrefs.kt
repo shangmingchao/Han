@@ -20,7 +20,7 @@ const val STORE_SETTINGS = "settings"
  * @constructor create App's SharedPreferences entry
  */
 class AppPrefs(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
 ) {
 
     /**

@@ -38,10 +38,10 @@ class HResourceViewTest {
                 Error(
                     NetError(
                         ERROR_CODE_NET_UNKNOWN_HOST,
-                        UnknownHostException("")
+                        UnknownHostException(""),
                     ),
-                    "mockError"
-                )
+                    "mockError",
+                ),
             ) {}
             assertThat(container.visibility).isEqualTo(GONE)
         }

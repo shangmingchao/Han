@@ -1,6 +1,7 @@
 package com.frank.han.ui.user
 
 import android.os.Bundle
+import android.view.View
 import androidx.navigation.fragment.navArgs
 import com.frank.han.R
 import com.frank.han.data.github.user.entity.UserVO
@@ -23,8 +24,8 @@ class UserFragment : BaseFragment(R.layout.fragment_user) {
     private val args by navArgs<UserFragmentArgs>()
     private val vm: UserViewModel by viewModel { parametersOf(args.username) }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         renderPage(vm.user, vb, FragmentUserBinding::dataBinding)
     }
 }

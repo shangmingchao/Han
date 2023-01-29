@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
  */
 class UserRepository(
     private val userService: UserService,
-    private val userDao: UserDao
+    private val userDao: UserDao,
 ) {
 
     /**

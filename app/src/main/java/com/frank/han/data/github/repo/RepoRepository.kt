@@ -16,7 +16,7 @@ import kotlinx.coroutines.flow.map
  */
 class RepoRepository(
     private val repoService: RepoService,
-    private val repoDao: RepoDao
+    private val repoDao: RepoDao,
 ) {
 
     /**

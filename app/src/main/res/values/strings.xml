@@ -3,6 +3,7 @@
     <string name="repo">Repo</string>
     <string name="user">User</string>
     <string name="article">Article</string>
+    <string name="article_detail">ArticleDetail</string>
     <string name="user_click">User button was clicked %1$s times</string>
     <string name="loading">Loading</string>
     <string name="data_error">Data error</string>

@@ -13,7 +13,9 @@ val databaseModule = module {
 
     factory(named(DATABASE_APP)) {
         Room.databaseBuilder(
-            androidContext(), AppDatabase::class.java, AppDatabase.DATABASE_NAME
+            androidContext(),
+            AppDatabase::class.java,
+            AppDatabase.DATABASE_NAME,
         )
     }
 

@@ -1,6 +1,7 @@
 package com.frank.han.ui.article
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.test.core.app.ApplicationProvider
 import com.frank.han.App
 import com.frank.han.api.wan.WeChatService
 import com.frank.han.data.ERROR_CODE_NET_HTTP_EXCEPTION
@@ -13,18 +14,17 @@ import com.frank.han.data.Success
 import com.frank.han.data.wan.BaseDTO
 import com.frank.han.data.wan.wechat.ArticleRepository
 import com.frank.han.data.wan.wechat.entity.ArticlesDTO
-import com.frank.han.util.MainCoroutineScopeRule
+import com.frank.han.util.MainDispatcherRule
 import com.frank.han.util.captureValues
 import com.frank.han.util.getWanRetrofit
 import com.frank.han.util.mockArticles
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.test.TestCoroutineDispatcher
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import retrofit2.Call
 import retrofit2.mock.Calls.failure
 import retrofit2.mock.Calls.response
@@ -47,13 +47,12 @@ import java.util.concurrent.TimeUnit
 class ArticleViewModelTest {
 
     @get:Rule
-    val coroutineScope = MainCoroutineScopeRule()
+    val mainDispatcherRule = MainDispatcherRule()
 
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    private val app = RuntimeEnvironment.application as App
-    private val testDispatcher = TestCoroutineDispatcher()
+    private val app = ApplicationProvider.getApplicationContext<App>()
     private val id = "1"
     private val page = 1
     private var call: Call<BaseDTO<ArticlesDTO>> = response(mockArticles)
@@ -71,15 +70,16 @@ class ArticleViewModelTest {
     /**
      * remoteSuccess
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun remoteSuccess() = coroutineScope.runBlockingTest {
+    fun remoteSuccess() = runTest {
         call = response(mockArticles)
         behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         behavior.setErrorPercent(0)
         val articleViewModel =
-            ArticleViewModel(app, testDispatcher, id, page, ArticleRepository(weChatService))
+            ArticleViewModel(app, mainDispatcherRule.testDispatcher, id, page, ArticleRepository(weChatService))
         articleViewModel.articles.captureValues {
             sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
@@ -91,15 +91,16 @@ class ArticleViewModelTest {
     /**
      * remoteFailedIOException
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun remoteFailedIOException() = coroutineScope.runBlockingTest {
+    fun remoteFailedIOException() = runTest {
         call = response(mockArticles)
         behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(100)
         behavior.setErrorPercent(0)
         val articleViewModel =
-            ArticleViewModel(app, testDispatcher, id, page, ArticleRepository(weChatService))
+            ArticleViewModel(app, mainDispatcherRule.testDispatcher, id, page, ArticleRepository(weChatService))
         articleViewModel.articles.captureValues {
             sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
@@ -111,8 +112,9 @@ class ArticleViewModelTest {
     /**
      * remoteFailedSocketTimeoutException
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun remoteFailedSocketTimeoutException() = coroutineScope.runBlockingTest {
+    fun remoteFailedSocketTimeoutException() = runTest {
         call = response(mockArticles)
         behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
@@ -120,12 +122,12 @@ class ArticleViewModelTest {
         behavior.setErrorPercent(0)
         behavior.setFailureException(SocketTimeoutException("MockSocketTimeoutException"))
         val articleViewModel =
-            ArticleViewModel(app, testDispatcher, id, page, ArticleRepository(weChatService))
+            ArticleViewModel(app, mainDispatcherRule.testDispatcher, id, page, ArticleRepository(weChatService))
         articleViewModel.articles.captureValues {
             sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
             assertThat(((this.values[1] as Error).errorInfo as NetError).code).isEqualTo(
-                ERROR_CODE_NET_SOCKET_TIMEOUT
+                ERROR_CODE_NET_SOCKET_TIMEOUT,
             )
             assertThat(this.values.size).isEqualTo(2)
         }
@@ -134,8 +136,9 @@ class ArticleViewModelTest {
     /**
      * remoteFailedUnknownHostException
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun remoteFailedUnknownHostException() = coroutineScope.runBlockingTest {
+    fun remoteFailedUnknownHostException() = runTest {
         call = response(mockArticles)
         behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
@@ -143,12 +146,12 @@ class ArticleViewModelTest {
         behavior.setErrorPercent(0)
         behavior.setFailureException(UnknownHostException("MockUnknownHostException"))
         val articleViewModel =
-            ArticleViewModel(app, testDispatcher, id, page, ArticleRepository(weChatService))
+            ArticleViewModel(app, mainDispatcherRule.testDispatcher, id, page, ArticleRepository(weChatService))
         articleViewModel.articles.captureValues {
             sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
             assertThat(((this.values[1] as Error).errorInfo as NetError).code).isEqualTo(
-                ERROR_CODE_NET_UNKNOWN_HOST
+                ERROR_CODE_NET_UNKNOWN_HOST,
             )
             assertThat(this.values.size).isEqualTo(2)
         }
@@ -157,20 +160,21 @@ class ArticleViewModelTest {
     /**
      * remoteError
      */
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun remoteError() = coroutineScope.runBlockingTest {
+    fun remoteError() = runTest {
         call = failure(IOException("Timeout!"))
         behavior.setDelay(10, TimeUnit.MILLISECONDS)
         behavior.setVariancePercent(0)
         behavior.setFailurePercent(0)
         behavior.setErrorPercent(100)
         val articleViewModel =
-            ArticleViewModel(app, testDispatcher, id, page, ArticleRepository(weChatService))
+            ArticleViewModel(app, mainDispatcherRule.testDispatcher, id, page, ArticleRepository(weChatService))
         articleViewModel.articles.captureValues {
             sleep(50)
             assertThat(this.values[0]).isInstanceOf(Loading::class.java)
             assertThat(((this.values[1] as Error).errorInfo as NetError).code).isEqualTo(
-                ERROR_CODE_NET_HTTP_EXCEPTION
+                ERROR_CODE_NET_HTTP_EXCEPTION,
             )
             assertThat(this.values.size).isEqualTo(2)
         }
